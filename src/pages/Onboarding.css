@@ -1,123 +1,218 @@
-.onboarding-page {
+/* ── Page ── */
+.ob-page {
+    direction: rtl;
+    min-height: 100dvh;
+    background: var(--color-bg);
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
-    padding: var(--space-5) var(--space-5) env(safe-area-inset-bottom, var(--space-6));
-    transition: background-color 0.4s ease;
-}
-
-.onboarding-topbar {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: var(--space-4);
-}
-
-.onboarding-skip-btn {
-    display: flex;
     align-items: center;
-    gap: var(--space-1);
-    background: rgba(0, 0, 0, 0.06);
-    border: none;
-    border-radius: var(--radius-full);
-    padding: var(--space-2) var(--space-4);
-    font-family: var(--font-primary);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--color-text-2);
-    cursor: pointer;
-    transition: background var(--transition-fast);
-}
-
-.onboarding-skip-btn:hover {
-    background: rgba(0, 0, 0, 0.12);
-}
-
-.onboarding-content {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding: var(--space-8) var(--space-6) var(--space-10);
+    position: relative;
     overflow: hidden;
 }
 
-.onboarding-slide {
+/* ── Subtle blobs ── */
+.ob-blob {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.ob-blob--1 {
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, var(--color-primary), transparent 70%);
+    opacity: 0.05;
+    top: -120px;
+    right: -80px;
+}
+
+.ob-blob--2 {
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, var(--color-primary), transparent 70%);
+    opacity: 0.04;
+    bottom: -80px;
+    left: -60px;
+}
+
+/* ── Logo ── */
+.ob-logo-wrap {
+    position: relative;
+    z-index: 1;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    padding-top: var(--space-4);
+}
+
+.ob-logo {
+    width: 96px;
+    height: 96px;
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    display: flex;
     align-items: center;
-    text-align: center;
-    gap: var(--space-5);
-    padding: var(--space-4);
+    justify-content: center;
+    border: 1px solid var(--color-border);
+}
+
+.ob-logo__svg {
+    width: 60px;
+    height: 60px;
+}
+
+/* ── Slide area ── */
+.ob-slide-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 1;
+    padding: var(--space-6) 0;
+}
+
+.ob-slide {
     width: 100%;
 }
 
-.onboarding-emoji {
-    font-size: 88px;
-    line-height: 1;
-    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+/* ── Content card — matches the bordered box in wireframes ── */
+.ob-card {
+    width: 100%;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8) var(--space-6);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: center;
 }
 
-.onboarding-title {
-    font-size: var(--font-size-xl);
-    font-weight: 800;
+.ob-card--center {
+    justify-content: center;
+    align-items: center;
+    min-height: 140px;
+}
+
+/* Card text variants */
+.ob-card__line {
+    font-size: var(--font-size-lg);
     color: var(--color-text);
-    line-height: 1.3;
+    margin: 0;
+    line-height: 1.6;
 }
 
-.onboarding-desc {
+.ob-card__line--bold {
+    font-weight: 800;
+    font-size: var(--font-size-xl);
+}
+
+.ob-card__line--label {
     font-size: var(--font-size-base);
     color: var(--color-text-2);
-    line-height: 1.8;
-    max-width: 300px;
+    font-weight: 600;
+    text-align: right;
 }
 
-.onboarding-dots {
+.ob-card__headline {
+    font-size: clamp(2rem, 8vw, 3rem);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+
+.ob-card__research-title {
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    line-height: 1.9;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+}
+
+/* ── Progress dots ── */
+.ob-dots {
     display: flex;
-    justify-content: center;
     gap: var(--space-2);
-    padding: var(--space-4) 0;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    margin-bottom: var(--space-4);
 }
 
-.onboarding-dot {
+.ob-dot {
     width: 8px;
     height: 8px;
-    border-radius: var(--radius-full);
-    background: var(--color-border-strong);
+    border-radius: 50%;
+    background: var(--color-border);
     border: none;
     cursor: pointer;
     padding: 0;
-    transition: all var(--transition-base);
+    transition: all 0.2s;
 }
 
-.onboarding-dot--active {
+.ob-dot--active {
     background: var(--color-primary);
     width: 24px;
+    border-radius: 4px;
 }
 
-.onboarding-footer {
+/* ── Footer ── */
+.ob-footer {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: var(--space-3);
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 1;
 }
 
-.onboarding-back-btn {
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-lg);
-    border: 2px solid var(--color-border);
-    background: var(--color-surface);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Main button — dark pill matching wireframe */
+.ob-next-btn {
+    width: 100%;
+    max-width: 220px;
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-text);
+    color: var(--color-bg);
+    border: none;
+    border-radius: 999px;
+    font-size: var(--font-size-base);
+    font-weight: 700;
     cursor: pointer;
+    transition: opacity 0.18s, transform 0.18s;
+    font-family: inherit;
+}
+
+.ob-next-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.ob-next-btn:active {
+    transform: translateY(0);
+}
+
+/* Skip all link */
+.ob-skip-link {
+    background: none;
+    border: none;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-3);
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.ob-skip-link:hover {
     color: var(--color-text-2);
-    flex-shrink: 0;
-    transition: background var(--transition-fast);
-}
-
-.onboarding-back-btn:hover {
-    background: var(--color-surface-2);
-}
-
-.onboarding-next-btn {
-    flex: 1;
 }

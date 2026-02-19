@@ -1,206 +1,170 @@
 .units-page {
+    direction: rtl;
+    min-height: 100dvh;
+    background: var(--color-bg);
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
-    padding: var(--space-5);
-    padding-bottom: calc(var(--bottom-nav-height, 72px) + var(--space-4));
-}
-
-.units-header {
-    margin-bottom: var(--space-2);
-}
-
-.units-header__title {
-    font-size: var(--font-size-xl);
-    font-weight: 800;
-    color: var(--color-text);
-}
-
-.units-header__sub {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-3);
-    font-weight: 500;
-    margin-top: var(--space-1);
-}
-
-.units-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-}
-
-.unit-card {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-4);
-    background: var(--color-surface);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-2xl);
-    padding: var(--space-5);
-    text-align: right;
-    cursor: pointer;
-    transition: all var(--transition-base);
-    box-shadow: var(--shadow-sm);
-    width: 100%;
-}
-
-.unit-card:hover:not(:disabled) {
-    box-shadow: var(--shadow-lg);
-    border-color: var(--color-primary);
-    transform: translateY(-2px);
-}
-
-.unit-card--locked {
-    opacity: 0.55;
-    cursor: not-allowed;
-    border-style: dashed;
-}
-
-.unit-card--done {
-    border-color: var(--color-success, #10b981);
-    background: var(--color-success-subtle, rgba(16, 185, 129, 0.04));
-}
-
-.unit-card__icon-wrap {
-    position: relative;
-    flex-shrink: 0;
-    width: 56px;
-    height: 56px;
-    background: var(--color-primary-subtle);
-    border-radius: var(--radius-xl);
-    display: flex;
     align-items: center;
-    justify-content: center;
+    padding: var(--space-8) var(--space-5) var(--space-8);
+    gap: var(--space-5);
+    position: relative;
 }
 
-.unit-card__emoji {
-    font-size: 28px;
-}
-
-.unit-card__lock {
-    position: absolute;
-    bottom: -4px;
-    left: -4px;
+/* ── Course name card ── */
+.units-course-card {
+    width: 100%;
+    max-width: 420px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
     background: var(--color-surface);
-    border-radius: var(--radius-full);
-    padding: 2px;
-    color: var(--color-text-3);
+    text-align: right;
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
 }
 
-.unit-card__done-icon {
-    position: absolute;
-    bottom: -4px;
-    left: -4px;
-    background: var(--color-surface);
-    border-radius: var(--radius-full);
-    color: var(--color-success, #10b981);
+.units-course-card__text {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.5;
 }
 
-.unit-card__body {
+/* ── Staggered grid ── */
+.units-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    max-width: 420px;
     flex: 1;
 }
 
-.unit-card__title {
+.units-grid__row {
+    display: flex;
+}
+
+/* Even rows align to the right (like wireframe: الوحدة الاولى on right) */
+.units-grid__row--right {
+    justify-content: flex-end;
+}
+
+/* Odd rows align to the left (like wireframe: الوحدة الثانية on left, grayed) */
+.units-grid__row--left {
+    justify-content: flex-start;
+}
+
+/* ── Unit button ── */
+.unit-btn {
+    width: 130px;
+    min-height: 80px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    font-family: inherit;
+    padding: var(--space-3);
+    transition: transform 0.18s, box-shadow 0.18s;
+    position: relative;
+}
+
+.unit-btn:not(:disabled):hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+}
+
+/* Locked state — gray, like wireframe second unit */
+.unit-btn--locked {
+    background: color-mix(in srgb, var(--color-border) 40%, var(--color-surface));
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+/* Done state */
+.unit-btn--done {
+    border-color: #4caf50;
+    background: color-mix(in srgb, #4caf50 8%, var(--color-surface));
+}
+
+.unit-btn__lock {
+    color: var(--color-text-3);
+}
+
+.unit-btn__label {
     font-size: var(--font-size-base);
     font-weight: 700;
     color: var(--color-text);
-    margin-bottom: var(--space-1);
+    line-height: 1.4;
+    text-align: center;
 }
 
-.unit-card__desc {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-3);
-    line-height: 1.5;
-    margin-bottom: var(--space-3);
+.unit-btn--locked .unit-btn__label {
+    color: var(--color-text-2);
 }
 
-.unit-card__progress-row {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-}
-
-.unit-card__progress-bar {
-    flex: 1;
-    height: 6px;
-    background: var(--color-surface-2);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-}
-
-.unit-card__progress-fill {
-    height: 100%;
-    background: var(--color-primary);
-    border-radius: var(--radius-full);
-    transition: width 0.4s ease;
-}
-
-.unit-card__progress-label {
+.unit-btn__progress {
     font-size: var(--font-size-xs);
-    font-weight: 700;
-    color: var(--color-text-3);
-    white-space: nowrap;
-}
-
-.unit-card__lock-hint {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-3);
-    font-style: italic;
-}
-
-.unit-card__chevron {
     color: var(--color-primary);
-    flex-shrink: 0;
-    padding-top: 2px;
+    font-weight: 600;
 }
 
-/* ── Survey CTA ───────────────────────────────────────────── */
-
+/* ── Survey CTA ── */
 .units-survey-cta {
+    width: 100%;
+    max-width: 420px;
+    border: 2px solid #4caf50;
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    background: color-mix(in srgb, #4caf50 8%, var(--color-surface));
+    text-align: center;
     display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
     align-items: center;
-    gap: var(--space-4);
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark, #7c3aed) 100%);
-    border-radius: var(--radius-2xl);
-    padding: var(--space-4) var(--space-5);
-    color: white;
-    box-shadow: var(--shadow-lg);
-}
-
-.units-survey-cta__emoji {
-    font-size: 36px;
-    flex-shrink: 0;
-}
-
-.units-survey-cta__body {
-    flex: 1;
 }
 
 .units-survey-cta__title {
     font-size: var(--font-size-base);
-    font-weight: 800;
-}
-
-.units-survey-cta__desc {
-    font-size: var(--font-size-sm);
-    opacity: 0.85;
-    margin-top: 2px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
 }
 
 .units-survey-cta__btn {
-    background: white;
-    color: var(--color-primary);
+    padding: var(--space-3) var(--space-7);
+    background: #4caf50;
+    color: #fff;
     border: none;
-    border-radius: var(--radius-lg);
-    padding: var(--space-2) var(--space-4);
-    font-family: var(--font-primary);
+    border-radius: 999px;
     font-size: var(--font-size-sm);
-    font-weight: 800;
+    font-weight: 700;
     cursor: pointer;
-    flex-shrink: 0;
-    transition: opacity var(--transition-fast);
+    font-family: inherit;
 }
 
-.units-survey-cta__btn:hover {
-    opacity: 0.9;
+/* ── Back button ── */
+.units-back-btn {
+    width: 46px;
+    height: 46px;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text);
+    flex-shrink: 0;
+    transition: background 0.18s;
+}
+
+.units-back-btn:hover {
+    background: var(--color-border);
 }

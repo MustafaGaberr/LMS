@@ -1,102 +1,117 @@
 .welcome-page {
+    direction: rtl;
+    min-height: 100dvh;
+    background: var(--color-bg);
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
-    padding: var(--space-8) var(--space-5) env(safe-area-inset-bottom, var(--space-6));
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-10) var(--space-6) var(--space-10);
     position: relative;
     overflow: hidden;
 }
 
-.welcome-bg-blob {
+/* blobs */
+.welcome-blob {
     position: absolute;
-    top: -80px;
-    right: -80px;
-    width: 260px;
-    height: 260px;
     border-radius: 50%;
-    background: var(--color-primary);
-    opacity: 0.08;
-    filter: blur(40px);
     pointer-events: none;
 }
 
-.welcome-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: var(--space-4);
-    padding-top: var(--space-6);
+.welcome-blob--1 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--color-primary), transparent 70%);
+    opacity: 0.05;
+    top: -100px;
+    right: -80px;
 }
 
-.welcome-emoji {
-    font-size: 72px;
+.welcome-blob--2 {
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, var(--color-primary), transparent 70%);
+    opacity: 0.04;
+    bottom: -60px;
+    left: -50px;
 }
 
-.welcome-title {
-    font-size: var(--font-size-2xl);
-    font-weight: 800;
-    color: var(--color-text);
+/* Bot avatar */
+.welcome-avatar-wrap {
+    position: relative;
+    z-index: 1;
 }
 
-.welcome-course-name {
-    font-size: var(--font-size-base);
-    font-weight: 700;
-    color: var(--color-primary);
-    background: var(--color-primary-subtle);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-}
-
-.welcome-desc {
-    font-size: var(--font-size-base);
-    color: var(--color-text-2);
-    line-height: 1.8;
-    max-width: 300px;
-}
-
-.welcome-stats {
-    display: flex;
-    align-items: center;
+.welcome-avatar {
+    width: 100px;
+    height: 100px;
     background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-border);
     border-radius: var(--radius-xl);
-    padding: var(--space-5) var(--space-6);
-    gap: var(--space-5);
-    box-shadow: var(--shadow-sm);
-    width: 100%;
-    max-width: 320px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
     justify-content: center;
 }
 
-.welcome-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-1);
+.welcome-avatar__emoji {
+    font-size: 3rem;
 }
 
-.welcome-stat__value {
-    font-size: var(--font-size-2xl);
+/* Message card */
+.welcome-card {
+    width: 100%;
+    max-width: 420px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-7) var(--space-6);
+    background: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    box-shadow: var(--shadow-sm);
+}
+
+.welcome-card__line {
+    font-size: var(--font-size-lg);
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.7;
+}
+
+.welcome-card__line--bold {
     font-weight: 800;
-    color: var(--color-primary);
+    font-size: var(--font-size-xl);
 }
 
-.welcome-stat__label {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-3);
-    font-weight: 600;
-}
-
-.welcome-stat-divider {
-    width: 1px;
-    height: 40px;
-    background: var(--color-border);
-}
-
+/* Footer */
 .welcome-footer {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
     display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
+    justify-content: center;
+}
+
+.welcome-start-btn {
+    padding: var(--space-4) var(--space-10);
+    background: var(--color-text);
+    color: var(--color-bg);
+    border: none;
+    border-radius: 999px;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.18s, transform 0.18s;
+    min-width: 160px;
+}
+
+.welcome-start-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
 }

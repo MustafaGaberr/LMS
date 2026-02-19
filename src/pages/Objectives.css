@@ -1,120 +1,124 @@
-.objectives-page {
+.obj-page {
+    direction: rtl;
+    min-height: 100dvh;
+    background: var(--color-bg);
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
-    padding: var(--space-5);
-    padding-bottom: calc(var(--bottom-nav-height, 72px) + var(--space-4));
-}
-
-.objectives-header {
-    display: flex;
     align-items: center;
-    gap: var(--space-3);
-    background: var(--color-primary-subtle);
-    border-radius: var(--radius-xl);
-    padding: var(--space-4);
+    padding: 0 var(--space-4) var(--space-8);
+    gap: var(--space-5);
+    position: relative;
+    overflow: hidden;
 }
 
-.objectives-header__icon {
-    color: var(--color-primary);
-    flex-shrink: 0;
-}
-
-.objectives-header__title {
-    font-size: var(--font-size-lg);
-    font-weight: 800;
-    color: var(--color-text);
-    margin: 0;
-}
-
-.objectives-header__sub {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-3);
-    font-weight: 600;
-    margin: 0;
-}
-
-.objectives-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-}
-
-.objective-card {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-4);
-    text-align: right;
-    cursor: pointer;
-    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+/* ── Title banner (black bar like wireframe) ── */
+.obj-title-banner {
     width: 100%;
-    box-shadow: var(--shadow-sm);
-}
-
-.objective-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-}
-
-.objective-card__num {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-full);
-    background: var(--color-primary-subtle);
-    color: var(--color-primary);
-    font-weight: 800;
-    font-size: var(--font-size-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    max-width: 420px;
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-5);
+    text-align: center;
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    margin-top: var(--space-8);
     flex-shrink: 0;
 }
 
-.objective-card__body {
+/* ── Rows list ── */
+.obj-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 420px;
     flex: 1;
+}
+
+/* Each row is a button (whole thing is clickable) */
+.obj-row {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-3);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
     text-align: right;
+    width: 100%;
 }
 
-.objective-card__title {
-    font-weight: 700;
-    font-size: var(--font-size-base);
-    color: var(--color-text);
-    margin-bottom: var(--space-1);
+.obj-row:hover .obj-row__desc {
+    background: var(--color-primary-subtle);
+    border-color: var(--color-primary);
 }
 
-.objective-card__preview {
+/* Description card — left side */
+.obj-row__desc {
+    flex: 1;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    transition: background 0.18s, border-color 0.18s;
+}
+
+.obj-row__desc p {
     font-size: var(--font-size-sm);
-    color: var(--color-text-3);
+    color: var(--color-text);
+    margin: 0;
     line-height: 1.5;
+    font-weight: 500;
 }
 
-.objective-card__arrow {
-    color: var(--color-text-3);
+/* Label button — right side */
+.obj-row__label {
+    width: 90px;
     flex-shrink: 0;
-    transform: rotate(180deg);
-}
-
-.objectives-cta {
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
-    background: var(--color-accent-subtle);
-    color: var(--color-accent);
-    border: none;
-    border-radius: var(--radius-xl);
-    padding: var(--space-4);
-    font-family: var(--font-primary);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     font-weight: 700;
-    cursor: pointer;
-    transition: opacity var(--transition-fast);
+    padding: var(--space-2) var(--space-2);
+    line-height: 1.4;
+    text-align: center;
 }
 
-.objectives-cta:hover {
-    opacity: 0.8;
+.obj-row__label--green {
+    border-color: #4caf50;
+    color: #2e7d32;
+    background: color-mix(in srgb, #4caf50 8%, transparent);
+}
+
+.obj-row__label--gray {
+    border-color: var(--color-border);
+    color: var(--color-text-2);
+    background: var(--color-surface);
+}
+
+/* ── Back button ── */
+.obj-back-btn {
+    width: 46px;
+    height: 46px;
+    border: 2px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text);
+    flex-shrink: 0;
+    transition: background 0.18s;
+}
+
+.obj-back-btn:hover {
+    background: var(--color-border);
 }

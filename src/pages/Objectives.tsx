@@ -1,49 +1,48 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Target, ChevronLeft, CheckCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { course } from '../data/sampleCourse';
 import './Objectives.css';
+
+const ORDINAL = ['الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس', 'السابع', 'الثامن'];
 
 const Objectives: React.FC = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="objectives-page">
-            <div className="objectives-header">
-                <Target size={20} className="objectives-header__icon" />
-                <div>
-                    <h2 className="objectives-header__title">أهداف الدورة</h2>
-                    <p className="objectives-header__sub">
-                        {course.objectives.length} أهداف تعليمية
-                    </p>
-                </div>
+        <div className="obj-page">
+            {/* Title banner — matches the black header in wireframe */}
+            <div className="obj-title-banner">
+                <span>{course.title}</span>
             </div>
 
-            <div className="objectives-list">
-                {course.objectives.map((obj, i) => (
-                    <button
-                        key={obj.id}
-                        className="objective-card"
-                        onClick={() => navigate(`/objectives/${obj.id}`)}
-                    >
-                        <div className="objective-card__num">{i + 1}</div>
-                        <div className="objective-card__body">
-                            <p className="objective-card__title">{obj.title}</p>
-                            <p className="objective-card__preview">
-                                {obj.details.slice(0, 80)}...
-                            </p>
-                        </div>
-                        <ChevronLeft size={18} className="objective-card__arrow" />
-                    </button>
-                ))}
+            {/* Two-column list: description left | label button right */}
+            <div className="obj-rows">
+                {course.objectives.map((obj, i) => {
+                    const isOdd = i % 2 === 0; // alternates green / gray like wireframe
+                    return (
+                        <button
+                            key={obj.id}
+                            className="obj-row"
+                            onClick={() => navigate(`/objectives/${obj.id}`)}
+                        >
+                            {/* Description card — left */}
+                            <div className="obj-row__desc">
+                                <p>{obj.title}</p>
+                            </div>
+
+                            {/* Label button — right */}
+                            <div className={`obj-row__label ${isOdd ? 'obj-row__label--green' : 'obj-row__label--gray'}`}>
+                                الهدف {ORDINAL[i] ?? i + 1}
+                            </div>
+                        </button>
+                    );
+                })}
             </div>
 
-            <button
-                className="objectives-cta"
-                onClick={() => navigate('/units')}
-            >
-                <CheckCircle size={18} />
-                <span>فهمت الأهداف — انتقل للوحدات</span>
+            {/* Back → go to units */}
+            <button className="obj-back-btn" onClick={() => navigate('/units')} aria-label="رجوع">
+                <ArrowRight size={22} />
             </button>
         </div>
     );

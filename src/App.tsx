@@ -9,6 +9,7 @@ import { useAppStore } from './store/useAppStore';
 import { AppShell } from './layouts/AppShell';
 
 // Pages
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Onboarding from './pages/Onboarding';
 import Welcome from './pages/Welcome';
@@ -42,6 +43,7 @@ const AppRoutes: React.FC = () => {
     <AppShell>
       <Routes>
         {/* Public */}
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
 
         {/* Protected */}
@@ -103,7 +105,7 @@ const AppRoutes: React.FC = () => {
         />
 
         {/* Default redirect */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AppShell>
   );

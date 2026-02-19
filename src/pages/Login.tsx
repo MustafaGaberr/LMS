@@ -106,7 +106,7 @@ const Login: React.FC = () => {
                         id="username"
                         label="اسم المستخدم"
                         type="text"
-                        placeholder="student1 أو student2"
+                        placeholder="ادخل اسم المستخدم"
                         value={username}
                         onChange={(e) => { setUsername(e.target.value); setError(''); }}
                         iconStart={<User size={18} />}

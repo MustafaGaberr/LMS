@@ -1,119 +1,113 @@
-.course-start-page {
-    display: flex;
-    flex-direction: column;
+.cs-page {
+    direction: rtl;
     min-height: 100dvh;
-    padding: var(--space-5);
-    gap: var(--space-5);
-}
-
-.course-card {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark, var(--color-primary)));
-    border-radius: var(--radius-2xl);
-    padding: var(--space-7);
+    background: var(--color-bg);
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    color: white;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-16) var(--space-6) var(--space-10);
     position: relative;
     overflow: hidden;
+    gap: var(--space-4);
 }
 
-.course-card::after {
-    content: '';
+.cs-blob {
     position: absolute;
-    top: -40px;
-    left: -40px;
-    width: 160px;
-    height: 160px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
 }
 
-.course-card__icon {
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-xl);
+.cs-blob--1 {
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, var(--color-primary), transparent 70%);
+    opacity: 0.05;
+    top: -90px;
+    right: -70px;
+}
+
+.cs-blob--2 {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--color-primary), transparent 70%);
+    opacity: 0.04;
+    bottom: -50px;
+    left: -40px;
+}
+
+.cs-body {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    gap: var(--space-5);
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 1;
 }
 
-.course-card__title {
-    font-size: var(--font-size-lg);
-    font-weight: 800;
-    line-height: 1.4;
-}
-
-.course-card__desc {
-    font-size: var(--font-size-sm);
-    opacity: 0.88;
-    line-height: 1.7;
-}
-
-.course-card__code-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-full);
-    padding: var(--space-1) var(--space-3);
-    font-size: var(--font-size-xs);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    width: fit-content;
-}
-
-.course-stats {
-    display: flex;
+.cs-card {
+    width: 100%;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
     background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
+    text-align: center;
     box-shadow: var(--shadow-sm);
 }
 
-.course-stat {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: var(--space-4);
-    border-left: 1px solid var(--color-border);
+.cs-card--code {
+    padding: var(--space-4) var(--space-6);
 }
 
-.course-stat:last-child {
-    border-left: none;
+.cs-card__title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.6;
 }
 
-.course-stat__value {
-    font-size: var(--font-size-2xl);
-    font-weight: 800;
-    color: var(--color-primary);
-}
-
-.course-stat__label {
-    font-size: var(--font-size-xs);
-    color: var(--color-text-3);
+.cs-card__code {
+    font-size: var(--font-size-base);
     font-weight: 600;
+    color: var(--color-primary);
+    margin: 0;
 }
 
-.course-code-section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-}
-
-.course-code-hint {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-3);
+.cs-tagline {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-text);
     text-align: center;
+    line-height: 1.7;
+    margin: var(--space-4) 0 0;
 }
 
-.course-start-footer {
+.cs-footer {
+    position: relative;
+    z-index: 1;
     display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    margin-top: auto;
+    justify-content: center;
+    width: 100%;
+}
+
+.cs-start-btn {
+    padding: var(--space-4) var(--space-10);
+    background: var(--color-text);
+    color: var(--color-bg);
+    border: none;
+    border-radius: 999px;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    min-width: 160px;
+    transition: opacity 0.18s, transform 0.18s;
+}
+
+.cs-start-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
 }
