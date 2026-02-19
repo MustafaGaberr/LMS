@@ -8,7 +8,6 @@ import './Units.css';
 const Units: React.FC = () => {
     const navigate = useNavigate();
     const isUnitUnlocked = useAppStore((s) => s.isUnitUnlocked);
-    const isLessonUnlocked = useAppStore((s) => s.isLessonUnlocked);
     const isAllCourseDone = useAppStore((s) => s.isAllCourseDone);
     const progress = useAppStore((s) => s.progress);
     const courseDone = isAllCourseDone();
@@ -27,9 +26,8 @@ const Units: React.FC = () => {
                         (l) => progress.completedLessons[l.id]?.activityDone
                     ).length;
                     const allDone = completedCount === unit.lessons.length;
-                    const firstUnlockedLesson = unit.lessons.find(
-                        (l) => isLessonUnlocked(unit.id, l.id)
-                    );
+
+
 
                     return (
                         <button

@@ -1,4 +1,4 @@
-import { normalize, tokenize } from './arNormalizer';
+import { tokenize } from './arNormalizer';
 import { levenshtein, trigramSimilarity } from './similarity';
 
 /**

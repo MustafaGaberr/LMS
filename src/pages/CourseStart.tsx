@@ -62,7 +62,7 @@ const CourseStart: React.FC = () => {
                     value={code}
                     onChange={(e) => { setCode(e.target.value); setCodeError(''); }}
                     error={codeError}
-                    startIcon={<Code size={16} />}
+                    iconStart={<Code size={16} />}
                 />
             </div>
 

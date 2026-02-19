@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Lock, ChevronLeft, CheckCircle, Clock } from 'lucide-react';
+import { Lock, ChevronLeft, CheckCircle } from 'lucide-react';
 import { getUnit } from '../data/sampleCourse';
 import { useAppStore } from '../store/useAppStore';
 import './LessonsList.css';
