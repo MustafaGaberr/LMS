@@ -9,7 +9,9 @@ const Units: React.FC = () => {
     const navigate = useNavigate();
     const isUnitUnlocked = useAppStore((s) => s.isUnitUnlocked);
     const isLessonUnlocked = useAppStore((s) => s.isLessonUnlocked);
+    const isAllCourseDone = useAppStore((s) => s.isAllCourseDone);
     const progress = useAppStore((s) => s.progress);
+    const courseDone = isAllCourseDone();
 
     return (
         <div className="units-page">
@@ -76,6 +78,23 @@ const Units: React.FC = () => {
                     );
                 })}
             </div>
+
+            {/* Survey CTA — visible only when entire course is done */}
+            {courseDone && (
+                <div className="units-survey-cta">
+                    <div className="units-survey-cta__emoji">🎉</div>
+                    <div className="units-survey-cta__body">
+                        <p className="units-survey-cta__title">أتممت الدورة بالكامل!</p>
+                        <p className="units-survey-cta__desc">شاركنا رأيك في استبيان قصير</p>
+                    </div>
+                    <button
+                        className="units-survey-cta__btn"
+                        onClick={() => navigate('/survey')}
+                    >
+                        ابدأ الاستبيان
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

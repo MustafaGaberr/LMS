@@ -1,5 +1,9 @@
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+// Re-export evaluator types so consumers can use a single import source
+export type { QuizQuestion, AcceptCriteria } from '../lib/evaluator/arAnswerEvaluator';
+import { quizData } from './quizData';
+
 export interface LessonSections {
     concept: string;
     importance: string;
@@ -356,4 +360,9 @@ export function getUnitIndex(unitId: string): number {
 
 export function getLessonIndex(unitId: string, lessonId: string): number {
     return getUnit(unitId)?.lessons.findIndex((l) => l.id === lessonId) ?? -1;
+}
+
+/** Return quiz questions for a given lessonId (from quizData.ts) */
+export function getQuizQuestions(lessonId: string) {
+    return quizData[lessonId] ?? [];
 }

@@ -1,0 +1,162 @@
+.activity-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    min-height: 100dvh;
+}
+
+.activity-error {
+    color: var(--color-error);
+    text-align: center;
+    padding: var(--space-8);
+}
+
+/* ── Instructions ────────────────────────────────────────── */
+.activity-instructions {
+    background: var(--color-primary-subtle);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.activity-instructions__icon {
+    font-size: 32px;
+}
+
+.activity-instructions__title {
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.activity-instructions__text {
+    font-size: var(--font-size-base);
+    color: var(--color-text-2);
+    line-height: 1.8;
+}
+
+/* ── Dropzone ─────────────────────────────────────────────── */
+.activity-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    border: 2px dashed var(--color-border-strong);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8) var(--space-6);
+    background: var(--color-surface);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    width: 100%;
+    text-align: center;
+}
+
+.activity-dropzone:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-subtle);
+}
+
+.activity-dropzone--has-file {
+    border-style: solid;
+    border-color: var(--color-primary);
+    background: var(--color-primary-subtle);
+}
+
+.activity-dropzone__icon {
+    color: var(--color-text-3);
+}
+
+.activity-dropzone__file-icon {
+    color: var(--color-primary);
+}
+
+.activity-dropzone__label {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text-2);
+}
+
+.activity-dropzone__formats {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-3);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+}
+
+.activity-dropzone__filename {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-text);
+    word-break: break-all;
+}
+
+.activity-dropzone__size {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-3);
+}
+
+.activity-dropzone__change {
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* ── Error / notice ───────────────────────────────────────── */
+.activity-error-msg {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-error, #ef4444);
+    background: rgba(239, 68, 68, 0.08);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.activity-sim-note {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-3);
+    text-align: center;
+    font-style: italic;
+}
+
+/* ── Success state ────────────────────────────────────────── */
+.activity-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+    padding: var(--space-8) 0;
+}
+
+.activity-success__icon {
+    color: #10b981;
+}
+
+.activity-success h3 {
+    font-size: var(--font-size-xl);
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.activity-success p {
+    font-size: var(--font-size-base);
+    color: var(--color-text-2);
+}
+
+/* ── Spin animation for loader ────────────────────────────── */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 0.8s linear infinite;
+}

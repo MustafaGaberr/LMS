@@ -13,6 +13,8 @@ export const STORAGE_KEYS = {
     SETTINGS: 'settings',
     SEEN_ONBOARDING: 'seenOnboarding',
     PROGRESS: 'progress',
+    DEVICE_ID: 'deviceId',
+    SURVEY_AGGREGATES: 'surveyAggregates',
 } as const;
 
 // Generic get/set/remove helpers
@@ -62,6 +64,12 @@ export interface Progress {
     completedLessons: Record<string, LessonProgress>;
 }
 
+// ─── Survey types ─────────────────────────────────────────────────────────────
+
+/** Aggregated counts: { [questionId]: { 1: count, 2: count, ..., 5: count } } */
+export type SurveyLikertCounts = Record<number, number>;
+export type SurveyAggregates = Record<string, SurveyLikertCounts>;
+
 // ─── Persisted state shape ────────────────────────────────────────────────────
 
 export interface PersistedAppState {
@@ -69,21 +77,48 @@ export interface PersistedAppState {
     settings: { soundEnabled: boolean };
     seenOnboarding: boolean;
     progress: Progress;
+    deviceId: string;
+    surveyAggregates: SurveyAggregates;
 }
 
-// Load all persisted fields at boot
+// ─── Device ID helper ─────────────────────────────────────────────────────────
+
+export async function getOrCreateDeviceId(): Promise<string> {
+    const existing = await getItem<string>(STORAGE_KEYS.DEVICE_ID);
+    if (existing) return existing;
+    const newId = `dev-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+    await setItem(STORAGE_KEYS.DEVICE_ID, newId);
+    return newId;
+}
+
+// ─── Load all persisted fields at boot ───────────────────────────────────────
+
 export async function initAppState(): Promise<PersistedAppState> {
-    const [activeUserId, settings, seenOnboarding, progress] = await Promise.all([
-        getItem<PersistedAppState['activeUserId']>(STORAGE_KEYS.ACTIVE_USER_ID),
-        getItem<PersistedAppState['settings']>(STORAGE_KEYS.SETTINGS),
-        getItem<boolean>(STORAGE_KEYS.SEEN_ONBOARDING),
-        getItem<Progress>(STORAGE_KEYS.PROGRESS),
-    ]);
+    const [activeUserId, settings, seenOnboarding, progress, deviceId, surveyAggregates] =
+        await Promise.all([
+            getItem<PersistedAppState['activeUserId']>(STORAGE_KEYS.ACTIVE_USER_ID),
+            getItem<PersistedAppState['settings']>(STORAGE_KEYS.SETTINGS),
+            getItem<boolean>(STORAGE_KEYS.SEEN_ONBOARDING),
+            getItem<Progress>(STORAGE_KEYS.PROGRESS),
+            getItem<string>(STORAGE_KEYS.DEVICE_ID),
+            getItem<SurveyAggregates>(STORAGE_KEYS.SURVEY_AGGREGATES),
+        ]);
+
+    // Create device ID if not yet set
+    const resolvedDeviceId =
+        deviceId ??
+        (() => {
+            const id = `dev-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+            setItem(STORAGE_KEYS.DEVICE_ID, id);
+            return id;
+        })();
 
     return {
         activeUserId: activeUserId ?? null,
         settings: settings ?? { soundEnabled: true },
         seenOnboarding: seenOnboarding ?? false,
         progress: progress ?? { completedLessons: {} },
+        deviceId: resolvedDeviceId,
+        surveyAggregates: surveyAggregates ?? {},
     };
 }

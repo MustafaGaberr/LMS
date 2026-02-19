@@ -153,3 +153,54 @@
     flex-shrink: 0;
     padding-top: 2px;
 }
+
+/* ── Survey CTA ───────────────────────────────────────────── */
+
+.units-survey-cta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark, #7c3aed) 100%);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-4) var(--space-5);
+    color: white;
+    box-shadow: var(--shadow-lg);
+}
+
+.units-survey-cta__emoji {
+    font-size: 36px;
+    flex-shrink: 0;
+}
+
+.units-survey-cta__body {
+    flex: 1;
+}
+
+.units-survey-cta__title {
+    font-size: var(--font-size-base);
+    font-weight: 800;
+}
+
+.units-survey-cta__desc {
+    font-size: var(--font-size-sm);
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
+.units-survey-cta__btn {
+    background: white;
+    color: var(--color-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: var(--space-2) var(--space-4);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: 800;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.units-survey-cta__btn:hover {
+    opacity: 0.9;
+}

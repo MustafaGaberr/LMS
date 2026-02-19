@@ -1,58 +1,107 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '../store/useAppStore';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
 import './Survey.css';
 
-const QUESTIONS = [
-    {
-        id: 'q1',
-        text: 'كيف تُقيّم مستوى الدورة بشكل عام؟',
-        options: ['ممتاز', 'جيد جداً', 'جيد', 'يحتاج تحسين'],
-    },
-    {
-        id: 'q2',
-        text: 'هل المحتوى مناسب لمستواك؟',
-        options: ['نعم تماماً', 'إلى حد ما', 'لا'],
-    },
-    {
-        id: 'q3',
-        text: 'هل توصي بهذه الدورة للآخرين؟',
-        options: ['نعم بكل تأكيد', 'ربما', 'لا'],
-    },
+interface SurveyQuestion {
+    id: string;
+    text: string;
+}
+
+const SURVEY_QUESTIONS: SurveyQuestion[] = [
+    { id: 'q1', text: 'كيف تُقيّم جودة محتوى الدورة التعليمية؟' },
+    { id: 'q2', text: 'كيف تُقيّم سهولة استخدام التطبيق؟' },
+    { id: 'q3', text: 'كيف تُقيّم فاعلية الأنشطة التطبيقية والتقييمات؟' },
+    { id: 'q4', text: 'هل أضافت هذه الدورة قيمة لمهاراتك الرقمية الفعلية؟' },
+    { id: 'q5', text: 'كيف تُقيّم تجربتك التعليمية الإجمالية في هذا التطبيق؟' },
 ];
+
+const LIKERT_LABELS = ['ضعيف جدًا', 'ضعيف', 'متوسط', 'جيد', 'ممتاز'];
 
 const Survey: React.FC = () => {
     const navigate = useNavigate();
-    const [answers, setAnswers] = useState<Record<string, string>>({});
+    const isAllCourseDone = useAppStore((s) => s.isAllCourseDone);
+    const submitSurveyResponse = useAppStore((s) => s.submitSurveyResponse);
 
-    const allAnswered = QUESTIONS.every((q) => answers[q.id]);
+    const [responses, setResponses] = useState<Record<string, number>>({});
+    const [submitted, setSubmitted] = useState(false);
+
+    // Guard: must complete all lessons first
+    if (!isAllCourseDone()) {
+        return (
+            <div className="survey-page survey-page--locked">
+                <div className="survey-locked-icon">🔒</div>
+                <h2 className="survey-locked-title">الاستبيان مقفل</h2>
+                <p className="survey-locked-desc">
+                    أكمل جميع دروس الدورة الثلاث عشر لفتح الاستبيان.
+                </p>
+                <Button variant="primary" onClick={() => navigate('/units')}>
+                    العودة للوحدات
+                </Button>
+            </div>
+        );
+    }
+
+    if (submitted) {
+        return (
+            <div className="survey-page survey-page--done">
+                <div className="survey-done-emoji">🎊</div>
+                <h2 className="survey-done-title">شكرًا على إجابتك!</h2>
+                <p className="survey-done-desc">تم حفظ ردودك بشكل مجهول. نقدّر رأيك.</p>
+                <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    onClick={() => navigate('/survey/results')}
+                >
+                    عرض النتائج والإحصاءات 📊
+                </Button>
+            </div>
+        );
+    }
+
+    const allAnswered = SURVEY_QUESTIONS.every((q) => responses[q.id] !== undefined);
+
+    const handleSubmit = () => {
+        if (!allAnswered) return;
+        submitSurveyResponse(responses);
+        setSubmitted(true);
+    };
 
     return (
         <div className="survey-page">
             <div className="survey-header">
-                <span style={{ fontSize: 48 }}>📋</span>
-                <h2 className="survey-title">استبيان الرأي</h2>
-                <p className="survey-subtitle">آراؤك تساعدنا على التحسين</p>
+                <h2 className="survey-header__title">استبيان الدورة</h2>
+                <p className="survey-header__sub">مجهول الهوية · 5 أسئلة</p>
             </div>
 
             <div className="survey-questions">
-                {QUESTIONS.map((q) => (
-                    <Card key={q.id} elevated padding="md">
-                        <p className="survey-question-text">{q.text}</p>
-                        <div className="survey-options">
-                            {q.options.map((opt) => (
+                {SURVEY_QUESTIONS.map((q, qi) => (
+                    <div key={q.id} className="survey-q">
+                        <p className="survey-q__text">
+                            <span className="survey-q__num">{qi + 1}</span>
+                            {q.text}
+                        </p>
+                        <div className="survey-likert">
+                            {[1, 2, 3, 4, 5].map((val) => (
                                 <button
-                                    key={opt}
-                                    className={`survey-option ${answers[q.id] === opt ? 'survey-option--selected' : ''}`}
-                                    onClick={() => setAnswers((a) => ({ ...a, [q.id]: opt }))}
-                                    type="button"
+                                    key={val}
+                                    className={`survey-likert-btn ${responses[q.id] === val ? 'survey-likert-btn--active' : ''
+                                        }`}
+                                    onClick={() =>
+                                        setResponses((r) => ({ ...r, [q.id]: val }))
+                                    }
+                                    title={LIKERT_LABELS[val - 1]}
                                 >
-                                    {opt}
+                                    <span className="survey-likert-btn__val">{val}</span>
+                                    <span className="survey-likert-btn__label">
+                                        {LIKERT_LABELS[val - 1]}
+                                    </span>
                                 </button>
                             ))}
                         </div>
-                    </Card>
+                    </div>
                 ))}
             </div>
 
@@ -61,9 +110,9 @@ const Survey: React.FC = () => {
                 size="lg"
                 fullWidth
                 disabled={!allAnswered}
-                onClick={() => navigate('/survey/results')}
+                onClick={handleSubmit}
             >
-                إرسال الاستبيان
+                إرسال الاستبيان 📤
             </Button>
         </div>
     );

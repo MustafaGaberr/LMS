@@ -1,12 +1,6 @@
 import { create } from 'zustand';
-import {
-    setItem,
-    removeItem,
-    clearAll,
-    STORAGE_KEYS,
-    Progress,
-    LessonProgress,
-} from '../services/storage';
+import { setItem, removeItem, clearAll, STORAGE_KEYS } from '../services/storage';
+import type { Progress, LessonProgress, SurveyAggregates, SurveyLikertCounts } from '../services/storage';
 import { course, getUnitIndex, getLessonIndex } from '../data/sampleCourse';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -25,6 +19,8 @@ interface AppState {
     settings: UserSettings;
     seenOnboarding: boolean;
     progress: Progress;
+    deviceId: string;
+    surveyAggregates: SurveyAggregates;
 
     // Auth actions
     login: (username: string, password: string) => boolean;
@@ -43,6 +39,11 @@ interface AppState {
     isUnitUnlocked: (unitId: string) => boolean;
     isLessonUnlocked: (unitId: string, lessonId: string) => boolean;
     getLessonProgress: (lessonId: string) => LessonProgress;
+    isAllCourseDone: () => boolean;
+
+    // Survey actions
+    submitSurveyResponse: (responses: Record<string, number>) => void;
+    resetSurveyStats: () => void;
 
     // App reset
     resetAll: () => Promise<void>;
@@ -53,6 +54,8 @@ interface AppState {
         settings: UserSettings;
         seenOnboarding: boolean;
         progress: Progress;
+        deviceId: string;
+        surveyAggregates: SurveyAggregates;
     }) => void;
 }
 
@@ -81,9 +84,8 @@ const DEFAULT_LESSON_PROGRESS: LessonProgress = {
 function computeIsUnitUnlocked(unitId: string, progress: Progress): boolean {
     const idx = getUnitIndex(unitId);
     if (idx < 0) return false;
-    if (idx === 0) return true; // first unit always unlocked
+    if (idx === 0) return true;
 
-    // All lessons in the previous unit must have activityDone
     const prevUnit = course.units[idx - 1];
     return prevUnit.lessons.every(
         (l) => progress.completedLessons[l.id]?.activityDone === true
@@ -102,9 +104,8 @@ function computeIsLessonUnlocked(
 
     const idx = getLessonIndex(unitId, lessonId);
     if (idx < 0) return false;
-    if (idx === 0) return true; // first lesson of an unlocked unit is always unlocked
+    if (idx === 0) return true;
 
-    // Previous lesson must have activityDone
     const prevLesson = unit.lessons[idx - 1];
     return progress.completedLessons[prevLesson.id]?.activityDone === true;
 }
@@ -121,7 +122,6 @@ function patchLesson(
     const existing = current.completedLessons[lessonId] ?? { ...DEFAULT_LESSON_PROGRESS };
     const updated = { ...existing, ...patch };
 
-    // If all 3 parts done, stamp completedAt
     if (updated.contentDone && updated.activityDone) {
         updated.completedAt = updated.completedAt ?? Date.now();
     }
@@ -144,14 +144,18 @@ export const useAppStore = create<AppState>((set, get) => ({
     settings: { soundEnabled: true },
     seenOnboarding: false,
     progress: { completedLessons: {} },
+    deviceId: '',
+    surveyAggregates: {},
 
-    hydrate({ activeUserId, settings, seenOnboarding, progress }) {
+    hydrate({ activeUserId, settings, seenOnboarding, progress, deviceId, surveyAggregates }) {
         set({
             activeUserId,
             theme: deriveTheme(activeUserId),
             settings,
             seenOnboarding,
             progress,
+            deviceId,
+            surveyAggregates,
         });
         applyTheme(deriveTheme(activeUserId));
     },
@@ -211,6 +215,31 @@ export const useAppStore = create<AppState>((set, get) => ({
         return computeIsLessonUnlocked(unitId, lessonId, get().progress);
     },
 
+    isAllCourseDone() {
+        const progress = get().progress;
+        return course.units.every((unit) =>
+            unit.lessons.every((l) => progress.completedLessons[l.id]?.activityDone === true)
+        );
+    },
+
+    submitSurveyResponse(responses: Record<string, number>) {
+        const current = get().surveyAggregates;
+        const next: SurveyAggregates = { ...current };
+
+        for (const [qId, value] of Object.entries(responses)) {
+            const existing: SurveyLikertCounts = next[qId] ?? { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+            next[qId] = { ...existing, [value]: (existing[value] ?? 0) + 1 };
+        }
+
+        set({ surveyAggregates: next });
+        void setItem(STORAGE_KEYS.SURVEY_AGGREGATES, next);
+    },
+
+    resetSurveyStats() {
+        set({ surveyAggregates: {} });
+        void setItem(STORAGE_KEYS.SURVEY_AGGREGATES, {});
+    },
+
     async resetAll() {
         await clearAll();
         set({
@@ -219,6 +248,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             settings: { soundEnabled: true },
             seenOnboarding: false,
             progress: { completedLessons: {} },
+            surveyAggregates: {},
         });
         applyTheme('A');
     },
