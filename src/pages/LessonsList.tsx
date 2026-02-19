@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Play, MessageCircle, Activity, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { Card } from '../components/Card';
 import { Badge } from '../components/Badge';
 

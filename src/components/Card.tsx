@@ -5,6 +5,7 @@ import './Card.css';
 export interface CardProps {
     children: React.ReactNode;
     className?: string;
+    style?: React.CSSProperties;
     onClick?: () => void;
     elevated?: boolean;
     padding?: 'none' | 'sm' | 'md' | 'lg';
@@ -13,6 +14,7 @@ export interface CardProps {
 export const Card: React.FC<CardProps> = ({
     children,
     className,
+    style,
     onClick,
     elevated = false,
     padding = 'md',
@@ -27,6 +29,7 @@ export const Card: React.FC<CardProps> = ({
                 className
             )}
             onClick={onClick}
+            style={style}
             type={onClick ? 'button' : undefined}
         >
             {children}

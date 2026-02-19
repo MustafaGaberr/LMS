@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { Button } from '../components/Button';
 import './Onboarding.css';

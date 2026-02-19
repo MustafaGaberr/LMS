@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 
 const ObjectiveDetail: React.FC = () => {

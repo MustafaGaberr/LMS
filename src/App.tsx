@@ -4,7 +4,6 @@ import {
   Routes,
   Route,
   Navigate,
-  useLocation,
 } from 'react-router-dom';
 import { useAppStore } from './store/useAppStore';
 import { AppShell } from './layouts/AppShell';

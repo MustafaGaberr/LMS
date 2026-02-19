@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Target, ChevronLeft } from 'lucide-react';
 import { Card } from '../components/Card';
-import { Badge } from '../components/Badge';
 
 const OBJECTIVES = [
     { id: '1', title: 'الهدف الأول', desc: 'فهم المفاهيم الأساسية', done: false },
