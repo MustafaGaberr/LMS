@@ -1,0 +1,120 @@
+.objectives-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    padding-bottom: calc(var(--bottom-nav-height, 72px) + var(--space-4));
+}
+
+.objectives-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    background: var(--color-primary-subtle);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+}
+
+.objectives-header__icon {
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.objectives-header__title {
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.objectives-header__sub {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-3);
+    font-weight: 600;
+    margin: 0;
+}
+
+.objectives-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.objective-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    text-align: right;
+    cursor: pointer;
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+    width: 100%;
+    box-shadow: var(--shadow-sm);
+}
+
+.objective-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.objective-card__num {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    font-weight: 800;
+    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.objective-card__body {
+    flex: 1;
+    text-align: right;
+}
+
+.objective-card__title {
+    font-weight: 700;
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    margin-bottom: var(--space-1);
+}
+
+.objective-card__preview {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-3);
+    line-height: 1.5;
+}
+
+.objective-card__arrow {
+    color: var(--color-text-3);
+    flex-shrink: 0;
+    transform: rotate(180deg);
+}
+
+.objectives-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    background: var(--color-accent-subtle);
+    color: var(--color-accent);
+    border: none;
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.objectives-cta:hover {
+    opacity: 0.8;
+}

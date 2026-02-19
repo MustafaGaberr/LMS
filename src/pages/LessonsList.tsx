@@ -1,41 +1,93 @@
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Play, MessageCircle, Activity, ChevronLeft } from 'lucide-react';
-import { Card } from '../components/Card';
-import { Badge } from '../components/Badge';
-
-const LESSONS = [
-    { id: 'l1', title: 'الدرس الأول', duration: '10 دقائق' },
-    { id: 'l2', title: 'الدرس الثاني', duration: '15 دقيقة' },
-    { id: 'l3', title: 'الدرس الثالث', duration: '12 دقيقة' },
-    { id: 'l4', title: 'الدرس الرابع', duration: '8 دقائق' },
-    { id: 'l5', title: 'الدرس الخامس', duration: '20 دقيقة' },
-];
+import { useParams, useNavigate } from 'react-router-dom';
+import { Lock, ChevronLeft, CheckCircle, Clock } from 'lucide-react';
+import { getUnit } from '../data/sampleCourse';
+import { useAppStore } from '../store/useAppStore';
+import './LessonsList.css';
 
 const LessonsList: React.FC = () => {
-    const { unitId } = useParams();
+    const { unitId } = useParams<{ unitId: string }>();
     const navigate = useNavigate();
+    const isLessonUnlocked = useAppStore((s) => s.isLessonUnlocked);
+    const getLessonProgress = useAppStore((s) => s.getLessonProgress);
+    const isUnitUnlocked = useAppStore((s) => s.isUnitUnlocked);
+
+    const unit = getUnit(unitId ?? '');
+
+    if (!unit || !isUnitUnlocked(unit.id)) {
+        return (
+            <div className="lessons-page">
+                <p className="lessons-error">هذه الوحدة غير متاحة بعد.</p>
+            </div>
+        );
+    }
 
     return (
-        <div style={{ padding: 'var(--space-5) var(--space-4)', display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-            <div style={{ marginBottom: 'var(--space-2)' }}>
-                <Badge variant="primary">{unitId}</Badge>
-                <h2 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 800, marginTop: 'var(--space-2)' }}>الدروس</h2>
+        <div className="lessons-page">
+            {/* Unit header */}
+            <div className="lessons-unit-header">
+                <span className="lessons-unit-emoji">{unit.icon}</span>
+                <div>
+                    <h2 className="lessons-unit-title">{unit.title}</h2>
+                    <p className="lessons-unit-desc">{unit.description}</p>
+                </div>
             </div>
-            {LESSONS.map((lesson, i) => (
-                <Card key={lesson.id} elevated onClick={() => navigate(`/units/${unitId}/lessons/${lesson.id}`)}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-                        <div style={{ width: 36, height: 36, borderRadius: 'var(--radius-full)', background: 'var(--color-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 'var(--font-size-sm)', fontWeight: 700 }}>
-                            {i + 1}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                            <p style={{ fontWeight: 600 }}>{lesson.title}</p>
-                            <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-3)' }}>{lesson.duration}</p>
-                        </div>
-                        <ChevronLeft size={16} color="var(--color-text-3)" />
-                    </div>
-                </Card>
-            ))}
+
+            {/* Lessons list */}
+            <div className="lessons-list">
+                {unit.lessons.map((lesson, idx) => {
+                    const unlocked = isLessonUnlocked(unit.id, lesson.id);
+                    const prog = getLessonProgress(lesson.id);
+                    const isDone = prog.activityDone;
+                    const isContentDone = prog.contentDone;
+
+                    return (
+                        <button
+                            key={lesson.id}
+                            className={`lesson-card ${!unlocked ? 'lesson-card--locked' : ''} ${isDone ? 'lesson-card--done' : ''}`}
+                            disabled={!unlocked}
+                            onClick={() =>
+                                unlocked &&
+                                navigate(`/units/${unit.id}/lessons/${lesson.id}`)
+                            }
+                        >
+                            {/* Number bubble → progress icon */}
+                            <div className="lesson-card__num">
+                                {isDone ? (
+                                    <CheckCircle size={18} className="lesson-card__done-icon" />
+                                ) : !unlocked ? (
+                                    <Lock size={15} />
+                                ) : (
+                                    <span>{idx + 1}</span>
+                                )}
+                            </div>
+
+                            <div className="lesson-card__body">
+                                <p className="lesson-card__title">{lesson.title}</p>
+                                <div className="lesson-card__chips">
+                                    <span className={`chip ${isContentDone ? 'chip--done' : 'chip--pending'}`}>
+                                        {isContentDone ? '✓' : '○'} المحتوى
+                                    </span>
+                                    <span className={`chip ${prog.activityDone ? 'chip--done' : 'chip--pending'}`}>
+                                        {prog.activityDone ? '✓' : '○'} النشاط
+                                    </span>
+                                    {!unlocked && (
+                                        <span className="chip chip--locked">مقفل</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            {unlocked && (
+                                <ChevronLeft
+                                    size={16}
+                                    className="lesson-card__arrow"
+                                    style={{ transform: 'rotate(180deg)' }}
+                                />
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
         </div>
     );
 };

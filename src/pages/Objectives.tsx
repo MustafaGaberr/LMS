@@ -1,33 +1,50 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Target, ChevronLeft } from 'lucide-react';
-import { Card } from '../components/Card';
-import { Badge } from '../components/Badge';
-
-const OBJECTIVES = [
-    { id: '1', title: 'الهدف الأول', desc: 'فهم المفاهيم الأساسية', done: false },
-    { id: '2', title: 'الهدف الثاني', desc: 'تطبيق المعرفة عملياً', done: false },
-    { id: '3', title: 'الهدف الثالث', desc: 'تقييم الأداء والتحسين', done: false },
-];
+import { Target, ChevronLeft, CheckCircle } from 'lucide-react';
+import { course } from '../data/sampleCourse';
+import './Objectives.css';
 
 const Objectives: React.FC = () => {
     const navigate = useNavigate();
+
     return (
-        <div style={{ padding: 'var(--space-5) var(--space-4)', display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-            <div className="placeholder-icon" style={{ alignSelf: 'center', marginBottom: 'var(--space-2)' }}>
-                <Target size={32} />
+        <div className="objectives-page">
+            <div className="objectives-header">
+                <Target size={20} className="objectives-header__icon" />
+                <div>
+                    <h2 className="objectives-header__title">أهداف الدورة</h2>
+                    <p className="objectives-header__sub">
+                        {course.objectives.length} أهداف تعليمية
+                    </p>
+                </div>
             </div>
-            {OBJECTIVES.map((obj) => (
-                <Card key={obj.id} elevated onClick={() => navigate(`/objectives/${obj.id}`)}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div>
-                            <p style={{ fontWeight: 700, marginBottom: '4px' }}>{obj.title}</p>
-                            <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-3)' }}>{obj.desc}</p>
+
+            <div className="objectives-list">
+                {course.objectives.map((obj, i) => (
+                    <button
+                        key={obj.id}
+                        className="objective-card"
+                        onClick={() => navigate(`/objectives/${obj.id}`)}
+                    >
+                        <div className="objective-card__num">{i + 1}</div>
+                        <div className="objective-card__body">
+                            <p className="objective-card__title">{obj.title}</p>
+                            <p className="objective-card__preview">
+                                {obj.details.slice(0, 80)}...
+                            </p>
                         </div>
-                        <ChevronLeft size={18} color="var(--color-text-3)" />
-                    </div>
-                </Card>
-            ))}
+                        <ChevronLeft size={18} className="objective-card__arrow" />
+                    </button>
+                ))}
+            </div>
+
+            <button
+                className="objectives-cta"
+                onClick={() => navigate('/units')}
+            >
+                <CheckCircle size={18} />
+                <span>فهمت الأهداف — انتقل للوحدات</span>
+            </button>
         </div>
     );
 };
