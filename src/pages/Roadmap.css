@@ -1,0 +1,95 @@
+.roadmap-page {
+    padding: var(--space-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.roadmap-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.roadmap-title {
+    font-size: var(--font-size-xl);
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.roadmap-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-3);
+}
+
+.roadmap-track {
+    display: flex;
+    flex-direction: column;
+    padding: 0 var(--space-4);
+}
+
+.roadmap-node {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-4);
+    position: relative;
+}
+
+.roadmap-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--color-border-strong);
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-3);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.roadmap-circle--done {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: white;
+}
+
+.roadmap-circle--current {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    box-shadow: 0 0 0 4px var(--color-primary-subtle);
+}
+
+.roadmap-line {
+    position: absolute;
+    right: 21px;
+    top: 44px;
+    width: 2px;
+    height: calc(100% + var(--space-4));
+    background: var(--color-border);
+}
+
+.roadmap-line--done {
+    background: var(--color-success);
+}
+
+.roadmap-label {
+    padding: var(--space-3) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text);
+    flex: 1;
+    min-height: 44px;
+    padding-bottom: var(--space-6);
+}

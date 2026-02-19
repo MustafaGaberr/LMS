@@ -1,0 +1,70 @@
+.survey-page {
+    padding: var(--space-5) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.survey-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.survey-title {
+    font-size: var(--font-size-xl);
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.survey-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-3);
+}
+
+.survey-questions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.survey-question-text {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--space-3);
+    line-height: 1.6;
+}
+
+.survey-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.survey-option {
+    padding: var(--space-2) var(--space-4);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: transparent;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-2);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.survey-option:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.survey-option--selected {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    font-weight: 700;
+}

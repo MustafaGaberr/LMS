@@ -1,0 +1,92 @@
+.login-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    background: linear-gradient(160deg, var(--color-primary-subtle) 0%, var(--color-bg) 50%);
+}
+
+/* ── Hero ── */
+.login-hero {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-10) var(--space-6) var(--space-6);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-hero__blob {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--color-primary) 0%, transparent 70%);
+    opacity: 0.08;
+    pointer-events: none;
+}
+
+.login-hero__icon-wrap {
+    width: 100px;
+    height: 100px;
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-5);
+}
+
+.login-hero__svg {
+    width: 60px;
+    height: 60px;
+}
+
+.login-hero__title {
+    font-size: var(--font-size-2xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+}
+
+.login-hero__subtitle {
+    font-size: var(--font-size-base);
+    color: var(--color-text-2);
+}
+
+/* ── Form area ── */
+.login-form-wrap {
+    flex: 1;
+    background: var(--color-surface);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    box-shadow: 0 -6px 30px rgba(0, 0, 0, 0.07);
+    padding: var(--space-8) var(--space-6);
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-width: 380px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.login-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-3);
+    text-align: center;
+    line-height: 1.8;
+}
+
+.login-hint strong {
+    color: var(--color-primary);
+    font-weight: 700;
+}
