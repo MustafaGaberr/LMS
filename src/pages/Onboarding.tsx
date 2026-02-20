@@ -103,14 +103,10 @@ const variants = {
 const Onboarding: React.FC = () => {
     const navigate = useNavigate();
     const markOnboardingSeen = useAppStore((s) => s.markOnboardingSeen);
-    const activeUserId = useAppStore((s) => s.activeUserId);
     const [step, setStep] = useState(0);
     const [dir, setDir] = useState(1);
 
     const isLast = step === SLIDES.length - 1;
-
-    // student1 → blue (primary), student2 → secondary/accent colour
-    const skipColor = activeUserId === 'student2' ? 'ob-skip-btn--accent' : 'ob-skip-btn--primary';
 
     const finish = () => {
         markOnboardingSeen();
