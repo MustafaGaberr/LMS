@@ -8,11 +8,6 @@ const CourseStart: React.FC = () => {
 
     return (
         <div className="cs-page">
-            <div className="cs-blob cs-blob--1" />
-            <div className="cs-blob cs-blob--2" />
-
-            {/* Spacer top */}
-            <div />
 
             {/* Content */}
             <div className="cs-body">
@@ -28,7 +23,7 @@ const CourseStart: React.FC = () => {
 
                 {/* Tagline */}
                 <p className="cs-tagline">
-                    هيا بينا نبدأ تعلمنا في محتوانا
+                    هيا بنا نبدأ تعلمنا في محتوانا
                 </p>
             </div>
 

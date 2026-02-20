@@ -14,7 +14,9 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card">
+                <div className="ob-card__badge">🏛️</div>
                 <p className="ob-card__line ob-card__line--bold">جامعة أسوان</p>
+                <div className="ob-card__divider" />
                 <p className="ob-card__line">كلية التربية النوعية</p>
                 <p className="ob-card__line">قسم تكنولوجيا التعليم</p>
             </div>
@@ -23,6 +25,7 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card ob-card--center">
+                <div className="ob-card__badge">🎓</div>
                 <p className="ob-card__headline">يُقدِّم</p>
             </div>
         ),
@@ -30,8 +33,11 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card">
+                <div className="ob-card__badge">📄</div>
                 <p className="ob-card__research-title">
-                    التفاعل بين نمط الاستجابة لروبوتات المحادثة القائمة على الذكاء الاصطناعي التوليدي ومستوى السعة العقلية وأثره في تنمية قوة السيطرة المعرفية والكفاءة الذاتية لدى طلاب تكنولوجيا التعليم
+                    التفاعل بين نمط الاستجابة لروبوتات المحادثة القائمة على الذكاء الاصطناعي التوليدي
+                    ومستوى السعة العقلية وأثره في تنمية قوة السيطرة المعرفية والكفاءة الذاتية
+                    لدى طلاب تكنولوجيا التعليم
                 </p>
             </div>
         ),
@@ -39,6 +45,7 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card ob-card--center">
+                <div className="ob-card__badge">✏️</div>
                 <p className="ob-card__headline">إعداد</p>
             </div>
         ),
@@ -46,34 +53,43 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card">
+                <div className="ob-card__badge">👨‍🎓</div>
                 <p className="ob-card__line ob-card__line--label">الباحث/</p>
                 <p className="ob-card__line ob-card__line--bold">وليد راضي عبدالمجيد</p>
-                <p className="ob-card__line">المعيد بقسم تكنولوجيا التعليم</p>
-                <p className="ob-card__line">كلية التربية النوعية جامعة أسوان</p>
+                <div className="ob-card__divider" />
+                <p className="ob-card__line ob-card__line--sm">المعيد بقسم تكنولوجيا التعليم</p>
+                <p className="ob-card__line ob-card__line--sm">كلية التربية النوعية — جامعة أسوان</p>
             </div>
         ),
     },
     {
         content: (
             <div className="ob-card">
+                <div className="ob-card__badge">👨‍🏫</div>
                 <p className="ob-card__line ob-card__line--label">إشراف/</p>
                 <p className="ob-card__line ob-card__line--bold">أ.د/ حلمي أبو موتة</p>
-                <p className="ob-card__line">أستاذ تكنولوجيا التعليم ورئيس قسم تكنولوجيا التعليم</p>
-                <p className="ob-card__line">كلية التربية النوعية جامعة أسوان</p>
+                <div className="ob-card__divider" />
+                <p className="ob-card__line ob-card__line--sm">أستاذ تكنولوجيا التعليم</p>
+                <p className="ob-card__line ob-card__line--sm">ورئيس قسم تكنولوجيا التعليم</p>
+                <p className="ob-card__line ob-card__line--sm">كلية التربية النوعية — جامعة أسوان</p>
             </div>
         ),
     },
     {
         content: (
             <div className="ob-card">
+                <div className="ob-card__badge">👩‍🏫</div>
                 <p className="ob-card__line ob-card__line--label">إشراف/</p>
                 <p className="ob-card__line ob-card__line--bold">أ.د/ رجاء علي عبدالعليم</p>
-                <p className="ob-card__line">أستاذ تكنولوجيا التعليم ووكيل الكلية لشنون البيئة وخدمة المجتمع</p>
-                <p className="ob-card__line">كلية التربية النوعية جامعة أسوان</p>
+                <div className="ob-card__divider" />
+                <p className="ob-card__line ob-card__line--sm">أستاذ تكنولوجيا التعليم</p>
+                <p className="ob-card__line ob-card__line--sm">ووكيل الكلية لشئون البيئة وخدمة المجتمع</p>
+                <p className="ob-card__line ob-card__line--sm">كلية التربية النوعية — جامعة أسوان</p>
             </div>
         ),
     },
 ];
+
 // ─── Animations ───────────────────────────────────────────────────────────────
 
 const variants = {
@@ -87,10 +103,14 @@ const variants = {
 const Onboarding: React.FC = () => {
     const navigate = useNavigate();
     const markOnboardingSeen = useAppStore((s) => s.markOnboardingSeen);
+    const activeUserId = useAppStore((s) => s.activeUserId);
     const [step, setStep] = useState(0);
     const [dir, setDir] = useState(1);
 
     const isLast = step === SLIDES.length - 1;
+
+    // student1 → blue (primary), student2 → secondary/accent colour
+    const skipColor = activeUserId === 'student2' ? 'ob-skip-btn--accent' : 'ob-skip-btn--primary';
 
     const finish = () => {
         markOnboardingSeen();
@@ -106,15 +126,13 @@ const Onboarding: React.FC = () => {
         }
     };
 
-    const handleSkip = () => finish();
-
     return (
         <div className="ob-page">
             {/* ── Blobs ── */}
             <div className="ob-blob ob-blob--1" />
             <div className="ob-blob ob-blob--2" />
 
-            {/* ── Logo / illustration ── */}
+            {/* ── Logo ── */}
             <div className="ob-logo-wrap">
                 <div className="ob-logo">
                     <svg viewBox="0 0 80 80" fill="none" className="ob-logo__svg">
@@ -159,16 +177,11 @@ const Onboarding: React.FC = () => {
                 ))}
             </div>
 
-            {/* ── Footer ── */}
+            {/* ── Footer: next only ── */}
             <div className="ob-footer">
                 <button className="ob-next-btn" onClick={handleNext}>
-                    {isLast ? 'ابدأ الآن' : 'تخطى'}
+                    {isLast ? 'ابدأ الآن ✨' : 'التالي'}
                 </button>
-                {!isLast && (
-                    <button className="ob-skip-link" onClick={handleSkip}>
-                        تخطي الكل
-                    </button>
-                )}
             </div>
         </div>
     );

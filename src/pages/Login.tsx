@@ -1,29 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
-import { Howl } from 'howler';
+import { User, Lock, Eye, EyeOff, AlertCircle, Bot, GraduationCap } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
-import { Button } from '../components/Button';
-import { Input } from '../components/Input';
 import './Login.css';
-
-// Simple click sound data URI (beep)
-const CLICK_SOUND_SRC = 'data:audio/wav;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihwMWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIIIhxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQAVQ2ORaIQwEMAJiDg95G4nQL7mQVWI6GwRcfsZAcsKkJvxgxEjzFUgfHoSQ9Qq7KNwqHwuB13MA4a1q/DmBrHgPcmjiGoh//EwC5nGPEmS4RcfkVKOhJf+WOgoxJclFz3kgn//dBA+ya1GhurNn8zb//9NNutNuhz31f////9vt///z+IdAEAAAK4LQIAKobHItEIYCGAExBwe8jcToF9zIKrEdDYIuP2MgOWFSE34wYiR5iqQPj0JIeoVdlG4VDlXAgt1RcAMwA6wAFpAZBZEJAtcnMFCAnpijELuEK+vHAAgEBME2QBACFwGAAABBgAAAAAAAAAAg==';
-
-let clickHowl: Howl | null = null;
-
-function getClickSound() {
-    if (!clickHowl) {
-        clickHowl = new Howl({ src: [CLICK_SOUND_SRC], volume: 0.5 });
-    }
-    return clickHowl;
-}
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const login = useAppStore((s) => s.login);
     const seenOnboarding = useAppStore((s) => s.seenOnboarding);
-    const soundEnabled = useAppStore((s) => s.settings.soundEnabled);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -40,15 +24,8 @@ const Login: React.FC = () => {
             return;
         }
 
-        if (soundEnabled) {
-            try { getClickSound().play(); } catch { }
-        }
-
         setLoading(true);
-
-        // Simulate async delay for UX
         await new Promise((r) => setTimeout(r, 500));
-
         const success = login(username.trim(), password);
         setLoading(false);
 
@@ -66,33 +43,34 @@ const Login: React.FC = () => {
 
     return (
         <div className="login-page">
-            {/* Illustration / Brand area */}
+            {/* ── Hero / top section ── */}
             <div className="login-hero">
                 <div className="login-hero__blob" />
-                <div className="login-hero__icon-wrap">
-                    <svg viewBox="0 0 80 80" fill="none" className="login-hero__svg">
-                        <circle cx="40" cy="40" r="40" fill="var(--color-primary)" opacity="0.12" />
-                        <path
-                            d="M20 54V30a4 4 0 0 1 4-4h32a4 4 0 0 1 4 4v24"
-                            stroke="var(--color-primary)"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                        />
-                        <path
-                            d="M14 54h52M32 26v-6a8 8 0 0 1 16 0v6"
-                            stroke="var(--color-primary)"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                        />
-                        <circle cx="40" cy="42" r="5" fill="var(--color-primary)" />
-                        <path d="M40 47v5" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-                    </svg>
+
+                {/* Bot icon + animated dots + Student icon */}
+                <div className="login-hero__bots">
+                    <div className="login-hero__bot-icon">
+                        <Bot size={40} strokeWidth={1.4} />
+                    </div>
+
+                    {/* Animated dots between */}
+                    <div className="login-hero__dots">
+                        <span /><span /><span />
+                    </div>
+
+                    <div className="login-hero__bot-icon login-hero__bot-icon--right">
+                        <GraduationCap size={40} strokeWidth={1.4} />
+                    </div>
                 </div>
-                <h2 className="login-hero__title">منصة التعلم</h2>
-                <p className="login-hero__subtitle">سجّل دخولك للمتابعة</p>
+
+                {/* Chatbot greeting card */}
+                <div className="login-hero__greeting">
+                    <p className="login-hero__greeting-bold">مرحباً... أنا روبوت المحادثة الذكي</p>
+                    <p className="login-hero__greeting-sub">قم بتسجيل الدخول لنبدأ</p>
+                </div>
             </div>
 
-            {/* Form card */}
+            {/* ── Form card / bottom section ── */}
             <div className="login-form-wrap">
                 <form className="login-form" onSubmit={handleSubmit} noValidate>
                     {error && (
@@ -102,41 +80,59 @@ const Login: React.FC = () => {
                         </div>
                     )}
 
-                    <Input
-                        id="username"
-                        label="اسم المستخدم"
-                        type="text"
-                        placeholder="ادخل اسم المستخدم"
-                        value={username}
-                        onChange={(e) => { setUsername(e.target.value); setError(''); }}
-                        iconStart={<User size={18} />}
-                        autoComplete="username"
-                        autoCapitalize="none"
-                        autoCorrect="off"
-                    />
+                    {/* Username — icon on RIGHT (first in RTL) */}
+                    <div className="login-field-group">
+                        <label className="login-label" htmlFor="username">اسم المستخدم</label>
+                        <div className="login-field">
+                            <span className="login-field__icon"><User size={18} /></span>
+                            <input
+                                id="username"
+                                className="login-field__input"
+                                type="text"
+                                placeholder="ادخل اسم المستخدم"
+                                value={username}
+                                onChange={(e) => { setUsername(e.target.value); setError(''); }}
+                                autoComplete="username"
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                            />
+                        </div>
+                    </div>
 
-                    <Input
-                        id="password"
-                        label="كلمة المرور"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => { setPassword(e.target.value); setError(''); }}
-                        iconStart={<Lock size={18} />}
-                        iconEnd={showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                        onIconEndClick={() => setShowPassword((v) => !v)}
-                        autoComplete="current-password"
-                    />
+                    {/* Password — Lock on RIGHT, Eye on LEFT */}
+                    <div className="login-field-group">
+                        <label className="login-label" htmlFor="password">كلمة المرور</label>
+                        <div className="login-field">
+                            <span className="login-field__icon"><Lock size={18} /></span>
+                            <input
+                                id="password"
+                                className="login-field__input"
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => { setPassword(e.target.value); setError(''); }}
+                                autoComplete="current-password"
+                            />
+                            <button
+                                type="button"
+                                className="login-field__eye"
+                                onClick={() => setShowPassword((v) => !v)}
+                                tabIndex={-1}
+                                aria-label={showPassword ? 'إخفاء' : 'إظهار'}
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                        </div>
+                    </div>
 
-                    <Button
-                        type="submit"
-                        variant="primary"
-                        size="lg"
-                        fullWidth
-                        loading={loading}
-                    >
-                        تسجيل الدخول
-                    </Button>
+                    {/* Submit */}
+                    <button type="submit" className="login-submit-btn" disabled={loading}>
+                        {loading ? (
+                            <span className="login-submit-btn__dots">
+                                <span /><span /><span />
+                            </span>
+                        ) : 'تسجيل الدخول'}
+                    </button>
 
                     <p className="login-hint">
                         استخدم: <strong>student1</strong> أو <strong>student2</strong> — كلمة المرور: <strong>1234</strong>

@@ -23,7 +23,7 @@
     width: 320px;
     height: 320px;
     background: radial-gradient(circle, var(--color-primary), transparent 70%);
-    opacity: 0.05;
+    opacity: 0.06;
     top: -120px;
     right: -80px;
 }
@@ -43,7 +43,7 @@
     z-index: 1;
     display: flex;
     justify-content: center;
-    padding-top: var(--space-4);
+    padding-top: var(--space-2);
 }
 
 .ob-logo {
@@ -55,7 +55,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--color-border);
+    border: 1.5px solid var(--color-border);
 }
 
 .ob-logo__svg {
@@ -73,34 +73,53 @@
     max-width: 420px;
     position: relative;
     z-index: 1;
-    padding: var(--space-6) 0;
+    padding: var(--space-5) 0;
 }
 
 .ob-slide {
     width: 100%;
 }
 
-/* ── Content card — matches the bordered box in wireframes ── */
+/* ── Content card ── */
 .ob-card {
     width: 100%;
     border: 2px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: var(--space-8) var(--space-6);
     background: var(--color-surface);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-3);
     text-align: center;
+    position: relative;
 }
 
 .ob-card--center {
     justify-content: center;
     align-items: center;
-    min-height: 140px;
+    min-height: 180px;
 }
 
-/* Card text variants */
+/* Emoji badge */
+.ob-card__badge {
+    font-size: 2.2rem;
+    line-height: 1;
+    margin-bottom: var(--space-2);
+}
+
+/* Divider line */
+.ob-card__divider {
+    width: 48px;
+    height: 2px;
+    border-radius: 99px;
+    background: var(--color-primary);
+    opacity: 0.35;
+    align-self: center;
+    margin: var(--space-1) 0;
+}
+
+/* Text variants */
 .ob-card__line {
     font-size: var(--font-size-lg);
     color: var(--color-text);
@@ -111,27 +130,35 @@
 .ob-card__line--bold {
     font-weight: 800;
     font-size: var(--font-size-xl);
+    color: var(--color-primary);
 }
 
 .ob-card__line--label {
-    font-size: var(--font-size-base);
-    color: var(--color-text-2);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-3);
     font-weight: 600;
     text-align: right;
 }
 
-.ob-card__headline {
-    font-size: clamp(2rem, 8vw, 3rem);
-    font-weight: 800;
-    color: var(--color-text);
+.ob-card__line--sm {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-2);
     margin: 0;
-    letter-spacing: 0.02em;
+    line-height: 1.7;
+}
+
+.ob-card__headline {
+    font-size: clamp(2.4rem, 10vw, 3.5rem);
+    font-weight: 900;
+    color: var(--color-primary);
+    margin: 0;
+    letter-spacing: 0.03em;
 }
 
 .ob-card__research-title {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     color: var(--color-text);
-    line-height: 1.9;
+    line-height: 2;
     font-weight: 600;
     margin: 0;
     text-align: center;
@@ -144,7 +171,7 @@
     justify-content: center;
     position: relative;
     z-index: 1;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
 }
 
 .ob-dot {
@@ -155,7 +182,7 @@
     border: none;
     cursor: pointer;
     padding: 0;
-    transition: all 0.2s;
+    transition: all 0.25s;
 }
 
 .ob-dot--active {
@@ -171,18 +198,17 @@
     align-items: center;
     gap: var(--space-3);
     width: 100%;
-    max-width: 420px;
+    max-width: 360px;
     position: relative;
     z-index: 1;
 }
 
-/* Main button — dark pill matching wireframe */
+/* "التالي" / "ابدأ الآن" — primary filled pill */
 .ob-next-btn {
     width: 100%;
-    max-width: 220px;
     padding: var(--space-4) var(--space-6);
-    background: var(--color-text);
-    color: var(--color-bg);
+    background: var(--color-primary);
+    color: #fff;
     border: none;
     border-radius: 999px;
     font-size: var(--font-size-base);
@@ -190,10 +216,11 @@
     cursor: pointer;
     transition: opacity 0.18s, transform 0.18s;
     font-family: inherit;
+    letter-spacing: 0.01em;
 }
 
 .ob-next-btn:hover {
-    opacity: 0.85;
+    opacity: 0.88;
     transform: translateY(-1px);
 }
 
@@ -201,18 +228,37 @@
     transform: translateY(0);
 }
 
-/* Skip all link */
-.ob-skip-link {
+/* "تخطى" — ghost pill, color depends on user */
+.ob-skip-btn {
     background: none;
-    border: none;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    padding: var(--space-3) var(--space-7);
     font-size: var(--font-size-sm);
-    color: var(--color-text-3);
+    font-weight: 700;
     cursor: pointer;
     font-family: inherit;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    transition: background 0.18s, border-color 0.18s;
 }
 
-.ob-skip-link:hover {
-    color: var(--color-text-2);
+/* student1 → blue (primary) */
+.ob-skip-btn--primary {
+    color: var(--color-primary);
+    border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+.ob-skip-btn--primary:hover {
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    border-color: var(--color-primary);
+}
+
+/* student2 → accent / secondary color */
+.ob-skip-btn--accent {
+    color: var(--color-accent, #e67e22);
+    border-color: color-mix(in srgb, var(--color-accent, #e67e22) 35%, transparent);
+}
+
+.ob-skip-btn--accent:hover {
+    background: color-mix(in srgb, var(--color-accent, #e67e22) 10%, transparent);
+    border-color: var(--color-accent, #e67e22);
 }

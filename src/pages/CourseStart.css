@@ -1,113 +1,91 @@
 .cs-page {
     direction: rtl;
     min-height: 100dvh;
-    background: var(--color-bg);
+    background: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding: var(--space-16) var(--space-6) var(--space-10);
-    position: relative;
-    overflow: hidden;
-    gap: var(--space-4);
+    justify-content: center;
+    padding: var(--space-10) var(--space-6);
+    gap: var(--space-6);
 }
 
-.cs-blob {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-.cs-blob--1 {
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(circle, var(--color-primary), transparent 70%);
-    opacity: 0.05;
-    top: -90px;
-    right: -70px;
-}
-
-.cs-blob--2 {
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, var(--color-primary), transparent 70%);
-    opacity: 0.04;
-    bottom: -50px;
-    left: -40px;
-}
-
+/* Content block */
 .cs-body {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--space-5);
     width: 100%;
-    max-width: 420px;
-    position: relative;
-    z-index: 1;
+    max-width: 380px;
 }
 
+/* Main bordered card */
 .cs-card {
     width: 100%;
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    background: var(--color-surface);
+    border: 2px solid #111;
+    border-radius: var(--radius-md);
+    padding: var(--space-6) var(--space-5);
     text-align: center;
-    box-shadow: var(--shadow-sm);
 }
 
 .cs-card--code {
-    padding: var(--space-4) var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    max-width: 220px;
 }
 
 .cs-card__title {
-    font-size: var(--font-size-lg);
-    font-weight: 700;
-    color: var(--color-text);
+    font-size: var(--font-size-xl);
+    font-weight: 800;
+    color: #111;
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.55;
 }
 
 .cs-card__code {
     font-size: var(--font-size-base);
-    font-weight: 600;
-    color: var(--color-primary);
+    font-weight: 700;
+    color: #111;
     margin: 0;
 }
 
+/* Tagline */
 .cs-tagline {
-    font-size: var(--font-size-xl);
-    font-weight: 700;
-    color: var(--color-text);
+    font-size: var(--font-size-2xl, 1.5rem);
+    font-weight: 800;
+    color: #111;
     text-align: center;
-    line-height: 1.7;
-    margin: var(--space-4) 0 0;
+    line-height: 1.65;
+    margin: var(--space-3) 0 0;
 }
 
+/* Footer */
 .cs-footer {
-    position: relative;
-    z-index: 1;
     display: flex;
     justify-content: center;
     width: 100%;
 }
 
+/* "بدأ" button — dark wide pill like wireframe */
 .cs-start-btn {
-    padding: var(--space-4) var(--space-10);
-    background: var(--color-text);
-    color: var(--color-bg);
+    padding: var(--space-4) var(--space-12, 3rem);
+    background: #111;
+    color: #fff;
     border: none;
     border-radius: 999px;
-    font-size: var(--font-size-lg);
-    font-weight: 700;
+    font-size: var(--font-size-xl);
+    font-weight: 800;
     cursor: pointer;
     font-family: inherit;
-    min-width: 160px;
+    min-width: 180px;
     transition: opacity 0.18s, transform 0.18s;
 }
 
 .cs-start-btn:hover {
     opacity: 0.85;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+}
+
+.cs-start-btn:active {
+    transform: translateY(0);
 }
