@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MessageSquare, Activity, ArrowRight } from 'lucide-react';
+import { MessageSquare, Activity } from 'lucide-react';
 import { getLesson, getUnit } from '../data/sampleCourse';
 import { useAppStore } from '../store/useAppStore';
 import { Button } from '../components/Button';
@@ -163,7 +163,6 @@ const MindMap: React.FC<MindMapProps> = ({ points }) => {
         <svg
             viewBox="0 0 320 280"
             className="mindmap-svg"
-            dir="rtl"
         >
             {/* Central node */}
             <ellipse cx={centerX} cy={centerY} rx={52} ry={28} fill="#23445D" />
