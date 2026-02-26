@@ -176,7 +176,7 @@ const Onboarding: React.FC = () => {
             {/* ── Footer: next only ── */}
             <div className="ob-footer">
                 <button className="ob-next-btn" onClick={handleNext}>
-                    {isLast ? 'ابدأ الآن ✨' : 'التالي'}
+                    {isLast ? 'التالي' : 'التالي'}
                 </button>
             </div>
         </div>

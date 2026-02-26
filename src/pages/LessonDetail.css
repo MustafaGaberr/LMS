@@ -1,166 +1,212 @@
+/* ── LessonDetail Page ───────────────────────────────────────────────────── */
+
 .lesson-detail-page {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
-    padding: var(--space-5);
-    padding-bottom: calc(var(--bottom-nav-height, 72px) + var(--space-4));
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px 20px 120px;
+    background: #f0f4f8;
+    direction: rtl;
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
 }
+
+/* ── Error state ─────────────────────────────────────────────────────────── */
 
 .lesson-detail-error {
-    color: var(--color-error);
+    color: #e53e3e;
+    font-size: 1.1rem;
+    margin-top: 40px;
+}
+
+/* ── Title box ───────────────────────────────────────────────────────────── */
+
+.lesson-title-box {
+    width: 100%;
+    max-width: 480px;
+    background: #23445D;
+    border-radius: 18px;
+    padding: 18px 24px;
     text-align: center;
-    padding: var(--space-8);
+    margin-bottom: 36px;
+    box-shadow: 0 4px 18px rgba(35, 68, 93, 0.22);
 }
 
-/* ── 3-tab segmented control ──────────────────────────────── */
-.lesson-tabs {
+.lesson-title-text {
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+/* ── Bubbles container ───────────────────────────────────────────────────── */
+
+.lesson-bubbles-container {
     display: flex;
-    background: var(--color-surface-2);
-    border-radius: var(--radius-lg);
-    padding: 4px;
-    gap: 4px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
 }
 
-.lesson-tab {
-    flex: 1;
-    padding: var(--space-2) var(--space-3);
+/* ── Shared bubble styles ────────────────────────────────────────────────── */
+
+.lesson-bubble {
     border: none;
-    border-radius: var(--radius-md);
-    background: transparent;
-    font-family: var(--font-primary);
-    font-size: var(--font-size-sm);
-    font-weight: 700;
-    color: var(--color-text-3);
+    outline: none;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    padding: 14px 36px;
+    min-width: 120px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
 }
 
-.lesson-tab--active {
-    background: var(--color-primary);
-    color: white;
-    box-shadow: var(--shadow-sm);
+.lesson-bubble:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
-/* ── Text content ──────────────────────────────────────────── */
-.lesson-content-area {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-5);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    min-height: 140px;
+.lesson-bubble:active {
+    transform: translateY(0) scale(0.98);
 }
 
-.lesson-content-icon {
-    color: var(--color-primary);
+/* مفهوم bubble */
+.lesson-bubble--mafhoom {
+    background: #ffffff;
+    color: #23445D;
+    border: 2.5px solid #23445D;
 }
 
-.lesson-content-text {
-    font-size: var(--font-size-base);
-    color: var(--color-text-2);
+.lesson-bubble--mafhoom.lesson-bubble--active {
+    background: #23445D;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(35, 68, 93, 0.35);
+}
+
+/* أهمية bubble */
+.lesson-bubble--ahamiyya {
+    background: #ffffff;
+    color: #2d7d46;
+    border: 2.5px solid #2d7d46;
+}
+
+.lesson-bubble--ahamiyya.lesson-bubble--active {
+    background: #2d7d46;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(45, 125, 70, 0.35);
+}
+
+/* خصائص bubble */
+.lesson-bubble--khassais {
+    background: #ffffff;
+    color: #b45309;
+    border: 2.5px solid #b45309;
+}
+
+.lesson-bubble--khassais.lesson-bubble--active {
+    background: #b45309;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(180, 83, 9, 0.35);
+}
+
+/* ── Section content ─────────────────────────────────────────────────────── */
+
+.lesson-section-content {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 20px;
+    padding: 24px 20px;
+    margin-bottom: 28px;
+    animation: fadeInUp 0.28s ease both;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.09);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.lesson-section-content--concept {
+    background: #eef3f8;
+    border-right: 5px solid #23445D;
+}
+
+.lesson-section-content--importance {
+    background: #edf7f1;
+    border-right: 5px solid #2d7d46;
+}
+
+.lesson-section-content--features {
+    background: #fef5e7;
+    border-right: 5px solid #b45309;
+}
+
+.lesson-section-text {
+    color: #1a202c;
+    font-size: 1rem;
     line-height: 1.9;
+    text-align: right;
+    margin: 0;
 }
 
-/* ── contentDone button ────────────────────────────────────── */
-.lesson-read-btn {
+/* ── Mind map ────────────────────────────────────────────────────────────── */
+
+.mindmap-container {
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-xl);
-    border: 2px dashed var(--color-primary);
-    background: var(--color-primary-subtle);
-    color: var(--color-primary);
-    font-family: var(--font-primary);
-    font-size: var(--font-size-sm);
-    font-weight: 700;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.lesson-read-btn--done {
-    border-style: solid;
-    background: rgba(16, 185, 129, 0.1);
-    border-color: #10b981;
-    color: #059669;
-    cursor: default;
-}
-
-/* ── Section divider ───────────────────────────────────────── */
-.lesson-divider {
-    display: flex;
     align-items: center;
-    gap: var(--space-2);
-    font-size: var(--font-size-sm);
-    font-weight: 700;
-    color: var(--color-text-3);
+    padding: 8px 0;
 }
 
-.lesson-divider::before,
-.lesson-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--color-border);
+.mindmap-svg {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
 }
 
-/* ── Video player ──────────────────────────────────────────── */
-.lesson-player-wrap {
+/* ── YouTube iframe ──────────────────────────────────────────────────────── */
+
+.lesson-yt-wrap {
     position: relative;
-    border-radius: var(--radius-xl);
+    width: 100%;
+    padding-bottom: 56.25%;
+    /* 16:9 */
+    height: 0;
+    border-radius: 12px;
     overflow: hidden;
-    background: #000;
-    aspect-ratio: 16 / 9;
-    box-shadow: var(--shadow-lg);
 }
 
-.lesson-player-skeleton {
+.lesson-yt-iframe {
     position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    color: rgba(255, 255, 255, 0.6);
-    font-size: var(--font-size-sm);
-    background: #111;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 12px;
 }
 
-.lesson-player-skeleton__icon {
-    opacity: 0.4;
-    animation: pulse 1.5s infinite;
-}
+/* ── Footer ──────────────────────────────────────────────────────────────── */
 
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 0.3;
-    }
-
-    50% {
-        opacity: 0.7;
-    }
-}
-
-.lesson-player-inner {
-    position: absolute;
-    inset: 0;
-}
-
-.lesson-player-inner--hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* ── Footer actions ────────────────────────────────────────── */
 .lesson-footer {
+    width: 100%;
+    max-width: 480px;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    margin-top: var(--space-2);
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 16px;
 }
