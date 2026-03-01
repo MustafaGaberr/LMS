@@ -43,9 +43,9 @@ const LessonDetail: React.FC = () => {
         .filter(s => s.length > 10)
         .slice(0, 5);
 
-    // Get YouTube video ID
+    // Get YouTube video ID – handles watch?v=, youtu.be/, and /embed/ URLs
     const getYouTubeId = (url: string) => {
-        const match = url.match(/(?:v=|youtu\.be\/)([^&\s]+)/);
+        const match = url.match(/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{11})/);
         return match ? match[1] : '';
     };
     const videoId = getYouTubeId(lesson.video.url);
@@ -56,6 +56,8 @@ const LessonDetail: React.FC = () => {
             <div className="lesson-title-box">
                 <span className="lesson-title-text">{lesson.title}</span>
             </div>
+
+
 
             {/* ── 3 oval clickable bubbles ─────────────────────── */}
             <div className="lesson-bubbles-container">
@@ -104,10 +106,10 @@ const LessonDetail: React.FC = () => {
                     {videoId ? (
                         <div className="lesson-yt-wrap">
                             <iframe
-                                src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
-                                title="YouTube video player"
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`}
+                                title={lesson.title}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerPolicy="strict-origin-when-cross-origin"
                                 allowFullScreen
                                 className="lesson-yt-iframe"
                             />

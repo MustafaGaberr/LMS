@@ -177,6 +177,32 @@
     height: auto;
 }
 
+/* ── Video section ───────────────────────────────────────────────────────── */
+
+.lesson-video-section {
+    width: 100%;
+    max-width: 480px;
+    margin-bottom: 28px;
+    animation: fadeInUp 0.28s ease both;
+}
+
+.lesson-yt-fallback {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #23445D;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.18s ease;
+}
+
+.lesson-yt-fallback:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
 /* ── YouTube iframe ──────────────────────────────────────────────────────── */
 
 .lesson-yt-wrap {

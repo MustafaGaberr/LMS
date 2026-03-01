@@ -141,7 +141,7 @@ export const course: Course = {
                         features:
                             'يتميز التعلم الرقمي بالتفاعلية العالية، حيث تُدمج المنصات الحديثة عناصر الألعاب التعليمية (Gamification) والمحتوى المتعدد الوسائط. كما يوفر تتبعًا دقيقًا لتقدم المتعلم وبيانات تحليلية تساعد في تحسين تجربته التعليمية باستمرار.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=rPGBHSLNIuE' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=YjX_zIy8in8' },
                     activityInstructions:
                         'ابحث عن ثلاث منصات تعليمية رقمية مختلفة واكتب مقارنة موجزة بينها لا تتجاوز 200 كلمة، مُوضّحًا مميزات كل منصة وعيوبها.',
                 },
@@ -156,7 +156,7 @@ export const course: Course = {
                         features:
                             'تشترك معظم المنصات الحديثة في ميزات أساسية: لوحة تحكم المتعلم، وإدارة الدورات، والتقييمات الآلية، والشهادات الرقمية. لكنها تتفاوت في مستوى التخصيص وإمكانات التكامل مع الأنظمة الخارجية.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=2_pCdBhqLiA' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=5MgBikgcWnY' },
                     activityInstructions:
                         'سجّل في إحدى منصات التعلم المفتوح (مثل Coursera أو edX) والتحق بدورة مجانية قصيرة، ثم اكتب تقريرًا عن تجربتك يتضمن: واجهة المستخدم، وجودة المحتوى، ومستوى التفاعل.',
                 },
@@ -171,7 +171,7 @@ export const course: Course = {
                         features:
                             'أدوات التعلم المتزامن: Zoom, Teams, Google Meet, Webex. أدوات التعلم غير المتزامن: الفيديوهات المسجلة، المنتديات، الواجبات الإلكترونية، الاختبارات الموقوتة. الأنظمة الحديثة تدمج الاثنين في منصة واحدة متكاملة.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=uc4vIDaBMQY' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=oc6faXVc54E' },
                     activityInstructions:
                         'صمّم جدولًا مقارنًا بين التعلم المتزامن وغير المتزامن يشمل: المزايا، العيوب، أفضل الأدوات، والحالات الأنسب لاستخدام كل نوع.',
                 },
@@ -186,7 +186,7 @@ export const course: Course = {
                         features:
                             'تقنيات تعزيز التعلم الذاتي: تقنية Pomodoro لإدارة الوقت، خرائط الذهن لتنظيم المعلومات، تطبيقات التذكير مثل Notion وTodoist، والمراجعة المتباعدة (Spaced Repetition) باستخدام تطبيقات مثل Anki.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=75d_29QWELk' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=M2l6LB50pKE' },
                     activityInstructions:
                         'ضع خطة تعلم أسبوعية باستخدام أي أداة رقمية (Notion, Trello, Google Calendar) تشمل: الأهداف، الأوقات المخصصة، المصادر المستخدمة، وأسلوب قياس التقدم.',
                 },
@@ -201,7 +201,7 @@ export const course: Course = {
                         features:
                             'معايير تقييم المحتوى الرقمي: نموذج CRAAP (Currency, Relevance, Authority, Accuracy, Purpose)، أدوات التحقق من الحقائق مثل Snopes، وقواعد البيانات الأكاديمية كـ JSTOR وGoogle Scholar.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=GoQG6Tin-1E' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=mRcNk5JkHvc' },
                     activityInstructions:
                         'ابحث عن موضوع تعليمي واجمع 5 مصادر مختلفة حوله، ثم قيّم كل مصدر وفق نموذج CRAAP وصنّفها من الأكثر إلى الأقل موثوقية مع التعليل.',
                 },
@@ -226,7 +226,7 @@ export const course: Course = {
                         features:
                             'قواعد أساسية: تجنّب الكتابة بالأحرف الكبيرة (يُعدّ صياحًا)، الوضوح والإيجاز في الرسائل، الرد خلال 24 ساعة، احترام الخصوصية، والتحقق من النص قبل الإرسال. في البريد الإلكتروني: موضوع واضح، تحية مناسبة، وتوقيع رسمي.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=K5hnKPYXFEg' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=NNPZ0oxiRwc' },
                     activityInstructions:
                         'اكتب ثلاث رسائل بريد إلكتروني: الأولى لأستاذك تطلب فيها تمديد موعد تسليم، والثانية لزميل تدعوه للتعاون في مشروع، والثالثة رد على شكوى. راعِ في كل رسالة قواعد Netiquette.',
                 },
@@ -241,7 +241,7 @@ export const course: Course = {
                         features:
                             'ميزات التعاون الفوري: التحرير المشترك، التعليقات والاقتراحات، تاريخ تعديلات كامل، مشاركة بصلاحيات محددة (قراءة/تعديل/تعليق). Notion يُضيف قواعد بيانات وخرائط ذهن وأدوات إدارة مشاريع في منصة واحدة.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=Yd4QNLNM4F0' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=rjLjntPyTZI' },
                     activityInstructions:
                         'أنشئ مستندًا مشتركًا في Google Docs مع زميل وقوموا معًا بتحرير ملخص لهذا الدرس لا يتجاوز 300 كلمة، موزّعًا المسؤوليات بالتساوي. أرفق رابط المستند ولقطة شاشة تُظهر التعاون الفعلي.',
                 },
@@ -256,7 +256,7 @@ export const course: Course = {
                         features:
                             'أفضل الممارسات: أجندة مُرسلة قبل 24 ساعة، بدء الاجتماع بنقطة تفكّر (icebreaker)، توزيع الأدوار (مُيسّر - كاتب محاضر - مُدير الوقت)، ملخّص فوري بعد الاجتماع، وتحديد الإجراءات والمسؤولين والمواعيد.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=hkFYHV01B4k' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=vRAb0IEkzMM' },
                     activityInstructions:
                         'نظّم اجتماعًا افتراضيًا قصيرًا (15 دقيقة) مع زملائك لمناقشة موضوع اخترتموه. قبله: أرسل الأجندة. أثناءه: وزّع الأدوار. بعده: أرسل ملخصًا. وثّق العملية بالصور وأرسل التقرير.',
                 },
@@ -271,7 +271,7 @@ export const course: Course = {
                         features:
                             'كيفية التفاعل المثمر: ابدأ بملاحظة أصيلة، استشهد بالمحتوى والمصادر، ردّ على زميلين على الأقل بتعليقات بنّاءة، استخدم لغة أكاديمية واضحة، وتجنّب الردود الفارغة من قبيل "أوافقك الرأي".',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=WY5dFSMiMJI' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=bdE-ggFCxQo' },
                     activityInstructions:
                         'انشر مشاركة في منتدى الدورة تناقش فيها: كيف يُمكن لأدوات التواصل الرقمي أن تُعزز التعلم التعاوني؟ (150-200 كلمة). ثم ردّ على مشاركتَي زميلين بتعليق نقدي بنّاء.',
                 },
@@ -286,7 +286,7 @@ export const course: Course = {
                         features:
                             'Trello: لوحات بصرية بسيطة وسريعة. Asana: إدارة مهام متقدمة مع تبعيات وجداول زمنية. Notion: قواعد بيانات + ويكي + مهام. GitHub Projects: مثالي للمشاريع البرمجية. اختر الأداة بناءً على حجم الفريق وطبيعة المشروع.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=HBkHuiyvBK0' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=sRVMA_bKD3Y' },
                     activityInstructions:
                         'أنشئ لوحة Trello لمشروع افتراضي يضم 3 أعضاء. أضف 10 مهام موزّعة على مراحل (قيد الانتظار / جارٍ التنفيذ / مكتمل). أرسل لقطة شاشة للوحة مع وصف قصير لأسلوب توزيع المهام.',
                 },
@@ -311,7 +311,7 @@ export const course: Course = {
                         features:
                             'أدوات الحماية: مديرو كلمات المرور (Bitwarden مجاني ومفتوح المصدر)، تطبيقات المصادقة الثنائية (Google Authenticator, Authy)، تنبيهات Have I Been Pwned لمعرفة تسريب بياناتك، وتشفير الأجهزة بـ BitLocker أو FileVault.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=aEmXedBu_h8' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=3NjQ9b3pgIg' },
                     activityInstructions:
                         'افحص 5 من كلمات مرورك الحالية باستخدام موقع security.org/how-secure-is-my-password (دون إدخال كلمات مرور حقيقية، استخدم كلمات مشابهة). سجّل النتائج وقترح بديلًا أقوى لكل كلمة مرور ضعيفة.',
                 },
@@ -326,7 +326,7 @@ export const course: Course = {
                         features:
                             'إجراءات الحماية: مراجعة صلاحيات التطبيقات، استخدام متصفحات تحترم الخصوصية مثل Firefox وBrave، تفعيل VPN موثوق عند استخدام الواي فاي العام، حذف الحسابات غير المستخدمة، واستخدام بريد إلكتروني مؤقت للتسجيل في مواقع غير موثوقة.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=szVMs2MBICY' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=v68zYyaEmEA' },
                     activityInstructions:
                         'راجع إعدادات الخصوصية في ثلاثة من تطبيقاتك الأكثر استخدامًا (مثل واتساب، إنستغرام، جوجل). وثّق الإعدادات الحالية، عدّل ما يبدو خطرًا، وأعدّ تقريرًا يصف ما وجدت وما غيّرت.',
                 },
@@ -341,7 +341,7 @@ export const course: Course = {
                         features:
                             'مؤشرات الفيديو التعليمي عالي الجودة: مدة لا تتجاوز 8 دقائق، هدف تعليمي واحد واضح، صوت نقي بلا ضوضاء خلفية، خطابة واضحة وإيقاع مناسب، رسوم بيانية توضيحية، وأسئلة مدمجة لقياس الفهم.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=WxOSrbWCrco' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=LXb3EKWsInQ' },
                     activityInstructions:
                         'أنتج مقطع فيديو تعليميًا قصيرًا (3-5 دقائق) توضح فيه أحد المفاهيم التي تعلّمتها في هذه الدورة. نظّم المحتوى وفق: مقدمة - محتوى - خلاصة. أرفع الفيديو ورابط الوصول.',
                 },
@@ -356,7 +356,7 @@ export const course: Course = {
                         features:
                             'أدوات بديلة لـ Photoshop: Canva (سهل للمبتدئين)، Adobe Express، Figma (للتصاميم التفاعلية). للإنفوجرافيك: Visme وPiktochart. أهمية: نظام ألوان متناسق، خطوط واضحة، مساحة بيضاء كافية، ورسائل بصرية متسقة.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=a5KYlHNKQB8' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=ZTFdnRPInGU' },
                     activityInstructions:
                         'صمّم إنفوجرافيك باستخدام Canva أو أي أداة مشابهة يلخّص مفاهيم الوحدة الأولى من هذه الدورة. يجب أن يكون جذابًا بصريًا ومعلوماتيًا في آنٍ واحد. أرسل الملف النهائي بصيغة PNG.',
                 },
@@ -371,7 +371,7 @@ export const course: Course = {
                         features:
                             'تراخيص Creative Commons الستة: من CC0 (مجال عام) إلى CC BY-SA (نسب + مشاركة بالمثل). مصادر المحتوى الحر: Unsplash (صور)، Pixabay (فيديو)، Free Music Archive (موسيقى)، Wikipedia Commons (وسائط متعددة).',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/watch?v=4ZvJGV6YF6Y' },
+                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' }, // REPLACED - original was: https://www.youtube.com/watch?v=1OdT3uJLRzw' },
                     activityInstructions:
                         'اختر 5 صور أو مقاطع من الإنترنت لاستخدامها في عرض تقديمي تعليمي. تحقق من ترخيص كل مصدر، ووثّق: الرابط، نوع الترخيص، وكيفية الاستشهاد الصحيح به وفق متطلبات الترخيص.',
                 },
