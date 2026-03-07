@@ -101,6 +101,7 @@ const Onboarding: React.FC = () => {
     const [dir, setDir] = useState(1);
 
     const isLast = step === SLIDES.length - 1;
+    const isFirst = step === 0;
 
     const finish = () => {
         markOnboardingSeen();
@@ -114,6 +115,11 @@ const Onboarding: React.FC = () => {
             setDir(1);
             setStep((s) => s + 1);
         }
+    };
+
+    const handlePrev = () => {
+        setDir(-1);
+        setStep((s) => s - 1);
     };
 
     return (
@@ -171,10 +177,17 @@ const Onboarding: React.FC = () => {
                 ))}
             </div>
 
-            {/* ── Footer: next only ── */}
+            {/* ── Footer: prev + next ── */}
             <div className="ob-footer">
+                <button
+                    className="ob-prev-btn"
+                    onClick={handlePrev}
+                    disabled={isFirst}
+                >
+                    السابق
+                </button>
                 <button className="ob-next-btn" onClick={handleNext}>
-                    {isLast ? 'التالي' : 'التالي'}
+                    {isLast ? 'ابدأ' : 'التالي'}
                 </button>
             </div>
         </div>

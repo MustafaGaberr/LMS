@@ -11,6 +11,38 @@
     overflow: hidden;
 }
 
+/* ── Header back button ── */
+.welcome-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    padding-bottom: var(--space-2);
+}
+
+.welcome-back-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    background: none;
+    border: none;
+    color: var(--color-text-2);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: background 0.18s, color 0.18s;
+}
+
+.welcome-back-btn:hover {
+    background: var(--color-surface);
+    color: var(--color-text);
+}
+
+
 /* blobs */
 .welcome-blob {
     position: absolute;
@@ -223,8 +255,9 @@
     font-size: var(--font-size-xl);
     font-weight: 800;
     color: var(--color-text);
-    text-align: right;
+    text-align: center;
     line-height: 1.55;
     margin: 0;
+    margin-top: var(--space-6);
     width: 100%;
 }

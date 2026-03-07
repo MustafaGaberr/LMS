@@ -118,9 +118,10 @@
     font-size: var(--font-size-2xl, 1.5rem);
     font-weight: 800;
     color: var(--color-text);
-    text-align: right;
+    text-align: center;
     line-height: 1.55;
     margin: 0;
+    margin-top: var(--space-6);
     width: 100%;
     position: relative;
     z-index: 1;

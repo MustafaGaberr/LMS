@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bot } from 'lucide-react';
+import { Bot, ChevronRight } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { course } from '../data/sampleCourse';
 import './Welcome.css';
@@ -17,10 +17,26 @@ const Welcome: React.FC = () => {
         }
     };
 
+    const handleBack = () => {
+        if (showCourse) {
+            setShowCourse(false);
+        } else {
+            navigate('/onboarding');
+        }
+    };
+
     return (
         <div className="welcome-page">
             <div className="welcome-blob welcome-blob--1" />
             <div className="welcome-blob welcome-blob--2" />
+
+            {/* ── Header back button ── */}
+            <div className="welcome-header">
+                <button className="welcome-back-btn" onClick={handleBack} aria-label="رجوع">
+                    <ChevronRight size={22} />
+                    <span>رجوع</span>
+                </button>
+            </div>
 
             {/* ── Bot avatar + dots (always fixed here) ── */}
             <div className="welcome-avatar-wrap">

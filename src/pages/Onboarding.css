@@ -209,8 +209,9 @@
 /* ── Footer ── */
 .ob-footer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: var(--space-3);
     width: 100%;
     max-width: 360px;
@@ -241,6 +242,36 @@
 
 .ob-next-btn:active {
     transform: translateY(0);
+}
+
+/* "السابق" — outline pill */
+.ob-prev-btn {
+    flex: 1;
+    padding: var(--space-4) var(--space-6);
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    border-radius: 999px;
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.18s;
+    font-family: inherit;
+    letter-spacing: 0.01em;
+}
+
+.ob-prev-btn:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    transform: translateY(-1px);
+}
+
+.ob-prev-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.ob-next-btn {
+    flex: 1;
 }
 
 /* "تخطى" — ghost pill, color depends on user */
