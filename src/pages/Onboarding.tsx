@@ -14,7 +14,7 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card">
-                <div className="ob-card__badge">🏛️</div>
+
                 <p className="ob-card__line ob-card__line--bold">جامعة أسوان</p>
                 <div className="ob-card__divider" />
                 <p className="ob-card__line">كلية التربية النوعية</p>
@@ -25,7 +25,6 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card ob-card--center">
-                <div className="ob-card__badge">🎓</div>
                 <p className="ob-card__headline">يُقدِّم</p>
             </div>
         ),
@@ -33,7 +32,6 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card">
-                <div className="ob-card__badge">📄</div>
                 <p className="ob-card__research-title">
                     التفاعل بين نمط الاستجابة لروبوتات المحادثة القائمة على الذكاء الاصطناعي التوليدي
                     ومستوى السعة العقلية وأثره في تنمية قوة السيطرة المعرفية والكفاءة الذاتية
@@ -45,7 +43,6 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card ob-card--center">
-                <div className="ob-card__badge">✏️</div>
                 <p className="ob-card__headline">إعداد</p>
             </div>
         ),
@@ -53,7 +50,6 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card">
-                <div className="ob-card__badge">👨‍🎓</div>
                 <p className="ob-card__line ob-card__line--label">الباحث/</p>
                 <p className="ob-card__line ob-card__line--bold">وليد راضي عبدالمجيد</p>
                 <div className="ob-card__divider" />
@@ -65,7 +61,6 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card">
-                <div className="ob-card__badge">👨‍🏫</div>
                 <p className="ob-card__line ob-card__line--label">إشراف/</p>
                 <p className="ob-card__line ob-card__line--bold">أ.د/ حلمي أبو موتة</p>
                 <div className="ob-card__divider" />
@@ -78,7 +73,6 @@ const SLIDES: Slide[] = [
     {
         content: (
             <div className="ob-card">
-                <div className="ob-card__badge">👩‍🏫</div>
                 <p className="ob-card__line ob-card__line--label">إشراف/</p>
                 <p className="ob-card__line ob-card__line--bold">أ.د/ رجاء علي عبدالعليم</p>
                 <div className="ob-card__divider" />
@@ -128,19 +122,20 @@ const Onboarding: React.FC = () => {
             <div className="ob-blob ob-blob--1" />
             <div className="ob-blob ob-blob--2" />
 
-            {/* ── Logo ── */}
+            {/* ── Logo / Person image ── */}
             <div className="ob-logo-wrap">
-                <div className="ob-logo">
-                    <svg viewBox="0 0 80 80" fill="none" className="ob-logo__svg">
-                        <rect width="80" height="80" rx="18" fill="var(--color-primary)" opacity="0.12" />
-                        <path d="M20 54V30a4 4 0 0 1 4-4h32a4 4 0 0 1 4 4v24"
-                            stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-                        <path d="M14 54h52M32 26v-6a8 8 0 0 1 16 0v6"
-                            stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-                        <circle cx="40" cy="42" r="5" fill="var(--color-primary)" />
-                        <path d="M40 47v5" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round" />
-                    </svg>
-                </div>
+                {step <= 3 && (
+                    <img src="/assets/aswlogo.png" alt="شعار جامعة أسوان" className="ob-logo__img" />
+                )}
+                {step === 4 && (
+                    <img src="/assets/drwalid.png" alt="د. وليد راضي" className="ob-logo__img ob-logo__img--person" />
+                )}
+                {step === 5 && (
+                    <img src="/assets/drhelmy.jpeg" alt="أ.د. حلمي أبو موتة" className="ob-logo__img ob-logo__img--person" />
+                )}
+                {step === 6 && (
+                    <img src="/assets/drragaa.jpeg" alt="أ.د. رجاء علي" className="ob-logo__img ob-logo__img--person" />
+                )}
             </div>
 
             {/* ── Slide ── */}
