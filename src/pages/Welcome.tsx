@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bot } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { course } from '../data/sampleCourse';
 import './Welcome.css';
 
 const Welcome: React.FC = () => {
     const navigate = useNavigate();
+    const [showCourse, setShowCourse] = useState(false);
+
+    const handleBtn = () => {
+        if (!showCourse) {
+            setShowCourse(true);
+        } else {
+            navigate('/objectives');
+        }
+    };
 
     return (
         <div className="welcome-page">
             <div className="welcome-blob welcome-blob--1" />
             <div className="welcome-blob welcome-blob--2" />
 
-            {/* Bot avatar */}
+            {/* ── Bot avatar + dots (always fixed here) ── */}
             <div className="welcome-avatar-wrap">
                 <div className="welcome-avatar">
                     <Bot size={64} strokeWidth={1.3} />
@@ -21,23 +32,53 @@ const Welcome: React.FC = () => {
                 </div>
             </div>
 
-            {/* Message card */}
-            <div className="welcome-card">
-                <p className="welcome-card__line welcome-card__line--bold">
-                    مرحباً طلاب الفرقة الثالثة
-                </p>
-                <p className="welcome-card__line">
-                    أنا روبوت المحادثة .....
-                </p>
-                <p className="welcome-card__line">
-                    ساكون معك مرشداً طوال الرحلة التعليمية هيا بنا لنبدأ تعلمنا
-                </p>
+            {/* ── Content (changes between welcome & course) ── */}
+            <div className="welcome-content-area">
+                <AnimatePresence mode="wait">
+                    {!showCourse ? (
+                        <motion.div
+                            key="welcome"
+                            className="welcome-card"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.25 }}
+                        >
+                            <p className="welcome-card__line welcome-card__line--bold">
+                                مرحباً طلاب الفرقة الثالثة
+                            </p>
+                            <p className="welcome-card__line">
+                                أنا روبوت المحادثة .....
+                            </p>
+                            <p className="welcome-card__line">
+                                سأكون معك مرشداً طوال الرحلة التعليمية، هيا بينا لنبدأ تعلمنا
+                            </p>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="course"
+                            className="welcome-course-cards"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.25 }}
+                        >
+                            <div className="welcome-card welcome-card--course">
+                                <p className="welcome-card__course-title">{course.title}</p>
+                            </div>
+                            <div className="welcome-card welcome-card--code">
+                                <p className="welcome-card__code">كود المقرر...</p>
+                            </div>
+                            <p className="welcome-card__tagline">هيا بنا نبدأ تعلمنا في محتوانا</p>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
-            {/* CTA */}
+            {/* ── Footer (button always here) ── */}
             <div className="welcome-footer">
-                <button className="welcome-start-btn" onClick={() => navigate('/course-start')}>
-                    بدأ
+                <button className="welcome-start-btn" onClick={handleBtn}>
+                    {showCourse ? 'بدأ' : 'التالي'}
                 </button>
             </div>
         </div>

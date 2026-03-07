@@ -125,7 +125,10 @@ const Onboarding: React.FC = () => {
             {/* ── Logo / Person image ── */}
             <div className="ob-logo-wrap">
                 {step <= 3 && (
-                    <img src="/assets/aswlogo.png" alt="شعار جامعة أسوان" className="ob-logo__img" />
+                    <div className="ob-logo-dual">
+                        <img src="/assets/aswlogo.png" alt="شعار جامعة أسوان" className="ob-logo__img ob-logo__img--sm" />
+                        <img src="/assets/facultylogo.png" alt="شعار كلية التربية" className="ob-logo__img ob-logo__img--sm" />
+                    </div>
                 )}
                 {step === 4 && (
                     <img src="/assets/drwalid.png" alt="د. وليد راضي" className="ob-logo__img ob-logo__img--person" />

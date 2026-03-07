@@ -53,6 +53,22 @@
     filter: drop-shadow(0px 10px 18px rgba(0, 0, 0, 0.22));
 }
 
+/* two logos side by side */
+.ob-logo-dual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-12);
+    width: 100%;
+}
+
+.ob-logo__img--sm {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    filter: drop-shadow(0px 8px 14px rgba(0, 0, 0, 0.18));
+}
+
 .ob-logo__img--person {
     width: 200px;
     height: 200px;
