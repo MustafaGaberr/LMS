@@ -20,10 +20,18 @@
 
 .app-shell__content--no-scroll {
     overflow: hidden;
+    height: calc(100dvh - var(--header-height));
+    padding-bottom: 0;
 }
 
 .app-shell__page {
     min-height: calc(100dvh - var(--header-height) - var(--bottom-nav-height));
     display: flex;
     flex-direction: column;
+}
+
+.app-shell__content--no-scroll .app-shell__page {
+    min-height: unset;
+    height: 100%;
+    overflow: hidden;
 }

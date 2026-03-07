@@ -18,7 +18,7 @@ const Objectives: React.FC = () => {
             <div className="obj-page">
                 {/* Title card */}
                 <div className="obj-title-card">
-                    <span>الأهداف العامه</span>
+                    <span>الأهداف العامة</span>
                 </div>
 
                 {/* 2×2 + 1 grid */}
@@ -27,7 +27,7 @@ const Objectives: React.FC = () => {
                         {course.objectives.map((obj, i) => (
                             <button
                                 key={obj.id}
-                                className={`obj-grid-btn ${i % 2 === 0 ? 'obj-grid-btn--green' : ''}`}
+                                className="obj-grid-btn"
                                 onClick={() => setSelected(i)}
                             >
                                 الهدف {ORDINAL[i]}
@@ -36,10 +36,12 @@ const Objectives: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Back arrow */}
-                <button className="obj-back-btn" onClick={() => navigate(-1)} aria-label="رجوع">
-                    <ArrowRight size={22} />
-                </button>
+                {/* Footer: back arrow */}
+                <div className="obj-footer">
+                    <button className="obj-back-btn" onClick={() => navigate(-1)} aria-label="رجوع">
+                        <ArrowRight size={22} />
+                    </button>
+                </div>
             </div>
         );
     }

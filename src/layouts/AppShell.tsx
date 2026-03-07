@@ -11,12 +11,14 @@ const HIDDEN_NAV_ROUTES = [
     '/onboarding',
     '/welcome',
     '/course-start',
+    '/objectives',
 ];
 
 // Routes where content should not scroll
 const NO_SCROLL_ROUTES = [
     '/onboarding',
     '/welcome',
+    '/objectives',
 ];
 
 // Page titles per route (prefix match)
@@ -42,7 +44,7 @@ function getPageTitle(pathname: string): string {
 }
 
 function getShowBack(pathname: string): boolean {
-    const noBackRoutes = ['/login', '/units', '/roadmap', '/settings', '/onboarding', '/welcome'];
+    const noBackRoutes = ['/login', '/units', '/roadmap', '/settings', '/onboarding', '/welcome', '/objectives'];
     return !noBackRoutes.some((r) => pathname === r);
 }
 
