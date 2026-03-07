@@ -16,6 +16,9 @@ const Welcome: React.FC = () => {
                 <div className="welcome-avatar">
                     <Bot size={64} strokeWidth={1.3} />
                 </div>
+                <div className="welcome-dots">
+                    <span /><span /><span />
+                </div>
             </div>
 
             {/* Message card */}
@@ -27,7 +30,7 @@ const Welcome: React.FC = () => {
                     أنا روبوت المحادثة .....
                 </p>
                 <p className="welcome-card__line">
-                    ساكون معك مرشداً طوال الرحلة التعليمية هيا بينا لنبدأ تعلمنا
+                    ساكون معك مرشداً طوال الرحلة التعليمية هيا بنا لنبدأ تعلمنا
                 </p>
             </div>
 
