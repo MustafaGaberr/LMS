@@ -1,12 +1,12 @@
 .welcome-page {
     direction: rtl;
-    min-height: 100dvh;
+    height: calc(100dvh - var(--header-height));
     background: var(--color-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-10) var(--space-6) var(--space-10);
+    padding: var(--space-5) var(--space-6) var(--space-6);
     position: relative;
     overflow: hidden;
 }
@@ -40,11 +40,12 @@
 .welcome-avatar-wrap {
     position: relative;
     z-index: 1;
+    margin-top: var(--space-4);
 }
 
 .welcome-avatar {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
     background: var(--color-surface);
     border: 2px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -52,10 +53,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--color-text);
+    animation: welcome-bot-float 3s ease-in-out infinite;
 }
 
-.welcome-avatar__emoji {
-    font-size: 3rem;
+@keyframes welcome-bot-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 /* Message card */
@@ -64,11 +75,11 @@
     max-width: 420px;
     border: 2px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: var(--space-7) var(--space-6);
+    padding: var(--space-5) var(--space-6);
     background: var(--color-surface);
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-3);
     text-align: center;
     position: relative;
     z-index: 1;

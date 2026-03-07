@@ -13,6 +13,12 @@ const HIDDEN_NAV_ROUTES = [
     '/course-start',
 ];
 
+// Routes where content should not scroll
+const NO_SCROLL_ROUTES = [
+    '/onboarding',
+    '/welcome',
+];
+
 // Page titles per route (prefix match)
 const ROUTE_TITLES: Array<[string, string]> = [
     ['/login', 'تسجيل الدخول'],
@@ -55,6 +61,7 @@ const pageTransition = { duration: 0.22, ease: 'easeInOut' };
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     const location = useLocation();
     const showNav = !HIDDEN_NAV_ROUTES.some((r) => location.pathname.startsWith(r));
+    const noScroll = NO_SCROLL_ROUTES.some((r) => location.pathname.startsWith(r));
     const title = getPageTitle(location.pathname);
     const showBack = getShowBack(location.pathname);
 
@@ -63,7 +70,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             <AppHeader title={title} showBack={showBack} />
 
             <main
-                className={`app-shell__content ${showNav ? '' : 'app-shell__content--no-nav'}`}
+                className={`app-shell__content ${showNav ? '' : 'app-shell__content--no-nav'} ${noScroll ? 'app-shell__content--no-scroll' : ''}`}
             >
                 <AnimatePresence mode="wait">
                     <motion.div

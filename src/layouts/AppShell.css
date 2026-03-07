@@ -18,6 +18,10 @@
     padding-bottom: 0;
 }
 
+.app-shell__content--no-scroll {
+    overflow: hidden;
+}
+
 .app-shell__page {
     min-height: calc(100dvh - var(--header-height) - var(--bottom-nav-height));
     display: flex;

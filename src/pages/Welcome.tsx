@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Bot } from 'lucide-react';
 import './Welcome.css';
 
 const Welcome: React.FC = () => {
@@ -13,7 +14,7 @@ const Welcome: React.FC = () => {
             {/* Bot avatar */}
             <div className="welcome-avatar-wrap">
                 <div className="welcome-avatar">
-                    <span className="welcome-avatar__emoji">🤖</span>
+                    <Bot size={64} strokeWidth={1.3} />
                 </div>
             </div>
 
