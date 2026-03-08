@@ -86,7 +86,7 @@ const Objectives: React.FC = () => {
                         >
                             {/* Title banner */}
                             <div className="obj-detail-banner">
-                                <span>{course.title}</span>
+                                <span>{course.objectives[selected].title}</span>
                             </div>
 
                             {/* Two-column body */}
