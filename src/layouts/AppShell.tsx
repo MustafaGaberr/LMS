@@ -19,6 +19,7 @@ const NO_SCROLL_ROUTES = [
     '/onboarding',
     '/welcome',
     '/objectives',
+    '/units',
 ];
 
 // Page titles per route (prefix match)

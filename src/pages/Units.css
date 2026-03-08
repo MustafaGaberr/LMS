@@ -3,21 +3,21 @@
 ════════════════════════════════════════ */
 .units-shell {
     direction: rtl;
-    height: calc(100dvh - var(--header-height));
+    height: 100%;
     display: flex;
     flex-direction: column;
     background: var(--color-bg);
     overflow: hidden;
 }
 
-/* Scrollable body */
+/* Content area fills remaining space */
 .units-content {
     flex: 1;
-    overflow-y: auto;
-    padding: var(--space-4) var(--space-4) var(--space-2);
+    overflow: hidden;
+    padding: var(--space-3) var(--space-4) var(--space-2);
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-2);
 }
 
 /* ════════════════════════════════════════
@@ -34,6 +34,7 @@
     color: #fff;
     box-shadow: 0 6px 24px color-mix(in srgb, #7c3aed 35%, transparent);
     flex-shrink: 0;
+    margin-bottom: var(--space-6);
 }
 
 .units-header-card__icon {
@@ -67,12 +68,14 @@
 }
 
 /* ════════════════════════════════════════
-   UNIT LIST
+   UNIT LIST — grows to fill available space
 ════════════════════════════════════════ */
 .units-list {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-2);
+
 }
 
 /* ── Shared card base ── */
@@ -82,7 +85,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-4) var(--space-4);
+    padding: var(--space-6) var(--space-6);
     font-family: inherit;
     text-align: right;
     transition: box-shadow 0.18s, transform 0.18s;
@@ -106,6 +109,25 @@
 .unit-card--unlocked:active {
     transform: translateY(0);
     box-shadow: var(--shadow-sm);
+}
+
+/* ── Done (all lessons completed) ── */
+.unit-card--done {
+    border-color: #22c55e;
+    background: color-mix(in srgb, #22c55e 10%, var(--color-surface));
+}
+
+.unit-card--done .unit-card__badge {
+    background: #22c55e;
+}
+
+.unit-card--done .unit-card__cta {
+    color: #16a34a;
+}
+
+.unit-card--done:hover {
+    border-color: #16a34a;
+    box-shadow: 0 4px 16px color-mix(in srgb, #22c55e 25%, transparent);
 }
 
 /* Number badge */
@@ -232,12 +254,13 @@
 ════════════════════════════════════════ */
 .units-footer {
     flex-shrink: 0;
-    padding: var(--space-3) var(--space-5) var(--space-4);
+    padding: var(--space-2) var(--space-5) var(--space-3);
+    padding-bottom: calc(var(--bottom-nav-height) + var(--space-3));
     background: var(--color-surface);
-    border-top: 1px solid var(--color-border);
+    border-top: 2px solid color-mix(in srgb, var(--color-primary) 15%, transparent);
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-4);
 }
 
 .units-footer__bar-row {
@@ -247,29 +270,70 @@
 }
 
 .units-footer__label {
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    color: var(--color-text-2);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.units-footer__label::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
 }
 
 .units-footer__pct {
-    font-size: var(--font-size-xs);
-    font-weight: 700;
-    color: var(--color-primary);
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
 }
 
 .units-footer__track {
     width: 100%;
-    height: 8px;
+    height: 12px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--color-primary) 15%, var(--color-border));
+    background: color-mix(in srgb, var(--color-primary) 12%, var(--color-border));
     overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .units-footer__fill {
     height: 100%;
     border-radius: 999px;
-    background: linear-gradient(90deg, #7c3aed, #a855f7);
-    transition: width 0.5s ease;
-    min-width: 4px;
+    background: linear-gradient(90deg, #7c3aed 0%, #a855f7 60%, #ec4899 100%);
+    transition: width 0.6s cubic-bezier(.4, 0, .2, 1);
+    min-width: 6px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated shimmer on the fill */
+.units-footer__fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.35) 50%,
+            transparent 100%);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(200%);
+    }
 }

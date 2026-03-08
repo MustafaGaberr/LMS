@@ -48,13 +48,14 @@ const Units: React.FC = () => {
                         const completedCount = unit.lessons.filter(
                             (l) => progress.completedLessons[l.id]?.activityDone
                         ).length;
+                        const allDone = completedCount === unit.lessons.length;
                         const unitPct = Math.round((completedCount / unit.lessons.length) * 100);
 
                         return unlocked ? (
                             /* ── Unlocked unit card ── */
                             <button
                                 key={unit.id}
-                                className="unit-card unit-card--unlocked"
+                                className={`unit-card unit-card--unlocked ${allDone ? 'unit-card--done' : ''}`}
                                 onClick={() => navigate(`/units/${unit.id}/lessons`)}
                             >
                                 {/* Number badge */}
@@ -66,8 +67,7 @@ const Units: React.FC = () => {
                                         الوحدة {ORDINAL[i] ?? i + 1}
                                     </span>
                                     <span className="unit-card__cta">
-                                        <Play size={12} fill="currentColor" />
-                                        ابدأ الآن
+                                        {allDone ? '✓ مكتملة' : <><Play size={12} fill="currentColor" /> ابدأ الآن</>}
                                     </span>
                                 </div>
 
