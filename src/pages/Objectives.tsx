@@ -22,19 +22,19 @@ const Objectives: React.FC = () => {
                     <span>الأهداف العامة</span>
                 </div>
 
-                {/* 2×2 + 1 grid */}
-                <div className="obj-grid-wrap">
-                    <div className="obj-grid">
-                        {course.objectives.map((obj, i) => (
-                            <button
-                                key={obj.id}
-                                className="obj-grid-btn"
-                                onClick={() => setSelected(i)}
-                            >
-                                الهدف {ORDINAL[i]}
-                            </button>
-                        ))}
-                    </div>
+                {/* Horizontal card list */}
+                <div className="obj-list">
+                    {course.objectives.map((obj, i) => (
+                        <button
+                            key={obj.id}
+                            className="obj-list-card"
+                            onClick={() => setSelected(i)}
+                        >
+                            <span className="obj-list-card__num">{i + 1}</span>
+                            <span className="obj-list-card__label">الهدف {ORDINAL[i]}</span>
+                            <span className="obj-list-card__arrow">›</span>
+                        </button>
+                    ))}
                 </div>
 
                 {/* Footer: back arrow */}
