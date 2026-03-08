@@ -18,10 +18,12 @@ const Objectives: React.FC = () => {
 
     /* ─── Footer handlers ─── */
     const handleBack = () => {
-        if (isPhaseB) {
-            setSelected(null);   // back to grid
+        if (!isPhaseB) {
+            navigate(-1);                           // Phase A → leave page
+        } else if ((selected as number) > 0) {
+            setSelected((s) => (s as number) - 1); // Phase B → previous objective
         } else {
-            navigate(-1);        // leave page
+            setSelected(null);                      // first objective → back to grid
         }
     };
 
