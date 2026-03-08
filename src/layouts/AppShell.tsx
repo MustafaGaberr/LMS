@@ -5,15 +5,16 @@ import { AppHeader } from '../components/AppHeader';
 import { BottomNav } from '../components/BottomNav';
 import './AppShell.css';
 
-// Routes where bottom nav should be hidden
 const HIDDEN_NAV_ROUTES = [
     '/login',
     '/onboarding',
     '/welcome',
     '/course-start',
     '/objectives',
-    '/units/',     // hides on /units/:unitId/lessons/... (lesson detail, chat, activity, quiz-intro)
 ];
+
+// Hide bottom nav on lesson detail and deeper pages (e.g. /units/u1/lessons/u1-l1, /chat, /activity, /quiz-intro)
+const LESSON_DETAIL_PATTERN = /^\/units\/[^/]+\/lessons\/[^/]+/;
 
 // Routes where content should not scroll
 const NO_SCROLL_ROUTES = [
@@ -64,7 +65,7 @@ const pageTransition = { duration: 0.22, ease: 'easeInOut' };
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     const location = useLocation();
-    const showNav = !HIDDEN_NAV_ROUTES.some((r) => location.pathname.startsWith(r));
+    const showNav = !HIDDEN_NAV_ROUTES.some((r) => location.pathname.startsWith(r)) && !LESSON_DETAIL_PATTERN.test(location.pathname);
     const noScroll = NO_SCROLL_ROUTES.some((r) => location.pathname.startsWith(r));
     const title = getPageTitle(location.pathname);
     const showBack = getShowBack(location.pathname);
