@@ -99,7 +99,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 4px 18px rgba(26, 26, 46, 0.3);
-    margin-top: 16px;
+    margin-top: 3rem;
     margin-bottom: 24px;
     flex-shrink: 0;
 }
