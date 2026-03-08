@@ -1,126 +1,199 @@
-.units-page {
+/* ════════════════════════════════════════
+   SHELL — full-height column layout
+════════════════════════════════════════ */
+.units-shell {
     direction: rtl;
-    min-height: 100dvh;
-    background: var(--color-bg);
+    height: calc(100dvh - var(--header-height));
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: var(--space-8) var(--space-5) var(--space-8);
-    gap: var(--space-5);
-    position: relative;
+    background: var(--color-bg);
+    overflow: hidden;
 }
 
-/* ── Course name card ── */
-.units-course-card {
+/* Scrollable body */
+.units-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-4) var(--space-4) var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+/* ════════════════════════════════════════
+   COURSE HEADER CARD — gradient
+════════════════════════════════════════ */
+.units-header-card {
     width: 100%;
-    max-width: 420px;
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-6);
-    background: var(--color-surface);
-    text-align: right;
-    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 60%, #ec4899 100%);
+    padding: var(--space-5) var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    color: #fff;
+    box-shadow: 0 6px 24px color-mix(in srgb, #7c3aed 35%, transparent);
     flex-shrink: 0;
 }
 
-.units-course-card__text {
-    font-size: var(--font-size-lg);
-    font-weight: 700;
-    color: var(--color-text);
-    margin: 0;
-    line-height: 1.5;
-}
-
-/* ── Staggered grid ── */
-.units-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    width: 100%;
-    max-width: 420px;
-    flex: 1;
-}
-
-.units-grid__row {
-    display: flex;
-}
-
-/* Even rows align to the right (like wireframe: الوحدة الاولى on right) */
-.units-grid__row--right {
-    justify-content: flex-end;
-}
-
-/* Odd rows align to the left (like wireframe: الوحدة الثانية on left, grayed) */
-.units-grid__row--left {
-    justify-content: flex-start;
-}
-
-/* ── Unit button ── */
-.unit-btn {
-    width: 130px;
-    min-height: 80px;
-    border: 2px solid var(--color-border);
+.units-header-card__icon {
+    width: 52px;
+    height: 52px;
     border-radius: var(--radius-lg);
-    background: var(--color-surface);
+    background: rgba(255, 255, 255, 0.18);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
-    cursor: pointer;
-    font-family: inherit;
-    padding: var(--space-3);
-    transition: transform 0.18s, box-shadow 0.18s;
-    position: relative;
+    flex-shrink: 0;
 }
 
-.unit-btn:not(:disabled):hover {
-    transform: translateY(-3px);
+.units-header-card__text {
+    flex: 1;
+    text-align: right;
+}
+
+.units-header-card__title {
+    font-size: var(--font-size-base);
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 4px;
+    line-height: 1.45;
+}
+
+.units-header-card__meta {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+/* ════════════════════════════════════════
+   UNIT LIST
+════════════════════════════════════════ */
+.units-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+/* ── Shared card base ── */
+.unit-card {
+    width: 100%;
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-4);
+    font-family: inherit;
+    text-align: right;
+    transition: box-shadow 0.18s, transform 0.18s;
+    border: 1.5px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    cursor: default;
+}
+
+/* ── Unlocked — white card ── */
+.unit-card--unlocked {
+    background: var(--color-surface);
+    cursor: pointer;
+}
+
+.unit-card--unlocked:hover {
+    transform: translateY(-2px);
     box-shadow: var(--shadow-md);
     border-color: var(--color-primary);
 }
 
-/* Locked state — gray, like wireframe second unit */
-.unit-btn--locked {
-    background: color-mix(in srgb, var(--color-border) 40%, var(--color-surface));
-    opacity: 0.75;
-    cursor: not-allowed;
+.unit-card--unlocked:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
 }
 
-/* Done state */
-.unit-btn--done {
-    border-color: #4caf50;
-    background: color-mix(in srgb, #4caf50 8%, var(--color-surface));
+/* Number badge */
+.unit-card__badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: var(--font-size-base);
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.unit-btn__lock {
-    color: var(--color-text-3);
+/* Info block (middle) */
+.unit-card__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.unit-btn__label {
+.unit-card__name {
     font-size: var(--font-size-base);
     font-weight: 700;
     color: var(--color-text);
     line-height: 1.4;
-    text-align: center;
 }
 
-.unit-btn--locked .unit-btn__label {
+.unit-card__cta {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Right section (progress numbers) */
+.unit-card__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+.unit-card__progress-label {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.unit-card__progress-sub {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-3);
+}
+
+/* ── Locked — grayed card ── */
+.unit-card--locked {
+    background: color-mix(in srgb, var(--color-border) 30%, var(--color-surface));
+    justify-content: space-between;
+    opacity: 0.8;
+}
+
+.unit-card--locked .unit-card__name {
     color: var(--color-text-2);
 }
 
-.unit-btn__progress {
+.unit-card__locked-label {
     font-size: var(--font-size-xs);
-    color: var(--color-primary);
-    font-weight: 600;
+    color: var(--color-text-3);
+    font-weight: 500;
 }
 
-/* ── Survey CTA ── */
+.unit-card__lock {
+    color: var(--color-text-3);
+    flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════
+   SURVEY CTA
+════════════════════════════════════════ */
 .units-survey-cta {
-    width: 100%;
-    max-width: 420px;
     border: 2px solid #4caf50;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: var(--space-5);
     background: color-mix(in srgb, #4caf50 8%, var(--color-surface));
     text-align: center;
@@ -147,24 +220,56 @@
     font-weight: 700;
     cursor: pointer;
     font-family: inherit;
+    transition: opacity 0.18s;
 }
 
-/* ── Back button ── */
-.units-back-btn {
-    width: 46px;
-    height: 46px;
-    border: 2px solid var(--color-border);
-    border-radius: 50%;
+.units-survey-cta__btn:hover {
+    opacity: 0.88;
+}
+
+/* ════════════════════════════════════════
+   BOTTOM PROGRESS BAR
+════════════════════════════════════════ */
+.units-footer {
+    flex-shrink: 0;
+    padding: var(--space-3) var(--space-5) var(--space-4);
     background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.units-footer__bar-row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--color-text);
-    flex-shrink: 0;
-    transition: background 0.18s;
+    justify-content: space-between;
 }
 
-.units-back-btn:hover {
-    background: var(--color-border);
+.units-footer__label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-text-2);
+}
+
+.units-footer__pct {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.units-footer__track {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-primary) 15%, var(--color-border));
+    overflow: hidden;
+}
+
+.units-footer__fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #7c3aed, #a855f7);
+    transition: width 0.5s ease;
+    min-width: 4px;
 }
