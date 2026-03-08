@@ -20,7 +20,8 @@
 
 .app-shell__content--no-scroll {
     overflow: hidden;
-    height: calc(100dvh - var(--header-height));
+    max-height: 100dvh;
+    box-sizing: border-box;
     padding-bottom: 0;
 }
 

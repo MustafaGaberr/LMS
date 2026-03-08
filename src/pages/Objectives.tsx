@@ -39,7 +39,7 @@ const Objectives: React.FC = () => {
                 {/* Footer: back arrow */}
                 <div className="obj-footer">
                     <button className="obj-back-btn" onClick={() => navigate(-1)} aria-label="رجوع">
-                        <ArrowRight size={22} />
+                        <ArrowRight size={26} />
                     </button>
                 </div>
             </div>
@@ -81,13 +81,10 @@ const Objectives: React.FC = () => {
                 </div>
             </div>
 
-            {/* Footer: back arrow + skip */}
-            <div className="obj-detail-footer">
+            {/* Back button centered */}
+            <div className="obj-footer">
                 <button className="obj-back-btn" onClick={() => setSelected(null)} aria-label="رجوع">
-                    <ArrowRight size={22} />
-                </button>
-                <button className="obj-skip-btn" onClick={() => navigate('/units')}>
-                    تخطي
+                    <ArrowRight size={26} />
                 </button>
             </div>
         </div>
