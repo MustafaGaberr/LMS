@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { course } from '../data/sampleCourse';
 import './Objectives.css';
 
@@ -73,11 +74,22 @@ const Objectives: React.FC = () => {
 
                 {/* LEFT: sub-objectives for selected objective */}
                 <div className="obj-sub-col">
-                    {activeObj.subObjectives.map((sub, i) => (
-                        <div key={i} className="obj-sub-card">
-                            <p>{sub}</p>
-                        </div>
-                    ))}
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={selected}
+                            className="obj-sub-col-inner"
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -12 }}
+                            transition={{ duration: 0.22, ease: 'easeInOut' }}
+                        >
+                            {activeObj.subObjectives.map((sub, i) => (
+                                <div key={i} className="obj-sub-card">
+                                    <p>{sub}</p>
+                                </div>
+                            ))}
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
             </div>
 

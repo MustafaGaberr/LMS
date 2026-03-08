@@ -40,6 +40,7 @@ export interface Objective {
 
 export interface Course {
     title: string;
+    subject?: string;
     code?: string;
     description: string;
     objectives: Objective[];
@@ -49,7 +50,8 @@ export interface Course {
 // ─── Sample Data ──────────────────────────────────────────────────────────────
 
 export const course: Course = {
-    title: 'مادة إدارة المحتوى عبر الانترنت',
+    title: 'التعرف على أنظمة إدارة التعلم الإلكتروني',
+    subject: 'مادة إدارة المحتوى عبر الإنترنت',
     code: 'DLS-101',
     description:
         'دورة شاملة تهدف إلى تطوير مهارات المتعلم الرقمية وتمكينه من الانخراط الفعّال في بيئات التعلم الإلكتروني الحديثة.',

@@ -80,7 +80,7 @@ const Welcome: React.FC = () => {
                             transition={{ duration: 0.25 }}
                         >
                             <div className="welcome-card welcome-card--course">
-                                <p className="welcome-card__course-title">{course.title}</p>
+                                <p className="welcome-card__course-title">{course.subject ?? course.title}</p>
                             </div>
                             <div className="welcome-card welcome-card--code">
                                 <p className="welcome-card__code">كود المقرر...</p>
