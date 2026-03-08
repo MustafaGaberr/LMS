@@ -1,21 +1,31 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MessageSquare, Activity } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { getLesson, getUnit } from '../data/sampleCourse';
 import { useAppStore } from '../store/useAppStore';
-import { Button } from '../components/Button';
 import './LessonDetail.css';
 
 type Tab = 'concept' | 'importance' | 'features';
+
+const TABS: Tab[] = ['concept', 'importance', 'features'];
+const TAB_LABELS: Record<Tab, string> = {
+    concept: 'مفهوم',
+    importance: 'أهمية',
+    features: 'خصائص',
+};
+const TAB_CSS: Record<Tab, string> = {
+    concept: 'mafhoom',
+    importance: 'ahamiyya',
+    features: 'khassais',
+};
 
 const LessonDetail: React.FC = () => {
     const { unitId, lessonId } = useParams<{ unitId: string; lessonId: string }>();
     const navigate = useNavigate();
 
     const markContentDone = useAppStore((s) => s.markContentDone);
-    const getLessonProgress = useAppStore((s) => s.getLessonProgress);
 
-    const [tab, setTab] = useState<Tab | null>(null);
+    const [step, setStep] = useState(0); // 0=concept, 1=importance, 2=features
 
     const unit = getUnit(unitId ?? '');
     const lesson = getLesson(unitId ?? '', lessonId ?? '');
@@ -28,11 +38,24 @@ const LessonDetail: React.FC = () => {
         );
     }
 
-    const progress = getLessonProgress(lesson.id);
+    const currentTab = TABS[step];
 
-    const handleTabClick = (t: Tab) => {
-        setTab(prev => prev === t ? null : t);
-        if (!progress.contentDone) markContentDone(lesson.id);
+    const handleBubbleClick = (idx: number) => {
+        setStep(idx);
+    };
+
+    const handleNext = () => {
+        if (step < 2) {
+            const nextStep = step + 1;
+            setStep(nextStep);
+            // Mark content done when reaching features (last content tab)
+            if (nextStep === 2) {
+                markContentDone(lesson.id);
+            }
+        } else {
+            // step === 2 → go to quiz instructions
+            navigate(`/units/${unitId}/lessons/${lessonId}/quiz-intro`);
+        }
     };
 
     // Extract importance points for mind map
@@ -43,7 +66,7 @@ const LessonDetail: React.FC = () => {
         .filter(s => s.length > 10)
         .slice(0, 5);
 
-    // Get YouTube video ID – handles watch?v=, youtu.be/, and /embed/ URLs
+    // Get YouTube video ID
     const getYouTubeId = (url: string) => {
         const match = url.match(/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{11})/);
         return match ? match[1] : '';
@@ -57,43 +80,30 @@ const LessonDetail: React.FC = () => {
                 <span className="lesson-title-text">{lesson.title}</span>
             </div>
 
-
-
             {/* ── 3 oval clickable bubbles ─────────────────────── */}
             <div className="lesson-bubbles-container">
-                {/* مفهوم - right */}
-                <button
-                    className={`lesson-bubble lesson-bubble--mafhoom ${tab === 'concept' ? 'lesson-bubble--active' : ''}`}
-                    onClick={() => handleTabClick('concept')}
-                >
-                    مفهوم
-                </button>
-
-                {/* أهمية - center top */}
-                <button
-                    className={`lesson-bubble lesson-bubble--ahamiyya ${tab === 'importance' ? 'lesson-bubble--active' : ''}`}
-                    onClick={() => handleTabClick('importance')}
-                >
-                    أهمية
-                </button>
-
-                {/* خصائص - left */}
-                <button
-                    className={`lesson-bubble lesson-bubble--khassais ${tab === 'features' ? 'lesson-bubble--active' : ''}`}
-                    onClick={() => handleTabClick('features')}
-                >
-                    خصائص
-                </button>
+                {TABS.map((tab, idx) => {
+                    const isActive = idx === step;
+                    return (
+                        <button
+                            key={tab}
+                            className={`lesson-bubble lesson-bubble--${TAB_CSS[tab]} ${isActive ? 'lesson-bubble--active' : ''}`}
+                            onClick={() => handleBubbleClick(idx)}
+                        >
+                            {TAB_LABELS[tab]}
+                        </button>
+                    );
+                })}
             </div>
 
             {/* ── Section content ──────────────────────────────── */}
-            {tab === 'concept' && (
+            {currentTab === 'concept' && (
                 <div className="lesson-section-content lesson-section-content--concept">
                     <p className="lesson-section-text">{lesson.sections.concept}</p>
                 </div>
             )}
 
-            {tab === 'importance' && (
+            {currentTab === 'importance' && (
                 <div className="lesson-section-content lesson-section-content--importance">
                     <div className="mindmap-container">
                         <MindMap title={lesson.title} points={importancePoints} />
@@ -101,7 +111,7 @@ const LessonDetail: React.FC = () => {
                 </div>
             )}
 
-            {tab === 'features' && (
+            {currentTab === 'features' && (
                 <div className="lesson-section-content lesson-section-content--features">
                     {videoId ? (
                         <div className="lesson-yt-wrap">
@@ -120,26 +130,15 @@ const LessonDetail: React.FC = () => {
                 </div>
             )}
 
-            {/* ── Footer navigation ────────────────────────────── */}
-            <div className="lesson-footer">
-                <Button
-                    variant="primary"
-                    size="lg"
-                    fullWidth
-                    icon={<MessageSquare size={18} />}
-                    onClick={() => navigate(`/units/${unitId}/lessons/${lessonId}/chat`)}
+            {/* ── Next arrow footer (centered) ────────────────── */}
+            <div className="lesson-nav-arrows">
+                <button
+                    className={`lesson-nav-arrow lesson-nav-arrow--next ${step === 2 ? 'lesson-nav-arrow--primary' : ''}`}
+                    onClick={handleNext}
+                    aria-label="التالي"
                 >
-                    الانتقال للأسئلة
-                </Button>
-                <Button
-                    variant="secondary"
-                    size="md"
-                    fullWidth
-                    icon={<Activity size={18} />}
-                    onClick={() => navigate(`/units/${unitId}/lessons/${lessonId}/activity`)}
-                >
-                    النشاط التطبيقي
-                </Button>
+                    <ArrowLeft size={26} />
+                </button>
             </div>
         </div>
     );
@@ -157,7 +156,6 @@ const MindMap: React.FC<MindMapProps> = ({ points }) => {
     const centerY = 110;
     const branchColors = ['#6C8EBF', '#82B366', '#D79B00', '#9673A6', '#23445D'];
 
-    // Spread branches from center downward/sideways
     const angles = [-60, -20, 20, 60, 90];
     const branchLength = 90;
 
@@ -187,7 +185,6 @@ const MindMap: React.FC<MindMapProps> = ({ points }) => {
                 const y2 = centerY + branchLength * Math.cos(angleRad);
                 const color = branchColors[i % branchColors.length];
 
-                // Word wrap: max ~20 chars per line
                 const words = point.split(' ');
                 const lines: string[] = [];
                 let current = '';
@@ -204,7 +201,6 @@ const MindMap: React.FC<MindMapProps> = ({ points }) => {
 
                 return (
                     <g key={i}>
-                        {/* Branch line */}
                         <line
                             x1={centerX}
                             y1={centerY}
@@ -214,7 +210,6 @@ const MindMap: React.FC<MindMapProps> = ({ points }) => {
                             strokeWidth="1.5"
                             strokeDasharray="3 2"
                         />
-                        {/* Leaf node */}
                         <ellipse
                             cx={x2}
                             cy={y2}
@@ -225,7 +220,6 @@ const MindMap: React.FC<MindMapProps> = ({ points }) => {
                             stroke={color}
                             strokeWidth="1.2"
                         />
-                        {/* Text */}
                         {maxLines.map((line, li) => (
                             <text
                                 key={li}

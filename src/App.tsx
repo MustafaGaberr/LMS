@@ -20,6 +20,7 @@ import Units from './pages/Units';
 import LessonsList from './pages/LessonsList';
 import LessonDetail from './pages/LessonDetail';
 import Chat from './pages/Chat';
+import QuizIntro from './pages/QuizIntro';
 import Activity from './pages/Activity';
 import Survey from './pages/Survey';
 import SurveyResults from './pages/SurveyResults';
@@ -78,6 +79,10 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/units/:unitId/lessons/:lessonId"
           element={<ProtectedRoute><LessonDetail /></ProtectedRoute>}
+        />
+        <Route
+          path="/units/:unitId/lessons/:lessonId/quiz-intro"
+          element={<ProtectedRoute><QuizIntro /></ProtectedRoute>}
         />
         <Route
           path="/units/:unitId/lessons/:lessonId/chat"

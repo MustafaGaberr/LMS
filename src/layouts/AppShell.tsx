@@ -12,6 +12,7 @@ const HIDDEN_NAV_ROUTES = [
     '/welcome',
     '/course-start',
     '/objectives',
+    '/units/',     // hides on /units/:unitId/lessons/... (lesson detail, chat, activity, quiz-intro)
 ];
 
 // Routes where content should not scroll

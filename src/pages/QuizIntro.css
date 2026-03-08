@@ -1,0 +1,114 @@
+/* ════════════════════════════════════════
+   QUIZ INTRO PAGE
+   ════════════════════════════════════════ */
+
+.quiz-intro-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px 20px 40px;
+    background: #f0f4f8;
+    direction: rtl;
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
+    gap: 24px;
+}
+
+.quiz-intro-error {
+    color: #e53e3e;
+    font-size: 1.1rem;
+    margin-top: 40px;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────── */
+
+.quiz-intro-header {
+    width: 100%;
+    max-width: 480px;
+    background: #23445D;
+    border-radius: 18px;
+    padding: 22px 24px;
+    text-align: center;
+    box-shadow: 0 4px 18px rgba(35, 68, 93, 0.22);
+}
+
+.quiz-intro-header__title {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ── Instructions Card ─────────────────────────────────────────────────── */
+
+.quiz-intro-card {
+    width: 100%;
+    max-width: 480px;
+    background: #d4eaf7;
+    border-radius: 18px;
+    padding: 24px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    flex: 1;
+}
+
+.quiz-intro-card__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.quiz-intro-card__item {
+    position: relative;
+    padding-right: 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1a202c;
+    line-height: 1.75;
+}
+
+.quiz-intro-card__item::before {
+    content: '•';
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #23445D;
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+/* ── CTA Button ────────────────────────────────────────────────────────── */
+
+.quiz-intro-cta {
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px;
+    background: #1a1a2e;
+    color: #ffffff;
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 18px rgba(26, 26, 46, 0.3);
+    margin-top: auto;
+}
+
+.quiz-intro-cta:hover {
+    background: #23445D;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(35, 68, 93, 0.35);
+}
+
+.quiz-intro-cta:active {
+    transform: translateY(0);
+}

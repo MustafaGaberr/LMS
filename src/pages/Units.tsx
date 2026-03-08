@@ -1,12 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, BookOpen, Play, ArrowRight } from 'lucide-react';
+import { Lock, BookOpen, Play } from 'lucide-react';
 import { course } from '../data/sampleCourse';
 import { useAppStore } from '../store/useAppStore';
 import './Units.css';
 
 const ORDINAL = ['الأولى', 'الثانية', 'الثالثة', 'الرابعة', 'الخامسة', 'السادسة'];
-const ORDINAL_NUM = ['الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس'];
 
 const Units: React.FC = () => {
     const navigate = useNavigate();
@@ -49,7 +48,6 @@ const Units: React.FC = () => {
                             (l) => progress.completedLessons[l.id]?.activityDone
                         ).length;
                         const allDone = completedCount === unit.lessons.length;
-                        const unitPct = Math.round((completedCount / unit.lessons.length) * 100);
 
                         return unlocked ? (
                             /* ── Unlocked unit card ── */
