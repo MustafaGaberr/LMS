@@ -212,11 +212,16 @@
     color: #fff;
     padding: var(--space-5) var(--space-5);
     text-align: center;
-    font-size: var(--font-size-base);
-    font-weight: 800;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
     line-height: 1.5;
     flex-shrink: 0;
     border-radius: var(--radius-lg) var(--radius-lg);
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 /* Two-column body */
@@ -224,7 +229,7 @@
     flex: 1;
     display: flex;
     gap: var(--space-2);
-    padding: var(--space-2);
+    padding: var(--space-2) 0;
     overflow: hidden;
     align-items: stretch;
     max-height: 60%;
@@ -251,7 +256,7 @@
     border: 1.5px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
     border-right: 3px solid var(--color-primary);
     border-radius: var(--radius-lg);
-    padding: 10px 15px;
+    padding: var(--space-6) var(--space-6);
     background: color-mix(in srgb, var(--color-primary) 5%, var(--color-surface));
     display: flex;
     align-items: center;
