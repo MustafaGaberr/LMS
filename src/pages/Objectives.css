@@ -1,14 +1,43 @@
 /* ════════════════════════════════════════════
+   SHARED SHELL — wraps both phases
+════════════════════════════════════════════ */
+.obj-shell {
+    direction: rtl;
+    height: calc(100dvh - var(--header-height));
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg);
+    overflow: hidden;
+}
+
+/* Scrollable / animated content area */
+.obj-content {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Shared footer — always pinned at the same height */
+.obj-shared-footer {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5) var(--space-12);
+    /* background: red; */
+    /* border-top: 1px solid var(--color-border); */
+}
+
+/* ════════════════════════════════════════════
    PHASE A — Grid view
 ════════════════════════════════════════════ */
 .obj-page {
-    direction: rtl;
-    height: calc(100dvh - var(--header-height));
+    height: 100%;
     background: var(--color-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: var(--space-6) var(--space-5) var(--space-6);
+    padding: var(--space-6) var(--space-5) var(--space-4);
     gap: var(--space-5);
     position: relative;
     overflow: hidden;
@@ -137,16 +166,9 @@
     transform: translateX(-4px);
 }
 
-/* Footer (Phase A) */
+/* Footer (Phase A) — kept for any legacy usage */
 .obj-footer {
-    width: 100%;
-    max-width: 380px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-    padding-bottom: var(--space-6);
+    display: none;
 }
 
 /* Back arrow */
@@ -176,8 +198,7 @@
    PHASE B — Detail view (2-column)
 ════════════════════════════════════════════ */
 .obj-detail-page {
-    direction: rtl;
-    height: calc(100dvh - var(--header-height));
+    height: 100%;
     background: var(--color-bg);
     display: flex;
     flex-direction: column;
@@ -293,10 +314,23 @@
     padding: var(--space-3) var(--space-5);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     /* border-top: 1px solid var(--color-border); */
     flex-shrink: 0;
     background: var(--color-surface);
+}
+
+/* Forward button — primary fill when it leads to next page */
+.obj-back-btn--primary {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+.obj-back-btn--primary:hover {
+    background: color-mix(in srgb, var(--color-primary) 85%, #000);
+    border-color: transparent;
+    color: #fff;
 }
 
 /* Skip button */

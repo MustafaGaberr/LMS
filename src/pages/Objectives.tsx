@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { course } from '../data/sampleCourse';
 import './Objectives.css';
@@ -13,92 +13,134 @@ const Objectives: React.FC = () => {
     // 0-4   → phase B (detail, selected index)
     const [selected, setSelected] = useState<number | null>(null);
 
-    /* ─── Phase A: Grid of 5 objective buttons ─── */
-    if (selected === null) {
-        return (
-            <div className="obj-page">
-                {/* Title card */}
-                <div className="obj-title-card">
-                    <span>الأهداف العامة</span>
-                </div>
+    const isPhaseB = selected !== null;
+    const isLast = isPhaseB && selected === course.objectives.length - 1;
 
-                {/* Horizontal card list */}
-                <div className="obj-list">
-                    {course.objectives.map((obj, i) => (
-                        <button
-                            key={obj.id}
-                            className="obj-list-card"
-                            onClick={() => setSelected(i)}
-                        >
-                            <span className="obj-list-card__num">{i + 1}</span>
-                            <span className="obj-list-card__label">الهدف {ORDINAL[i]}</span>
-                            <span className="obj-list-card__arrow">›</span>
-                        </button>
-                    ))}
-                </div>
+    /* ─── Footer handlers ─── */
+    const handleBack = () => {
+        if (isPhaseB) {
+            setSelected(null);   // back to grid
+        } else {
+            navigate(-1);        // leave page
+        }
+    };
 
-                {/* Footer: back arrow */}
-                <div className="obj-footer">
-                    <button className="obj-back-btn" onClick={() => navigate(-1)} aria-label="رجوع">
-                        <ArrowRight size={26} />
-                    </button>
-                </div>
-            </div>
-        );
-    }
+    const handleForward = () => {
+        if (!isPhaseB) {
+            setSelected(0);      // enter first objective
+        } else if (isLast) {
+            navigate('/units');  // finish
+        } else {
+            setSelected((s) => (s as number) + 1);
+        }
+    };
 
-    /* ─── Phase B: 2-column interactive detail ─── */
-    const activeObj = course.objectives[selected];
-
+    /* ─── Shared wrapper with one footer ─── */
     return (
-        <div className="obj-detail-page">
-            {/* Black title banner */}
-            <div className="obj-detail-banner">
-                <span>{course.title}</span>
-            </div>
+        <div className="obj-shell">
 
-            {/* Two-column layout */}
-            <div className="obj-detail-body">
-                {/* RIGHT (first in RTL): all 5 objective buttons */}
-                <div className="obj-label-col">
-                    {course.objectives.map((obj, i) => (
-                        <button
-                            key={obj.id}
-                            className={`obj-label-btn ${i === selected ? 'obj-label-btn--active' : 'obj-label-btn--inactive'}`}
-                            onClick={() => setSelected(i)}
-                        >
-                            الهدف {ORDINAL[i]}
-                        </button>
-                    ))}
-                </div>
-
-                {/* LEFT: sub-objectives for selected objective */}
-                <div className="obj-sub-col">
-                    <AnimatePresence mode="wait">
+            {/* ── Animated content area ── */}
+            <div className="obj-content">
+                <AnimatePresence mode="wait">
+                    {!isPhaseB ? (
+                        /* Phase A: grid */
                         <motion.div
-                            key={selected}
-                            className="obj-sub-col-inner"
-                            initial={{ opacity: 0, y: 16 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -12 }}
+                            key="phase-a"
+                            className="obj-page"
+                            initial={{ opacity: 0, x: 40 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 40 }}
                             transition={{ duration: 0.22, ease: 'easeInOut' }}
                         >
-                            {activeObj.subObjectives.map((sub, i) => (
-                                <div key={i} className="obj-sub-card">
-                                    <p>{sub}</p>
-                                </div>
-                            ))}
+                            {/* Title card */}
+                            <div className="obj-title-card">
+                                <span>الأهداف العامة</span>
+                            </div>
+
+                            {/* Card list */}
+                            <div className="obj-list">
+                                {course.objectives.map((obj, i) => (
+                                    <button
+                                        key={obj.id}
+                                        className="obj-list-card"
+                                        onClick={() => setSelected(i)}
+                                    >
+                                        <span className="obj-list-card__num">{i + 1}</span>
+                                        <span className="obj-list-card__label">الهدف {ORDINAL[i]}</span>
+                                        <span className="obj-list-card__arrow">›</span>
+                                    </button>
+                                ))}
+                            </div>
                         </motion.div>
-                    </AnimatePresence>
-                </div>
+                    ) : (
+                        /* Phase B: detail */
+                        <motion.div
+                            key="phase-b"
+                            className="obj-detail-page"
+                            initial={{ opacity: 0, x: -40 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -40 }}
+                            transition={{ duration: 0.22, ease: 'easeInOut' }}
+                        >
+                            {/* Title banner */}
+                            <div className="obj-detail-banner">
+                                <span>{course.title}</span>
+                            </div>
+
+                            {/* Two-column body */}
+                            <div className="obj-detail-body">
+                                {/* RIGHT: objective label buttons */}
+                                <div className="obj-label-col">
+                                    {course.objectives.map((obj, i) => (
+                                        <button
+                                            key={obj.id}
+                                            className={`obj-label-btn ${i === selected ? 'obj-label-btn--active' : 'obj-label-btn--inactive'}`}
+                                            onClick={() => setSelected(i)}
+                                        >
+                                            الهدف {ORDINAL[i]}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* LEFT: sub-objectives */}
+                                <div className="obj-sub-col">
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            key={selected}
+                                            className="obj-sub-col-inner"
+                                            initial={{ opacity: 0, y: 16 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -12 }}
+                                            transition={{ duration: 0.22, ease: 'easeInOut' }}
+                                        >
+                                            {course.objectives[selected].subObjectives.map((sub, i) => (
+                                                <div key={i} className="obj-sub-card">
+                                                    <p>{sub}</p>
+                                                </div>
+                                            ))}
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
-            {/* Back button centered */}
-            <div className="obj-footer">
-                <button className="obj-back-btn" onClick={() => setSelected(null)} aria-label="رجوع">
+            {/* ── Single shared footer — always same position ── */}
+            <div className="obj-shared-footer">
+                <button className="obj-back-btn" onClick={handleBack} aria-label="رجوع">
                     <ArrowRight size={26} />
                 </button>
+                <button
+                    className={`obj-back-btn obj-back-btn--forward ${isPhaseB && isLast ? 'obj-back-btn--primary' : ''}`}
+                    onClick={handleForward}
+                    aria-label="التالي"
+                >
+                    <ArrowLeft size={26} />
+                </button>
             </div>
+
         </div>
     );
 };

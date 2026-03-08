@@ -187,7 +187,7 @@ const Onboarding: React.FC = () => {
                     السابق
                 </button>
                 <button className="ob-next-btn" onClick={handleNext}>
-                    {isLast ? 'ابدأ' : 'التالي'}
+                    {isLast ? 'التالي' : 'التالي'}
                 </button>
             </div>
         </div>
