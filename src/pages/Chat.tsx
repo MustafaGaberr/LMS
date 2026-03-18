@@ -54,21 +54,38 @@ const Chat: React.FC = () => {
     const [qIdx, setQIdx] = useState(0);
     const [awaitingAnswer, setAwaitingAnswer] = useState(!isReadOnly);
     const [quizFinished, setQuizFinished] = useState(isReadOnly);
+    const [isBotTyping, setIsBotTyping] = useState(false);
+    const initRef = useRef(false);
     const bottomRef = useRef<HTMLDivElement>(null);
 
     // ── Init bot opening messages (only if starting fresh) ─────────────────
     useEffect(() => {
-        if (isReadOnly) return;           // already done — don't reinit
+        if (isReadOnly) return;           
         if (!lesson || questions.length === 0) return;
+        if (initRef.current) return; 
+        initRef.current = true;
 
         const greeting = isFriendly
             ? `أهلاً! 🎉 جاهز نبدأ أسئلة درس "${lesson.title}"؟ خذ وقتك بالإجابة 😊`
             : `مرحبًا. سنبدأ التقييم الكتابي لدرس: "${lesson.title}". يُرجى الإجابة بصياغة كاملة.`;
 
-        setMessages([
-            { id: uid(), sender: 'bot', text: greeting },
-            { id: uid(), sender: 'bot', text: `س١: ${questions[0].question}` },
-        ]);
+        let t1: any, t2: any;
+
+        setIsBotTyping(true);
+        t1 = setTimeout(() => {
+            setMessages([
+                { id: uid(), sender: 'bot', text: greeting }
+            ]);
+            t2 = setTimeout(() => {
+                addMsg({ sender: 'bot', text: `س١: ${questions[0].question}` });
+                setIsBotTyping(false);
+            }, 1500); 
+        }, 1500); 
+
+        return () => {
+            clearTimeout(t1);
+            clearTimeout(t2);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -79,6 +96,14 @@ const Chat: React.FC = () => {
 
     const addMsg = (msg: Omit<ChatMessage, 'id'>) =>
         setMessages((prev) => [...prev, { id: uid(), ...msg }]);
+
+    const addBotMsgWithDelay = (text: string, verdict?: VerdictType, delay = 3000) => {
+        setIsBotTyping(true);
+        setTimeout(() => {
+            addMsg({ sender: 'bot', text, verdict });
+            setIsBotTyping(false);
+        }, delay);
+    };
 
     // ── Send handler ──────────────────────────────────────────────────────
     const handleSend = () => {
@@ -109,27 +134,27 @@ const Chat: React.FC = () => {
                 : `الإجابة غير صحيحة ❌\n\nالإجابة الصحيحة: ${q.modelAnswer}\n\n${q.explanation}`;
         }
 
-        addMsg({ sender: 'bot', text: reactMsg, verdict: result.verdict });
+        addBotMsgWithDelay(reactMsg, result.verdict);
 
         const nextIdx = qIdx + 1;
 
         if (nextIdx < questions.length) {
             setTimeout(() => {
-                addMsg({
-                    sender: 'bot',
-                    text: `س${nextIdx + 1}: ${questions[nextIdx].question}`,
-                });
+                addBotMsgWithDelay(`س${nextIdx + 1}: ${questions[nextIdx].question}`);
                 setQIdx(nextIdx);
-            }, 600);
+            }, 3500); // 3s for feedback + 0.5s buffer
         } else {
+            // For the VERY LAST question, send the final summary slightly after the feedback
+            // without waiting for another full 3s typing cycle if that's what's annoying.
+            // Or better yet, send it as part of the same sequence with a smaller 1s gap.
             setTimeout(() => {
                 const finalMsg = isFriendly
                     ? 'ممتاز! 🎊 أنهيت جميع الأسئلة. اضغط الزر للانتقال للنشاط.'
                     : 'انتهت الأسئلة. اضغط "إرسال الإجابات" للمتابعة.';
-                addMsg({ sender: 'bot', text: finalMsg });
+                addBotMsgWithDelay(finalMsg, undefined, 1500); // Shorter typing for the final summary
                 setQuizFinished(true);
                 setAwaitingAnswer(false);
-            }, 600);
+            }, 3500); 
         }
     };
 
@@ -227,6 +252,19 @@ const Chat: React.FC = () => {
                         </div>
                     </div>
                 ))}
+
+                {isBotTyping && (
+                    <div className="chat-bubble-wrap chat-bubble-wrap--bot">
+                        <div className="chat-bot-avatar">🤖</div>
+                        <div className="chat-bubble chat-bubble--bot chat-bubble--typing">
+                            <div className="typing-indicator">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <div ref={bottomRef} />
             </div>
 

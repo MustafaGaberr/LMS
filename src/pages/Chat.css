@@ -139,6 +139,47 @@
     border-left: 3px solid #ef4444 !important;
 }
 
+/* ── Typing Indicator ────────────────────────────────────── */
+.chat-bubble--typing {
+    padding: var(--space-2) var(--space-4);
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+}
+
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    background: var(--color-text-3);
+    border-radius: 50%;
+    display: block;
+    animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes typing-bounce {
+    0%, 80%, 100% { 
+        transform: scale(0);
+        opacity: 0.3;
+    } 
+    40% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 .chat-verdict-badge {
     margin-top: var(--space-2);
     display: inline-flex;
