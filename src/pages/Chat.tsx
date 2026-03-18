@@ -55,39 +55,35 @@ const Chat: React.FC = () => {
     const [awaitingAnswer, setAwaitingAnswer] = useState(!isReadOnly);
     const [quizFinished, setQuizFinished] = useState(isReadOnly);
     const [isBotTyping, setIsBotTyping] = useState(false);
-    const initRef = useRef(false);
+    const scheduledRef = useRef(false);
+    const typingCount = useRef(0);
+    const timeoutsRef = useRef<any[]>([]);
     const bottomRef = useRef<HTMLDivElement>(null);
 
     // ── Init bot opening messages (only if starting fresh) ─────────────────
     useEffect(() => {
-        if (isReadOnly) return;           
-        if (!lesson || questions.length === 0) return;
-        if (initRef.current) return; 
-        initRef.current = true;
+        if (isReadOnly || !lesson || questions.length === 0 || messages.length > 0 || scheduledRef.current) return;
+        scheduledRef.current = true;
 
         const greeting = isFriendly
             ? `أهلاً! 🎉 جاهز نبدأ أسئلة درس "${lesson.title}"؟ خذ وقتك بالإجابة 😊`
             : `مرحبًا. سنبدأ التقييم الكتابي لدرس: "${lesson.title}". يُرجى الإجابة بصياغة كاملة.`;
 
-        let t1: any, t2: any;
-
-        setIsBotTyping(true);
-        t1 = setTimeout(() => {
-            setMessages([
-                { id: uid(), sender: 'bot', text: greeting }
-            ]);
-            t2 = setTimeout(() => {
-                addMsg({ sender: 'bot', text: `س١: ${questions[0].question}` });
-                setIsBotTyping(false);
-            }, 1500); 
-        }, 1500); 
+        addBotMsgWithDelay(greeting);
+        
+        const t1 = setTimeout(() => {
+            addBotMsgWithDelay(`س١: ${questions[0].question}`);
+        }, 1200); // 1s greeting + 0.2s gap
+        timeoutsRef.current.push(t1);
 
         return () => {
-            clearTimeout(t1);
-            clearTimeout(t2);
+            timeoutsRef.current.forEach(clearTimeout);
+            timeoutsRef.current = [];
+            scheduledRef.current = false;
+            setIsBotTyping(false);
+            typingCount.current = 0;
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [lesson, questions, isFriendly, isReadOnly]);
 
     // Auto-scroll
     useEffect(() => {
@@ -98,17 +94,25 @@ const Chat: React.FC = () => {
         setMessages((prev) => [...prev, { id: uid(), ...msg }]);
 
     const addBotMsgWithDelay = (text: string, verdict?: VerdictType, delay = 1000) => {
+        typingCount.current++;
         setIsBotTyping(true);
-        setTimeout(() => {
+        const t = setTimeout(() => {
             addMsg({ sender: 'bot', text, verdict });
-            setIsBotTyping(false);
+            typingCount.current--;
+            if (typingCount.current <= 0) {
+                typingCount.current = 0;
+                setIsBotTyping(false);
+            }
+            // Remove from array after execution
+            timeoutsRef.current = timeoutsRef.current.filter(x => x !== t);
         }, delay);
+        timeoutsRef.current.push(t);
     };
 
     // ── Send handler ──────────────────────────────────────────────────────
     const handleSend = () => {
         const text = input.trim();
-        if (!text || !awaitingAnswer || quizFinished || isReadOnly) return;
+        if (!text || !awaitingAnswer || quizFinished || isReadOnly || isBotTyping) return;
         setInput('');
         addMsg({ sender: 'user', text });
 
@@ -139,20 +143,24 @@ const Chat: React.FC = () => {
         const nextIdx = qIdx + 1;
 
         if (nextIdx < questions.length) {
-            setTimeout(() => {
+            const tNext = setTimeout(() => {
                 addBotMsgWithDelay(`س${nextIdx + 1}: ${questions[nextIdx].question}`);
                 setQIdx(nextIdx);
-            }, 1500); // 1s typing + 0.5s buffer
+                timeoutsRef.current = timeoutsRef.current.filter(x => x !== tNext);
+            }, 1500); 
+            timeoutsRef.current.push(tNext);
         } else {
             // For the VERY LAST question, send the final summary slightly after the feedback
-            setTimeout(() => {
+            const tFinal = setTimeout(() => {
                 const finalMsg = isFriendly
                     ? 'ممتاز! 🎊 أنهيت جميع الأسئلة. اضغط الزر للانتقال للنشاط.'
                     : 'انتهت الأسئلة. اضغط "إرسال الإجابات" للمتابعة.';
                 addBotMsgWithDelay(finalMsg, undefined, 1000); 
                 setQuizFinished(true);
                 setAwaitingAnswer(false);
+                timeoutsRef.current = timeoutsRef.current.filter(x => x !== tFinal);
             }, 1500); 
+            timeoutsRef.current.push(tFinal);
         }
     };
 
@@ -291,12 +299,13 @@ const Chat: React.FC = () => {
                     </Button>
                 </div>
             ) : (
-                <div className="chat-footer chat-footer--input">
+                <div className={`chat-footer chat-footer--input ${isBotTyping ? 'chat-footer--disabled' : ''}`}>
                     <textarea
                         className="chat-input"
-                        placeholder="اكتب إجابتك هنا…"
+                        placeholder={isBotTyping ? "انتظر رد البوت..." : "اكتب إجابتك هنا…"}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
+                        disabled={isBotTyping}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                                 e.preventDefault();
@@ -308,7 +317,7 @@ const Chat: React.FC = () => {
                     <button
                         className="chat-send-btn"
                         onClick={handleSend}
-                        disabled={!input.trim()}
+                        disabled={!input.trim() || isBotTyping}
                     >
                         <Send size={20} />
                     </button>
