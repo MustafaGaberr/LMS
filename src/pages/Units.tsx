@@ -97,7 +97,7 @@ const Units: React.FC = () => {
                     <div className="units-survey-cta">
                         <p className="units-survey-cta__title">🎉 أتممت الدورة بالكامل!</p>
                         <button className="units-survey-cta__btn" onClick={() => navigate('/survey')}>
-                            ابدأ الاستبيان
+                            {progress.surveyFilled ? 'عرض ردود الاستبيان' : 'ابدأ الاستبيان'}
                         </button>
                     </div>
                 )}

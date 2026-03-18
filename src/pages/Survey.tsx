@@ -23,8 +23,11 @@ const Survey: React.FC = () => {
     const navigate = useNavigate();
     const isAllCourseDone = useAppStore((s) => s.isAllCourseDone);
     const submitSurveyResponse = useAppStore((s) => s.submitSurveyResponse);
+    const progress = useAppStore((s) => s.progress);
 
-    const [responses, setResponses] = useState<Record<string, number>>({});
+    const [responses, setResponses] = useState<Record<string, number>>(
+        progress.surveyResponses || {}
+    );
     const [submitted, setSubmitted] = useState(false);
 
     // Guard: must complete all lessons first
@@ -43,20 +46,51 @@ const Survey: React.FC = () => {
         );
     }
 
-    if (submitted) {
+    if (submitted || progress.surveyFilled) {
         return (
             <div className="survey-page survey-page--done">
-                <div className="survey-done-emoji">🎊</div>
+                <div className="survey-done-emoji">✅</div>
                 <h2 className="survey-done-title">شكرًا على إجابتك!</h2>
-                <p className="survey-done-desc">تم حفظ ردودك بشكل مجهول. نقدّر رأيك.</p>
-                <Button
-                    variant="primary"
-                    size="lg"
-                    fullWidth
-                    onClick={() => navigate('/survey/results')}
-                >
-                    عرض النتائج والإحصاءات 📊
-                </Button>
+                <p className="survey-done-desc">
+                    تم حفظ ردودك بشكل مجهول. نقدّر رأيك.
+                </p>
+                <div style={{ marginTop: '2rem', width: '100%' }}>
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        fullWidth
+                        onClick={() => navigate('/units')}
+                    >
+                        الذهاب للقائمة الرئيسية 🏠
+                    </Button>
+                </div>
+
+                {progress.surveyFilled && !submitted && (
+                    <div style={{ marginTop: '3rem', width: '100%', opacity: 0.8 }}>
+                        <p style={{ textAlign: 'center', marginBottom: '1rem', fontWeight: 'bold' }}>إجاباتك السابقة:</p>
+                        <div className="survey-questions">
+                            {SURVEY_QUESTIONS.map((q, qi) => (
+                                <div key={q.id} className="survey-q" style={{ pointerEvents: 'none' }}>
+                                    <p className="survey-q__text">
+                                        <span className="survey-q__num">{qi + 1}</span>
+                                        {q.text}
+                                    </p>
+                                    <div className="survey-likert">
+                                        {[1, 2, 3, 4, 5].map((val) => (
+                                            <div
+                                                key={val}
+                                                className={`survey-likert-btn ${responses[q.id] === val ? 'survey-likert-btn--active' : ''
+                                                    }`}
+                                            >
+                                                <span className="survey-likert-btn__val">{val}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }

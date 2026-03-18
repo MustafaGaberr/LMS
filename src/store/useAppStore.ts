@@ -128,6 +128,7 @@ function patchLesson(
     }
 
     const next: Progress = {
+        ...current,
         completedLessons: {
             ...current.completedLessons,
             [lessonId]: updated,
@@ -144,7 +145,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     theme: 'A',
     settings: { soundEnabled: true },
     seenOnboarding: false,
-    progress: { completedLessons: {} },
+    progress: { completedLessons: {}, surveyFilled: false },
     deviceId: '',
     surveyAggregates: {},
 
@@ -228,16 +229,30 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     submitSurveyResponse(responses: Record<string, number>) {
-        const current = get().surveyAggregates;
-        const next: SurveyAggregates = { ...current };
+        // 1. Update Global Aggregates
+        const currentAgg = get().surveyAggregates;
+        const nextAgg: SurveyAggregates = { ...currentAgg };
 
         for (const [qId, value] of Object.entries(responses)) {
-            const existing: SurveyLikertCounts = next[qId] ?? { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-            next[qId] = { ...existing, [value]: (existing[value] ?? 0) + 1 };
+            const existing: SurveyLikertCounts = nextAgg[qId] ?? { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+            nextAgg[qId] = { ...existing, [value]: (existing[value] ?? 0) + 1 };
         }
 
-        set({ surveyAggregates: next });
-        void setItem(STORAGE_KEYS.SURVEY_AGGREGATES, next);
+        // 2. Update User Progress (Mark as Filled + Save Responses)
+        const currentProgress = get().progress;
+        const nextProgress: Progress = {
+            ...currentProgress,
+            surveyFilled: true,
+            surveyResponses: responses,
+        };
+
+        set({ 
+            surveyAggregates: nextAgg,
+            progress: nextProgress
+        });
+
+        void setItem(STORAGE_KEYS.SURVEY_AGGREGATES, nextAgg);
+        void setItem(STORAGE_KEYS.PROGRESS, nextProgress);
     },
 
     resetSurveyStats() {
@@ -252,7 +267,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             theme: 'A',
             settings: { soundEnabled: true },
             seenOnboarding: false,
-            progress: { completedLessons: {} },
+            progress: { completedLessons: {}, surveyFilled: false },
             surveyAggregates: {},
         });
         applyTheme('A');

@@ -70,6 +70,8 @@ export interface LessonProgress {
 
 export interface Progress {
     completedLessons: Record<string, LessonProgress>;
+    surveyFilled: boolean;
+    surveyResponses?: Record<string, number>;
 }
 
 // ─── Survey types ─────────────────────────────────────────────────────────────
@@ -125,7 +127,7 @@ export async function initAppState(): Promise<PersistedAppState> {
         activeUserId: activeUserId ?? null,
         settings: settings ?? { soundEnabled: true },
         seenOnboarding: seenOnboarding ?? false,
-        progress: progress ?? { completedLessons: {} },
+        progress: progress ?? { completedLessons: {}, surveyFilled: false },
         deviceId: resolvedDeviceId,
         surveyAggregates: surveyAggregates ?? {},
     };

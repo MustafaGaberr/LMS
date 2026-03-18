@@ -214,39 +214,50 @@
    SURVEY CTA
 ════════════════════════════════════════ */
 .units-survey-cta {
-    border: 2px solid #4caf50;
+    margin-top: var(--space-4);
+    background: linear-gradient(to bottom, #f0fdf4, #ffffff);
+    border: 2px solid #10b981;
     border-radius: var(--radius-xl);
-    padding: var(--space-5);
-    background: color-mix(in srgb, #4caf50 8%, var(--color-surface));
+    padding: var(--space-6);
     text-align: center;
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.1);
+    animation: fadeIn 0.8s ease-out;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
     align-items: center;
+    gap: var(--space-4);
 }
 
 .units-survey-cta__title {
-    font-size: var(--font-size-base);
-    font-weight: 700;
-    color: var(--color-text);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #065f46;
     margin: 0;
 }
 
 .units-survey-cta__btn {
-    padding: var(--space-3) var(--space-7);
-    background: #4caf50;
-    color: #fff;
+    background: #10b981;
+    color: white;
     border: none;
-    border-radius: 999px;
-    font-size: var(--font-size-sm);
-    font-weight: 700;
-    cursor: pointer;
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-10);
     font-family: inherit;
-    transition: opacity 0.18s;
+    font-weight: 700;
+    font-size: 1.05rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .units-survey-cta__btn:hover {
-    opacity: 0.88;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+    background: #059669;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ════════════════════════════════════════
