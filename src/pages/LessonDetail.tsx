@@ -8,7 +8,7 @@ import './LessonDetail.css';
 type Tab = 'concept' | 'importance' | 'features';
 
 const TABS: Tab[] = ['concept', 'importance', 'features'];
-const TAB_LABELS: Record<Tab, string> = {
+const DEFAULT_TAB_LABELS: Record<Tab, string> = {
     concept: 'مفهوم',
     importance: 'أهمية',
     features: 'خصائص',
@@ -25,7 +25,8 @@ const LessonDetail: React.FC = () => {
 
     const markContentDone = useAppStore((s) => s.markContentDone);
 
-    const [step, setStep] = useState(0); // 0=concept, 1=importance, 2=features
+    const [step, setStep] = useState(0); 
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const unit = getUnit(unitId ?? '');
     const lesson = getLesson(unitId ?? '', lessonId ?? '');
@@ -42,6 +43,7 @@ const LessonDetail: React.FC = () => {
 
     const handleBubbleClick = (idx: number) => {
         setStep(idx);
+        setIsDropdownOpen(false);
     };
 
     const handleNext = () => {
@@ -80,20 +82,34 @@ const LessonDetail: React.FC = () => {
                 <span className="lesson-title-text">{lesson.title}</span>
             </div>
 
-            {/* ── 3 oval clickable bubbles ─────────────────────── */}
-            <div className="lesson-bubbles-container">
-                {TABS.map((tab, idx) => {
-                    const isActive = idx === step;
-                    return (
-                        <button
-                            key={tab}
-                            className={`lesson-bubble lesson-bubble--${TAB_CSS[tab]} ${isActive ? 'lesson-bubble--active' : ''}`}
-                            onClick={() => handleBubbleClick(idx)}
-                        >
-                            {TAB_LABELS[tab]}
-                        </button>
-                    );
-                })}
+            {/* ── Selection Dropdown ─────────────────────────── */}
+            <div className="lesson-dropdown-container">
+                <div 
+                    className={`lesson-custom-select lesson-custom-select--${TAB_CSS[currentTab]} ${isDropdownOpen ? 'lesson-custom-select--open' : ''}`}
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                >
+                    <span className="lesson-custom-select__label">
+                        {lesson.sectionLabels ? lesson.sectionLabels[currentTab] : DEFAULT_TAB_LABELS[currentTab]}
+                    </span>
+                    <div className="lesson-dropdown-icon">▼</div>
+                </div>
+
+                {isDropdownOpen && (
+                    <>
+                        <div className="lesson-dropdown-overlay" onClick={() => setIsDropdownOpen(false)} />
+                        <div className="lesson-dropdown-menu">
+                            {TABS.map((tab, idx) => (
+                                <div 
+                                    key={tab} 
+                                    className={`lesson-dropdown-item ${idx === step ? 'lesson-dropdown-item--active' : ''}`}
+                                    onClick={() => handleBubbleClick(idx)}
+                                >
+                                    {lesson.sectionLabels ? lesson.sectionLabels[tab] : DEFAULT_TAB_LABELS[tab]}
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
             </div>
 
             {/* ── Section content ──────────────────────────────── */}
@@ -106,7 +122,7 @@ const LessonDetail: React.FC = () => {
             {currentTab === 'importance' && (
                 <div className="lesson-section-content lesson-section-content--importance">
                     <div className="mindmap-container">
-                        <MindMap title={lesson.title} points={importancePoints} />
+                        <MindMap title={lesson.title} points={importancePoints} centerLabel={lesson.sectionLabels?.importance || DEFAULT_TAB_LABELS.importance} />
                     </div>
                 </div>
             )}
@@ -149,9 +165,10 @@ const LessonDetail: React.FC = () => {
 interface MindMapProps {
     title: string;
     points: string[];
+    centerLabel?: string;
 }
 
-const MindMap: React.FC<MindMapProps> = ({ points }) => {
+const MindMap: React.FC<MindMapProps> = ({ points, centerLabel = 'الأهمية' }) => {
     const centerX = 160;
     const centerY = 110;
     const branchColors = ['#6C8EBF', '#82B366', '#D79B00', '#9673A6', '#23445D'];
@@ -175,7 +192,7 @@ const MindMap: React.FC<MindMapProps> = ({ points }) => {
                 fontFamily="Cairo, sans-serif"
                 fontWeight="bold"
             >
-                الأهمية
+                {centerLabel}
             </text>
 
             {points.map((point, i) => {

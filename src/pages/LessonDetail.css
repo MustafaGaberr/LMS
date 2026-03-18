@@ -4,11 +4,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
-    padding: 24px 20px 120px;
+    flex: 1;
+    width: 100%;
+    /* Use padding-bottom only for the fixed footer if necessary, 
+       but here we want the content to be able to center in the space */
+    padding: 20px 20px 100px; 
     background: #f0f4f8;
     direction: rtl;
     font-family: 'Cairo', 'Segoe UI', sans-serif;
+    box-sizing: border-box;
+    gap: 16px; /* Space between elements */
 }
 
 /* ── Error state ─────────────────────────────────────────────────────────── */
@@ -26,9 +31,8 @@
     max-width: 480px;
     background: #23445D;
     border-radius: 18px;
-    padding: 18px 24px;
+    padding: 16px 24px;
     text-align: center;
-    margin-bottom: 36px;
     box-shadow: 0 4px 18px rgba(35, 68, 93, 0.22);
 }
 
@@ -41,104 +45,138 @@
 
 /* ── Bubbles container ───────────────────────────────────────────────────── */
 
-.lesson-bubbles-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
+/* ── Dropdown container ──────────────────────────────────────────────────── */
+/* Replaces bubbles container due to long text titles */
+
+.lesson-dropdown-container {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
 }
 
-/* ── Shared bubble styles ────────────────────────────────────────────────── */
-
-.lesson-bubble {
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-family: 'Cairo', 'Segoe UI', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    border-radius: 50px;
-    padding: 14px 36px;
-    min-width: 120px;
-    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease, opacity 0.18s ease;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
-}
-
-.lesson-bubble:hover:not(:disabled) {
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-}
-
-.lesson-bubble:active:not(:disabled) {
-    transform: translateY(0) scale(0.98);
-}
-
-/* ── Disabled bubble ────────────────────────────────────────────────────── */
-
-.lesson-bubble--disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    filter: grayscale(0.6);
-    box-shadow: none;
-}
-
-.lesson-bubble--disabled:hover {
-    transform: none;
-    box-shadow: none;
-}
-
-/* مفهوم bubble */
-.lesson-bubble--mafhoom {
+.lesson-custom-select {
+    width: 100%;
     background: #ffffff;
-    color: #23445D;
     border: 2.5px solid #23445D;
+    border-radius: 16px;
+    padding: 16px 24px;
+    padding-left: 48px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #23445D;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(35, 68, 93, 0.12);
+    transition: all 0.22s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 1001; /* Above overlay */
 }
 
-.lesson-bubble--mafhoom.lesson-bubble--active {
-    background: #23445D;
-    color: #ffffff;
-    box-shadow: 0 6px 20px rgba(35, 68, 93, 0.35);
+.lesson-custom-select--open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: 0 8px 24px rgba(35, 68, 93, 0.18);
 }
 
-/* أهمية bubble */
-.lesson-bubble--ahamiyya {
+.lesson-dropdown-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: transform 0.22s ease;
+    font-size: 0.7rem;
+}
+
+.lesson-custom-select--open .lesson-dropdown-icon {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Dropdown Menu */
+.lesson-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     background: #ffffff;
-    color: #2d7d46;
-    border: 2.5px solid #2d7d46;
+    border: 2.5px solid #23445D;
+    border-top: none;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    overflow: hidden;
+    animation: slideDown 0.2s ease-out forwards;
 }
 
-.lesson-bubble--ahamiyya.lesson-bubble--active {
-    background: #2d7d46;
-    color: #ffffff;
-    box-shadow: 0 6px 20px rgba(45, 125, 70, 0.35);
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* خصائص bubble */
-.lesson-bubble--khassais {
-    background: #ffffff;
-    color: #b45309;
-    border: 2.5px solid #b45309;
+.lesson-dropdown-item {
+    padding: 14px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f4f8;
 }
 
-.lesson-bubble--khassais.lesson-bubble--active {
-    background: #b45309;
-    color: #ffffff;
-    box-shadow: 0 6px 20px rgba(180, 83, 9, 0.35);
+.lesson-dropdown-item:last-child {
+    border-bottom: none;
 }
+
+.lesson-dropdown-item:hover {
+    background: #f7fafc;
+    padding-right: 30px;
+    color: #23445D;
+}
+
+.lesson-dropdown-item--active {
+    background: #edf2f7;
+    color: #23445D;
+    font-weight: 700;
+}
+
+/* Overlay for closing when clicking outside */
+.lesson-dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    background: transparent;
+}
+
+/* Variations */
+.lesson-custom-select--mafhoom { border-color: #23445D; color: #23445D; }
+.lesson-custom-select--mafhoom + .lesson-dropdown-menu { border-color: #23445D; }
+
+.lesson-custom-select--ahamiyya { border-color: #2d7d46; color: #2d7d46; }
+.lesson-custom-select--ahamiyya .lesson-dropdown-icon { color: #2d7d46; }
+
+.lesson-custom-select--khassais { border-color: #b45309; color: #b45309; }
+.lesson-custom-select--khassais .lesson-dropdown-icon { color: #b45309; }
 
 /* ── Section content ─────────────────────────────────────────────────────── */
 
 .lesson-section-content {
     width: 100%;
-    max-width: 480px;
+    max-width: 540px; 
     border-radius: 20px;
-    padding: 24px 20px;
-    margin-bottom: 28px;
+    padding: 32px 24px;
+    margin: auto 0; /* Important: this centers it in the flex space */
     animation: fadeInUp 0.28s ease both;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.09);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 200px;
 }
 
 @keyframes fadeInUp {
@@ -155,17 +193,17 @@
 
 .lesson-section-content--concept {
     background: #eef3f8;
-    border-right: 5px solid #23445D;
+    border-right: 6px solid #23445D;
 }
 
 .lesson-section-content--importance {
     background: #edf7f1;
-    border-right: 5px solid #2d7d46;
+    border-right: 6px solid #2d7d46;
 }
 
 .lesson-section-content--features {
     background: #fef5e7;
-    border-right: 5px solid #b45309;
+    border-right: 6px solid #b45309;
 }
 
 .lesson-section-text {

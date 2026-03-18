@@ -15,10 +15,17 @@ export interface LessonVideo {
     url: string;
 }
 
+export interface LessonSectionLabels {
+    concept: string;
+    importance: string;
+    features: string;
+}
+
 export interface Lesson {
     id: string;
     title: string;
     sections: LessonSections;
+    sectionLabels?: LessonSectionLabels;
     video: LessonVideo;
     activityInstructions: string;
 }
@@ -150,6 +157,11 @@ export const course: Course = {
                             'تُعدّ أنظمة LMS ركيزة التعليم الرقمي المؤسسي، إذ تُمكّن المعلمين من إدارة المحتوى والمتعلمين في بيئة واحدة. تُساهم في رفع كفاءة التعليم وخفض تكاليفه، كما تُوفّر بيانات تحليلية دقيقة عن أداء المتعلمين تُساعد في اتخاذ قرارات تعليمية مدروسة.',
                         features:
                             'تشمل أبرز خصائص LMS: إدارة المستخدمين والصلاحيات، رفع المحتوى بصيغ متعددة (فيديو، PDF، اختبارات)، تتبع التقدم وإصدار الشهادات، أدوات التواصل (منتديات، رسائل، إعلانات)، والتكامل مع أنظمة خارجية عبر معايير مثل SCORM وxAPI.',
+                    },
+                    sectionLabels: {
+                        concept: 'تعريف أنظمة إدارة التعليم الإلكتروني (LMS)',
+                        importance: 'وظائف نظام إدارة التعليم الإلكتروني الرئيسة',
+                        features: 'استخدامات نظام إدارة التعليم الإلكتروني في التعليم',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
                     activityInstructions:
