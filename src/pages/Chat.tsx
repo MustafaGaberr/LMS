@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Send, CheckCircle } from 'lucide-react';
+import { Send, CheckCircle, Lock } from 'lucide-react';
 import { getLesson, getQuizQuestions } from '../data/sampleCourse';
 import { evaluate } from '../lib/evaluator/arAnswerEvaluator';
 import { useAppStore } from '../store/useAppStore';
+import type { SavedChatMessage } from '../services/storage';
 import { Button } from '../components/Button';
 import './Chat.css';
 
@@ -27,6 +28,7 @@ const Chat: React.FC = () => {
 
     const activeUserId = useAppStore((s) => s.activeUserId);
     const markQuizDone = useAppStore((s) => s.markQuizDone);
+    const saveChatHistory = useAppStore((s) => s.saveChatHistory);
     const getLessonProgress = useAppStore((s) => s.getLessonProgress);
 
     const lesson = getLesson(unitId, lessonId);
@@ -34,18 +36,29 @@ const Chat: React.FC = () => {
 
     const isFriendly = activeUserId === 'student2';
 
-    // ── State ──────────────────────────────────────────────────────────────
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
-    const [input, setInput] = useState('');
-    const [qIdx, setQIdx] = useState(0);
-    const [awaitingAnswer, setAwaitingAnswer] = useState(true);
-    const [quizFinished, setQuizFinished] = useState(false);
-    const bottomRef = useRef<HTMLDivElement>(null);
-
     const progress = getLessonProgress(lessonId);
 
-    // ── Init bot opening messages ─────────────────────────────────────────
+    // ── If quiz already done, restore saved history ─────────────────────────
+    const isReadOnly = progress.quizDone;
+    const savedHistory = progress.chatHistory as SavedChatMessage[] | undefined;
+
+    // ── State ──────────────────────────────────────────────────────────────
+    const [messages, setMessages] = useState<ChatMessage[]>(() => {
+        // On mount: if quiz done and history saved → restore it
+        if (isReadOnly && savedHistory && savedHistory.length > 0) {
+            return savedHistory as ChatMessage[];
+        }
+        return [];
+    });
+    const [input, setInput] = useState('');
+    const [qIdx, setQIdx] = useState(0);
+    const [awaitingAnswer, setAwaitingAnswer] = useState(!isReadOnly);
+    const [quizFinished, setQuizFinished] = useState(isReadOnly);
+    const bottomRef = useRef<HTMLDivElement>(null);
+
+    // ── Init bot opening messages (only if starting fresh) ─────────────────
     useEffect(() => {
+        if (isReadOnly) return;           // already done — don't reinit
         if (!lesson || questions.length === 0) return;
 
         const greeting = isFriendly
@@ -70,7 +83,7 @@ const Chat: React.FC = () => {
     // ── Send handler ──────────────────────────────────────────────────────
     const handleSend = () => {
         const text = input.trim();
-        if (!text || !awaitingAnswer || quizFinished) return;
+        if (!text || !awaitingAnswer || quizFinished || isReadOnly) return;
         setInput('');
         addMsg({ sender: 'user', text });
 
@@ -121,7 +134,28 @@ const Chat: React.FC = () => {
     };
 
     const handleSubmitQuiz = () => {
+        // Save history to localStorage before navigating away
+        const historyToSave: SavedChatMessage[] = messages.map((m) => ({
+            id: m.id,
+            sender: m.sender,
+            text: m.text,
+            verdict: m.verdict,
+        }));
+        // Add final done message to saved history if not already there
+        const doneMsg: SavedChatMessage = {
+            id: uid(),
+            sender: 'bot',
+            text: isFriendly
+                ? 'ممتاز! 🎊 أنهيت جميع الأسئلة. اضغط الزر للانتقال للنشاط.'
+                : 'انتهت الأسئلة. اضغط "إرسال الإجابات" للمتابعة.',
+        };
+        // Only add if last message isn't already the final done msg
+        const last = historyToSave[historyToSave.length - 1];
+        const finalHistory =
+            last?.text === doneMsg.text ? historyToSave : historyToSave;
+
         markQuizDone(lessonId);
+        saveChatHistory(lessonId, finalHistory);
         navigate(`/units/${unitId}/lessons/${lessonId}/activity`);
     };
 
@@ -149,6 +183,14 @@ const Chat: React.FC = () => {
                     <CheckCircle size={18} className="chat-header__done" />
                 )}
             </div>
+
+            {/* Read-only banner */}
+            {isReadOnly && (
+                <div className="chat-readonly-banner">
+                    <Lock size={14} />
+                    <span>تم إكمال هذا الدرس — المحادثة للقراءة فقط</span>
+                </div>
+            )}
 
             {/* Messages */}
             <div className="chat-messages">
@@ -189,7 +231,19 @@ const Chat: React.FC = () => {
             </div>
 
             {/* Footer */}
-            {quizFinished ? (
+            {isReadOnly ? (
+                /* Read-only: show a button to go to activity page */
+                <div className="chat-footer chat-footer--done">
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        fullWidth
+                        onClick={() => navigate(`/units/${unitId}/lessons/${lessonId}/activity`)}
+                    >
+                        الانتقال للنشاط 📋
+                    </Button>
+                </div>
+            ) : quizFinished ? (
                 <div className="chat-footer chat-footer--done">
                     <Button
                         variant="primary"
