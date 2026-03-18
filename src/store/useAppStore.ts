@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { setItem, removeItem, clearAll, STORAGE_KEYS } from '../services/storage';
-import type { Progress, LessonProgress, SurveyAggregates, SurveyLikertCounts } from '../services/storage';
+import type { Progress, LessonProgress, SurveyAggregates, SurveyLikertCounts, SavedChatMessage } from '../services/storage';
 import { course, getUnitIndex, getLessonIndex } from '../data/sampleCourse';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -34,6 +34,7 @@ interface AppState {
     markContentDone: (lessonId: string) => void;
     markQuizDone: (lessonId: string) => void;
     markActivityDone: (lessonId: string) => void;
+    saveChatHistory: (lessonId: string, messages: SavedChatMessage[]) => void;
 
     // Unlock selectors
     isUnitUnlocked: (unitId: string) => boolean;
@@ -201,6 +202,10 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     markActivityDone(lessonId) {
         patchLesson(get, set, lessonId, { activityDone: true });
+    },
+
+    saveChatHistory(lessonId, messages) {
+        patchLesson(get, set, lessonId, { chatHistory: messages });
     },
 
     getLessonProgress(lessonId) {

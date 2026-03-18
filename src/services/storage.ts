@@ -53,11 +53,19 @@ export async function clearAll(): Promise<void> {
 
 // ─── Progress types ───────────────────────────────────────────────────────────
 
+export interface SavedChatMessage {
+    id: string;
+    sender: 'bot' | 'user';
+    text: string;
+    verdict?: 'correct' | 'close' | 'wrong';
+}
+
 export interface LessonProgress {
     contentDone: boolean;
     quizDone: boolean;
     activityDone: boolean;
     completedAt?: number;
+    chatHistory?: SavedChatMessage[];
 }
 
 export interface Progress {
