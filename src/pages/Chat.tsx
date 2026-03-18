@@ -97,7 +97,7 @@ const Chat: React.FC = () => {
     const addMsg = (msg: Omit<ChatMessage, 'id'>) =>
         setMessages((prev) => [...prev, { id: uid(), ...msg }]);
 
-    const addBotMsgWithDelay = (text: string, verdict?: VerdictType, delay = 3000) => {
+    const addBotMsgWithDelay = (text: string, verdict?: VerdictType, delay = 1000) => {
         setIsBotTyping(true);
         setTimeout(() => {
             addMsg({ sender: 'bot', text, verdict });
@@ -142,19 +142,17 @@ const Chat: React.FC = () => {
             setTimeout(() => {
                 addBotMsgWithDelay(`س${nextIdx + 1}: ${questions[nextIdx].question}`);
                 setQIdx(nextIdx);
-            }, 3500); // 3s for feedback + 0.5s buffer
+            }, 1500); // 1s typing + 0.5s buffer
         } else {
             // For the VERY LAST question, send the final summary slightly after the feedback
-            // without waiting for another full 3s typing cycle if that's what's annoying.
-            // Or better yet, send it as part of the same sequence with a smaller 1s gap.
             setTimeout(() => {
                 const finalMsg = isFriendly
                     ? 'ممتاز! 🎊 أنهيت جميع الأسئلة. اضغط الزر للانتقال للنشاط.'
                     : 'انتهت الأسئلة. اضغط "إرسال الإجابات" للمتابعة.';
-                addBotMsgWithDelay(finalMsg, undefined, 1500); // Shorter typing for the final summary
+                addBotMsgWithDelay(finalMsg, undefined, 1000); 
                 setQuizFinished(true);
                 setAwaitingAnswer(false);
-            }, 3500); 
+            }, 1500); 
         }
     };
 

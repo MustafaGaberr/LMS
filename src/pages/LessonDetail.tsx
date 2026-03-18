@@ -39,7 +39,12 @@ const LessonDetail: React.FC = () => {
         );
     }
 
-    const currentTab = TABS[step];
+    const availableTabs = TABS.filter(tab => {
+        if (lesson.sectionLabels && lesson.sectionLabels[tab] === '') return false;
+        return true;
+    });
+
+    const currentTab = availableTabs[step] || availableTabs[0];
 
     const handleBubbleClick = (idx: number) => {
         setStep(idx);
@@ -47,15 +52,15 @@ const LessonDetail: React.FC = () => {
     };
 
     const handleNext = () => {
-        if (step < 2) {
+        if (step < availableTabs.length - 1) {
             const nextStep = step + 1;
             setStep(nextStep);
-            // Mark content done when reaching features (last content tab)
-            if (nextStep === 2) {
+            // Mark content done when reaching the last available content tab
+            if (nextStep === availableTabs.length - 1) {
                 markContentDone(lesson.id);
             }
         } else {
-            // step === 2 → go to quiz instructions
+            // go to quiz instructions
             navigate(`/units/${unitId}/lessons/${lessonId}/quiz-intro`);
         }
     };
@@ -98,7 +103,7 @@ const LessonDetail: React.FC = () => {
                     <>
                         <div className="lesson-dropdown-overlay" onClick={() => setIsDropdownOpen(false)} />
                         <div className="lesson-dropdown-menu">
-                            {TABS.map((tab, idx) => (
+                            {availableTabs.map((tab, idx) => (
                                 <div 
                                     key={tab} 
                                     className={`lesson-dropdown-item ${idx === step ? 'lesson-dropdown-item--active' : ''}`}
@@ -149,7 +154,7 @@ const LessonDetail: React.FC = () => {
             {/* ── Next arrow footer (centered) ────────────────── */}
             <div className="lesson-nav-arrows">
                 <button
-                    className={`lesson-nav-arrow lesson-nav-arrow--next ${step === 2 ? 'lesson-nav-arrow--primary' : ''}`}
+                    className={`lesson-nav-arrow lesson-nav-arrow--next ${step === availableTabs.length - 1 ? 'lesson-nav-arrow--primary' : ''}`}
                     onClick={handleNext}
                     aria-label="التالي"
                 >
