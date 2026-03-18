@@ -15,44 +15,49 @@ interface TreeNode {
     type?: 'root' | 'branch' | 'leaf' | 'done' | 'locked';
 }
 
-function buildTree(isUnitUnlocked: (uid: string) => boolean, isLessonUnlocked: (uid: string, lid: string) => boolean): TreeNode {
+function buildTree(
+    isUnitUnlocked: (uid: string) => boolean,
+    isLessonUnlocked: (uid: string, lid: string) => boolean,
+    isUnitDone: (uid: string) => boolean,
+    isLessonDone: (lid: string) => boolean
+): TreeNode {
     return {
         id: 'root',
-        label: 'التطبيق',
+        label: 'خريطة التعلم الذكي',
         icon: '📱',
         type: 'root',
         children: [
             {
                 id: 'path',
-                label: 'مسار التعلم',
+                label: 'مسار التعلم ',
                 icon: '🎓',
                 type: 'branch',
                 children: course.units.map((unit) => ({
                     id: unit.id,
                     label: unit.title,
                     icon: unit.icon,
-                    type: isUnitUnlocked(unit.id) ? 'branch' : 'locked',
+                    type: isUnitDone(unit.id) ? 'done' : isUnitUnlocked(unit.id) ? 'branch' : 'locked',
                     children: unit.lessons.map((lesson) => ({
                         id: lesson.id,
                         label: lesson.title,
-                        type: isLessonUnlocked(unit.id, lesson.id) ? 'leaf' : 'locked',
+                        type: isLessonDone(lesson.id) ? 'done' : isLessonUnlocked(unit.id, lesson.id) ? 'leaf' : 'locked',
                         children: [
-                            { id: `${lesson.id}-concept`, label: 'المحتوى النصي', type: 'leaf' },
-                            { id: `${lesson.id}-video`, label: 'الفيديو التعليمي', type: 'leaf' },
-                            { id: `${lesson.id}-chat`, label: 'المحادثة الذكية', type: 'leaf' },
-                            { id: `${lesson.id}-activity`, label: 'رفع النشاط', type: 'leaf' },
+                            { id: `${lesson.id}-concept`, label: 'المحتوى النصي', type: isLessonDone(lesson.id) ? 'done' : 'leaf' },
+                            { id: `${lesson.id}-video`, label: 'الفيديو التعليمي', type: isLessonDone(lesson.id) ? 'done' : 'leaf' },
+                            { id: `${lesson.id}-chat`, label: 'المحادثة الذكية', type: isLessonDone(lesson.id) ? 'done' : 'leaf' },
+                            { id: `${lesson.id}-activity`, label: 'رفع النشاط والتطبيق', type: isLessonDone(lesson.id) ? 'done' : 'leaf' },
                         ],
                     })),
                 })),
             },
             {
                 id: 'survey',
-                label: 'الاستبيان والإحصائيات',
-                icon: '📊',
+                label: 'التقييم الختامي والإحصائيات',
+                icon: '🏆',
                 type: 'branch',
                 children: [
-                    { id: 'survey-q', label: 'الاستبيان التقييمي', type: 'leaf' },
-                    { id: 'survey-results', label: 'مخططات النتائج', type: 'leaf' },
+                    { id: 'survey-q', label: 'استبيان جودة الدورة', type: 'leaf' },
+                    { id: 'survey-results', label: 'نتائج التعلم العامة', type: 'leaf' },
                 ],
             },
         ],
@@ -139,13 +144,25 @@ const TreeItem: React.FC<TreeItemProps> = ({ node, depth, defaultOpen = false })
 const Roadmap: React.FC = () => {
     const isUnitUnlocked = useAppStore((s) => s.isUnitUnlocked);
     const isLessonUnlocked = useAppStore((s) => s.isLessonUnlocked);
-    const tree = buildTree(isUnitUnlocked, isLessonUnlocked);
+    const progress = useAppStore((s) => s.progress);
+
+    const isUnitDone = (uid: string) => {
+        const unit = course.units.find((u) => u.id === uid);
+        if (!unit) return false;
+        return unit.lessons.every((l) => progress.completedLessons[l.id]?.activityDone === true);
+    };
+
+    const isLessonDone = (lid: string) => {
+        return progress.completedLessons[lid]?.activityDone === true;
+    };
+
+    const tree = buildTree(isUnitUnlocked, isLessonUnlocked, isUnitDone, isLessonDone);
 
     return (
         <div className="roadmap-page">
             <div className="roadmap-header">
-                <h2 className="roadmap-title">خريطة التطبيق</h2>
-                <p className="roadmap-sub">استعرض هيكل الدورة التعليمية</p>
+                <h2 className="roadmap-title">خريطة التعلم</h2>
+                <p className="roadmap-sub">استكشف مسارك التعليمي المخصص</p>
             </div>
             <div className="roadmap-tree">
                 <TreeItem node={tree} depth={0} defaultOpen />
