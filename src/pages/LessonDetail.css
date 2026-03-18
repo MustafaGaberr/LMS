@@ -214,6 +214,51 @@
     margin: 0;
 }
 
+/* ── Sub-navigation ──────────────────────────────────────────────────────── */
+
+.lesson-sub-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+    justify-content: center;
+}
+
+.lesson-sub-button {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e0;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Cairo', sans-serif;
+}
+
+.lesson-sub-button:hover {
+    border-color: #23445D;
+    color: #23445D;
+    background: #f7fafc;
+}
+
+.lesson-sub-button--active {
+    background: #23445D;
+    border-color: #23445D;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(35, 68, 93, 0.25);
+}
+
+.lesson-sub-text-wrap {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 /* ── Mind map ────────────────────────────────────────────────────────────── */
 
 .mindmap-container {
