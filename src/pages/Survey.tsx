@@ -46,51 +46,60 @@ const Survey: React.FC = () => {
         );
     }
 
-    if (submitted || progress.surveyFilled) {
+    // 1. Fresh submission thank you
+    if (submitted) {
         return (
             <div className="survey-page survey-page--done">
-                <div className="survey-done-emoji">✅</div>
+                <div className="survey-done-emoji">🎉</div>
                 <h2 className="survey-done-title">شكرًا على إجابتك!</h2>
                 <p className="survey-done-desc">
-                    تم حفظ ردودك بشكل مجهول. نقدّر رأيك.
+                    تم حفظ ردودك بشكل مجهول. نقدّر رأيك ونسعد بمشاركتك.
                 </p>
-                <div style={{ marginTop: '2rem', width: '100%' }}>
-                    <Button
-                        variant="primary"
-                        size="lg"
-                        fullWidth
-                        onClick={() => navigate('/units')}
-                    >
+                <div style={{ marginTop: '2.5rem', width: '100%' }}>
+                    <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/units')}>
                         الذهاب للقائمة الرئيسية 🏠
                     </Button>
                 </div>
+            </div>
+        );
+    }
 
-                {progress.surveyFilled && !submitted && (
-                    <div style={{ marginTop: '3rem', width: '100%', opacity: 0.8 }}>
-                        <p style={{ textAlign: 'center', marginBottom: '1rem', fontWeight: 'bold' }}>إجاباتك السابقة:</p>
-                        <div className="survey-questions">
-                            {SURVEY_QUESTIONS.map((q, qi) => (
-                                <div key={q.id} className="survey-q" style={{ pointerEvents: 'none' }}>
-                                    <p className="survey-q__text">
-                                        <span className="survey-q__num">{qi + 1}</span>
-                                        {q.text}
-                                    </p>
-                                    <div className="survey-likert">
-                                        {[1, 2, 3, 4, 5].map((val) => (
-                                            <div
-                                                key={val}
-                                                className={`survey-likert-btn ${responses[q.id] === val ? 'survey-likert-btn--active' : ''
-                                                    }`}
-                                            >
-                                                <span className="survey-likert-btn__val">{val}</span>
-                                            </div>
-                                        ))}
+    // 2. Returning user read-only view
+    if (progress.surveyFilled) {
+        return (
+            <div className="survey-page survey-page--readonly">
+                <div className="survey-header">
+                    <h2 className="survey-header__title">إجاباتك السابقة</h2>
+                    <p className="survey-header__sub">لقد قمت بملء هذا الاستبيان مسبقاً</p>
+                </div>
+
+                <div className="survey-questions">
+                    {SURVEY_QUESTIONS.map((q, qi) => (
+                        <div key={q.id} className="survey-q" style={{ pointerEvents: 'none', opacity: 0.9 }}>
+                            <p className="survey-q__text">
+                                <span className="survey-q__num">{qi + 1}</span>
+                                {q.text}
+                            </p>
+                            <div className="survey-likert">
+                                {[1, 2, 3, 4, 5].map((val) => (
+                                    <div
+                                        key={val}
+                                        className={`survey-likert-btn ${responses[q.id] === val ? 'survey-likert-btn--active' : ''
+                                            }`}
+                                    >
+                                        <span className="survey-likert-btn__val">{val}</span>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    ))}
+                </div>
+
+                <div style={{ marginTop: '2rem', width: '100%' }}>
+                    <Button variant="secondary" size="lg" fullWidth onClick={() => navigate('/units')}>
+                        العودة للرئيسية 🏠
+                    </Button>
+                </div>
             </div>
         );
     }

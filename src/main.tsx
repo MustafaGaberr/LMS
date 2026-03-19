@@ -4,6 +4,10 @@ import './styles/global.css';
 import App from './App.tsx';
 import { useAppStore } from './store/useAppStore';
 import { initAppState } from './services/storage';
+import { registerSW } from 'virtual:pwa-register';
+
+// Register PWA service worker for auto-updates
+registerSW({ immediate: true });
 
 // Bootstrap: load persisted state then render
 async function bootstrap() {

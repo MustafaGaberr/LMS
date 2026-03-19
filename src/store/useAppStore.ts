@@ -150,14 +150,21 @@ export const useAppStore = create<AppState>((set, get) => ({
     surveyAggregates: {},
 
     hydrate({ activeUserId, settings, seenOnboarding, progress, deviceId, surveyAggregates }) {
+        // Defensive hydration for backward compatibility
+        const safeProgress: Progress = {
+            completedLessons: progress?.completedLessons ?? {},
+            surveyFilled: progress?.surveyFilled ?? false,
+            surveyResponses: progress?.surveyResponses,
+        };
+
         set({
             activeUserId,
             theme: deriveTheme(activeUserId),
-            settings,
-            seenOnboarding,
-            progress,
+            settings: settings ?? { soundEnabled: true },
+            seenOnboarding: !!seenOnboarding,
+            progress: safeProgress,
             deviceId,
-            surveyAggregates,
+            surveyAggregates: surveyAggregates ?? {},
         });
         applyTheme(deriveTheme(activeUserId));
     },
@@ -229,6 +236,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     submitSurveyResponse(responses: Record<string, number>) {
+        if (get().progress.surveyFilled) return; // Block duplicate submissions
+
         // 1. Update Global Aggregates
         const currentAgg = get().surveyAggregates;
         const nextAgg: SurveyAggregates = { ...currentAgg };
@@ -267,7 +276,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             theme: 'A',
             settings: { soundEnabled: true },
             seenOnboarding: false,
-            progress: { completedLessons: {}, surveyFilled: false },
+            progress: { completedLessons: {}, surveyFilled: false, surveyResponses: undefined },
             surveyAggregates: {},
         });
         applyTheme('A');

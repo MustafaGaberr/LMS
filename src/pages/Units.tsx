@@ -94,10 +94,12 @@ const Units: React.FC = () => {
 
                 {/* Survey CTA when course done */}
                 {courseDone && (
-                    <div className="units-survey-cta">
-                        <p className="units-survey-cta__title">🎉 أتممت الدورة بالكامل!</p>
+                    <div className={`units-survey-cta ${progress.surveyFilled ? 'units-survey-cta--done' : ''}`}>
+                        <p className="units-survey-cta__title">
+                            {progress.surveyFilled ? '📊 شكراً لمشاركتك رأيك' : '🎉 أتممت الدورة بالكامل!'}
+                        </p>
                         <button className="units-survey-cta__btn" onClick={() => navigate('/survey')}>
-                            {progress.surveyFilled ? 'عرض ردود الاستبيان' : 'ابدأ الاستبيان'}
+                            {progress.surveyFilled ? 'عرض إجابات الاستبيان' : 'ابدأ الاستبيان'}
                         </button>
                     </div>
                 )}
