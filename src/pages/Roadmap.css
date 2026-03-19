@@ -174,7 +174,7 @@
 .rm-node--depth2 .rm-row {
     background: #fafafa;
     border-style: dashed;
-    padding: var(--space-2.5) var(--space-4);
+    padding: var(--space-2) var(--space-4);
 }
 
 .rm-node--depth3 .rm-label {
@@ -183,7 +183,7 @@
 }
 .rm-node--depth3 .rm-row {
     background: #ffffff;
-    padding: var(--space-2) var(--space-3.5);
+    padding: var(--space-2) var(--space-3);
     min-height: 44px;
 }
 
@@ -192,6 +192,6 @@
     font-weight: 500;
 }
 .rm-node--depth4 .rm-row {
-    padding: var(--space-1.5) var(--space-3);
+    padding: var(--space-1) var(--space-3);
     min-height: 38px;
 }
