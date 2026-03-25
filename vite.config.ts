@@ -39,6 +39,23 @@ export default defineConfig({
     })
   ],
   build: {
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1500,
+    rolldownOptions: {
+      // Suppress the eval() warning from lottie-web internals (unfixable from our side)
+      onLog(level, log, defaultHandler) {
+        if (level === 'warn' && log.code === 'EVAL' && log.id?.includes('lottie')) {
+          return;
+        }
+        defaultHandler(level, log);
+      },
+      output: {
+        manualChunks(id) {
+          if (id.includes('lottie')) return 'lottie';
+          if (id.includes('recharts')) return 'charts';
+          if (id.includes('framer-motion')) return 'motion';
+          if (id.includes('react-dom') || id.includes('react-router-dom')) return 'react-vendor';
+        },
+      },
+    },
   },
 })

@@ -6,6 +6,7 @@ import { evaluate } from '../lib/evaluator/arAnswerEvaluator';
 import { useAppStore } from '../store/useAppStore';
 import type { SavedChatMessage } from '../services/storage';
 import { Button } from '../components/Button';
+import BotHeaderAvatar, { type BotState } from '../components/BotHeaderAvatar';
 import './Chat.css';
 
 type SenderType = 'bot' | 'user';
@@ -55,8 +56,16 @@ const Chat: React.FC = () => {
     const [awaitingAnswer, setAwaitingAnswer] = useState(!isReadOnly);
     const [quizFinished, setQuizFinished] = useState(isReadOnly);
     const [isBotTyping, setIsBotTyping] = useState(false);
+    const [isSpeaking, setIsSpeaking] = useState(false);
     const scheduledRef = useRef(false);
     const typingCount = useRef(0);
+
+    // Derive bot state for avatar
+    const botState: BotState = isSpeaking ? 'speaking' : isBotTyping ? 'thinking' : 'idle';
+    const botStatusText =
+        botState === 'thinking' ? 'جاري التفكير...' :
+        botState === 'speaking' ? 'جاري الرد...' :
+        'جاهز للمساعدة';
     const timeoutsRef = useRef<any[]>([]);
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -96,12 +105,17 @@ const Chat: React.FC = () => {
     const addBotMsgWithDelay = (text: string, verdict?: VerdictType, delay = 1000) => {
         typingCount.current++;
         setIsBotTyping(true);
+        setIsSpeaking(false);
         const t = setTimeout(() => {
+            // Switch from thinking → speaking while message renders
+            setIsSpeaking(true);
             addMsg({ sender: 'bot', text, verdict });
             typingCount.current--;
             if (typingCount.current <= 0) {
                 typingCount.current = 0;
                 setIsBotTyping(false);
+                // Brief speaking pause then go idle
+                setTimeout(() => setIsSpeaking(false), 600);
             }
             // Remove from array after execution
             timeoutsRef.current = timeoutsRef.current.filter(x => x !== t);
@@ -205,9 +219,12 @@ const Chat: React.FC = () => {
         <div className="chat-page">
             {/* Header */}
             <div className="chat-header">
-                <div className="chat-header__bot-avatar">🤖</div>
-                <div>
-                    <p className="chat-header__title">المساعد التعليمي</p>
+                <BotHeaderAvatar state={botState} />
+                <div className="chat-header__info">
+                    <p className="chat-header__title">المساعد الذكي</p>
+                    <p className={`chat-header__status chat-header__status--${botState}`}>
+                        {botStatusText}
+                    </p>
                     <p className="chat-header__sub">{lesson.title}</p>
                 </div>
                 {progress.quizDone && (
@@ -231,7 +248,7 @@ const Chat: React.FC = () => {
                         className={`chat-bubble-wrap chat-bubble-wrap--${msg.sender}`}
                     >
                         {msg.sender === 'bot' && (
-                            <div className="chat-bot-avatar">🤖</div>
+                            <BotHeaderAvatar state="idle" size="sm" />
                         )}
                         <div
                             className={`chat-bubble chat-bubble--${msg.sender}${msg.verdict ? ` chat-bubble--${msg.verdict}` : ''
@@ -261,7 +278,7 @@ const Chat: React.FC = () => {
 
                 {isBotTyping && (
                     <div className="chat-bubble-wrap chat-bubble-wrap--bot">
-                        <div className="chat-bot-avatar">🤖</div>
+                        <BotHeaderAvatar state="thinking" size="sm" />
                         <div className="chat-bubble chat-bubble--bot chat-bubble--typing">
                             <div className="typing-indicator">
                                 <span></span>
