@@ -84,6 +84,11 @@ const LessonDetail: React.FC = () => {
 
     // Build mind-map node data from importance section text
     const mindMapNodes: MindMapNodeData[] = useMemo(() => {
+        // Use pre-structured data if available
+        if (lesson.mindMapData && lesson.mindMapData.length > 0) {
+            return lesson.mindMapData;
+        }
+
         const text = lesson.sections.importance;
         if (!text) return [];
         const COLORS = ['#4A90D9', '#34A853', '#9B59B6', '#E67E22', '#E74C3C', '#1ABC9C'];
@@ -98,7 +103,7 @@ const LessonDetail: React.FC = () => {
                 color: COLORS[i % COLORS.length],
                 details: [point],
             }));
-    }, [lesson.sections.importance]);
+    }, [lesson.mindMapData, lesson.sections.importance]);
 
     // Get YouTube video ID
     const getYouTubeId = (url: string) => {

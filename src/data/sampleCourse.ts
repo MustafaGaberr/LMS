@@ -3,6 +3,8 @@
 // Re-export evaluator types so consumers can use a single import source
 export type { QuizQuestion, AcceptCriteria } from '../lib/evaluator/arAnswerEvaluator';
 import { quizData } from './quizData';
+import { mindMapDataMap } from './mindMapData';
+import { type MindMapNodeData } from '../components/LessonMindMap';
 
 export interface LessonSections {
     concept: string;
@@ -37,6 +39,8 @@ export interface Lesson {
     activityInstructions: string;
     /** Full intro message context for the quiz-intro page */
     quizIntroFullContent: string;
+    /** Mind map data for the "Importance" tab */
+    mindMapData?: MindMapNodeData[];
 }
 
 export interface Unit {
@@ -173,6 +177,7 @@ export const course: Course = {
                             'يُستخدم نظام LMS في التعليم الرسمي (المدارس والجامعات)، والتدريب المهني في الشركات، والتطوير الذاتي. يساعد في توفير المرونة، وتقليل التكاليف، وتحسين جودة التعليم من خلال المتابعة المستمرة وتنوع مصادر التعلم.',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u1-l1'],
                     activityInstructions:
                         'ابحث عن تعريف نظام LMS في ثلاثة مصادر أكاديمية مختلفة، ثم اكتب تعريفًا بأسلوبك الخاص لا يتجاوز 100 كلمة، مُوضّحًا الفرق بين LMS ومنصات التعلم العادية.',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -199,6 +204,7 @@ export const course: Course = {
                             'أبرز مكونات LMS: لوحة تحكم متكاملة، نظام إدارة المقررات، أدوات التقييم الآلي، مستودع المحتوى التعليمي، نظام الإشعارات والتنبيهات، تقارير الأداء والتحليلات، ونظام الشهادات والإنجازات الرقمية.',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u1-l2'],
                     activityInstructions:
                         'ارسم مخططًا يُوضّح مكونات نظام LMS وكيفية تفاعلها مع بعضها، مُبيّنًا دور كل طرف (مسؤول - معلم - متعلم) داخل المنصة. يمكن استخدام أي أداة رسم إلكترونية.',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -226,6 +232,7 @@ export const course: Course = {
                             'معايير اختيار LMS: سهولة الاستخدام (UX)، إمكانية التخصيص، دعم المعايير الدولية (SCORM/xAPI)، التكامل مع الأنظمة الأخرى، الأمان وحماية البيانات، الدعم الفني، التكلفة الإجمالية للملكية (TCO)، وإمكانية التوسع مع نمو المؤسسة.',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u1-l3'],
                     activityInstructions:
                         'اكتب تقريرًا مختصرًا تُحدد فيه أنسب نوع من أنظمة LMS لمدرسة ثانوية حكومية بميزانية محدودة، مُعللًا اختيارك وفق ثلاثة معايير على الأقل من معايير الاختيار.',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -252,6 +259,7 @@ export const course: Course = {
                             'حقوق استخدام أنظمة المصدر المفتوح: حرية الاستخدام لأي غرض، حرية دراسة الكود وتعديله، حرية توزيع النسخ، وحرية توزيع النسخ المعدّلة. في المقابل، تتطلب كفاءات تقنية للتثبيت والصيانة والتحديث، وقد تحتاج مجتمعًا داعمًا.',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u1-l4'],
                     activityInstructions:
                         'قارن بين نظامَي Moodle وCanvas من حيث: سهولة الاستخدام، الميزات المتاحة مجانًا، دعم المجتمع، وإمكانية التخصيص. قدّم مقارنتك في جدول لا يقل عن 5 معايير.',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -278,6 +286,7 @@ export const course: Course = {
                             'أبرز مميزات Moodle: واجهة عربية كاملة، دعم معايير SCORM وxAPI، منتديات نقاش وغرف محادثة، بنك أسئلة ضخم، نظام تقييم الأقران، تقارير تفصيلية لأداء المتعلمين، تطبيق جوال، وأكثر من 1500 إضافة مجانية في مستودعه الرسمي.',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u1-l5'],
                     activityInstructions:
                         'سجّل في موقع Moodle.org واستكشف واجهة العرض التجريبية (Demo). اكتب تقريرًا قصيرًا (150 كلمة) تصف فيه تجربتك: ما الذي أعجبك؟ وما الذي تعتقد أنه يحتاج إلى تحسين؟',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -305,6 +314,7 @@ export const course: Course = {
                             'Blackboard هو أحد أعرق أنظمة LMS المغلقة، يُقدّم: واجهة احترافية متطورة، أدوات تعاون فوري (Collaborate)، تحليلات تنبؤية بالأداء، تكاملًا مع آلاف الناشرين الأكاديميين، ودعمًا لمعايير الوصول للذوي الاحتياجات الخاصة (Accessibility). يُستخدم في أكثر من 5000 مؤسسة حول العالم.',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u1-l6'],
                     activityInstructions:
                         'اكتب مقارنة موجزة بين Moodle وBlackboard تتضمن: التكلفة، التخصيص، الدعم الفني، والفئة المستهدفة من المؤسسات. اختتم بتوصيتك: أيهما تختار لجامعة كبيرة ولماذا؟',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -345,6 +355,7 @@ export const course: Course = {
                             'أنشطة التعلم عبر الإنترنت: البحث والاستكشاف، التعلم التشاركي عبر المشاريع المشتركة، التواصل مع الخبراء والمتخصصين، الوصول إلى المستودعات الأكاديمية (JSTOR, Google Scholar)، المحاكاة الافتراضية والمختبرات الإلكترونية، والدورات المفتوحة (MOOCs).',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u2-l1'],
                     activityInstructions:
                         'اذكر خمسة استخدامات للإنترنت في التعليم مع مثال تطبيقي لكل استخدام. ثم ناقش إيجابية واحدة وسلبية واحدة لكل استخدام ذكرته في لا يزيد عن 200 كلمة.',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -392,6 +403,7 @@ export const course: Course = {
                         ]
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    // u2-l2 has no specific mindMapData
                     activityInstructions:
                         'صنّف ثلاثة مقررات إلكترونية تعرفها (أو ابحث عنها) وفق أنواع المقررات الإلكترونية المذكورة. وضّح سبب تصنيفك لكل مقرر، مستعينًا بنسبة المحتوى الإلكتروني فيه.',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -425,6 +437,7 @@ export const course: Course = {
                             'مكونات المقرر الإلكتروني الفعّال: صفحة ترحيب وتعريف بالمقرر، نظرة عامة على الأهداف والمخرجات، وحدات محتوى منظّمة ومتسلسلة، أنشطة تفاعلية وواجبات قابلة للتسليم، اختبارات تقييم متنوعة، منتدى نقاش وتواصل، وموارد ومراجع إضافية.',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u2-l3'],
                     activityInstructions:
                         'افتح أحد المقررات الإلكترونية المتاحة على Coursera أو edX واستعرض مكوناته. اكتب تقريرًا (200 كلمة) توضّح فيه المكونات التي وجدتها، وما الذي ينقص المقرر من مكونات الفعّالية.',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -456,6 +469,7 @@ export const course: Course = {
                             'مبادئ تصميم المقررات الإلكترونية: مبدأ التوافق (Alignment) بين الأهداف والأنشطة والتقييم، مبدأ التسلسل المنطقي للمحتوى، مبدأ التنوع في أساليب التقديم لمراعاة أنماط التعلم المختلفة، مبدأ التغذية الراجعة الفورية، ومبدأ إمكانية الوصول للجميع (Accessibility).',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u2-l4'],
                     activityInstructions:
                         'صمّم خطة مبدئية لمقرر إلكتروني قصير (3 وحدات) في موضوع تختاره. حدّد: الأهداف، المحتوى الرئيسي لكل وحدة، نوع الأنشطة، وأسلوب التقييم. قدّم خطتك في جدول منظم.',
                     quizIntroFullContent: `عزيزي الطالب،
@@ -485,6 +499,7 @@ export const course: Course = {
                             'معايير تقويم جودة المقررات الإلكترونية: معيار Quality Matters (QM) ذو الثمانية معايير الرئيسية، ومعيار iNACOL للتعليم الإلكتروني، ومعايير WCAG لإمكانية الوصول. تشمل المعايير: وضوح الأهداف، التوافق التعليمي، جودة التقييم، سهولة التنقل، وجودة الموارد والمواد التعليمية.',
                     },
                     video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    mindMapData: mindMapDataMap['u2-l5'],
                     activityInstructions:
                         'ابحث عن نموذج ADDIE واشرح مراحله الخمس بأسلوبك الخاص مع مثال تطبيقي لكل مرحلة عند تصميم مقرر إلكتروني في مادة الرياضيات. قدّم إجابتك في لا يزيد عن 300 كلمة.',
                     quizIntroFullContent: `عزيزي الطالب،
