@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { getLesson, getUnit } from '../data/sampleCourse';
 import { useAppStore } from '../store/useAppStore';
-import MindMap from '../components/MindMap';
+import LessonMindMap, { type MindMapNodeData } from '../components/LessonMindMap';
 import './LessonDetail.css';
 
 type Tab = 'concept' | 'importance' | 'features';
@@ -82,13 +82,23 @@ const LessonDetail: React.FC = () => {
         }
     };
 
-    // Extract importance points for mind map
-    const importanceText = lesson.sections.importance;
-    const importancePoints = importanceText
-        .split(/[،,؛;.]/)
-        .map(s => s.trim())
-        .filter(s => s.length > 10)
-        .slice(0, 5);
+    // Build mind-map node data from importance section text
+    const mindMapNodes: MindMapNodeData[] = useMemo(() => {
+        const text = lesson.sections.importance;
+        if (!text) return [];
+        const COLORS = ['#4A90D9', '#34A853', '#9B59B6', '#E67E22', '#E74C3C', '#1ABC9C'];
+        return text
+            .split(/[،,؛;.]/)
+            .map(s => s.trim())
+            .filter(s => s.length > 10)
+            .slice(0, 6)
+            .map((point, i) => ({
+                id: `imp-${i}`,
+                title: point,
+                color: COLORS[i % COLORS.length],
+                details: [point],
+            }));
+    }, [lesson.sections.importance]);
 
     // Get YouTube video ID
     const getYouTubeId = (url: string) => {
@@ -161,9 +171,12 @@ const LessonDetail: React.FC = () => {
                     <>
                         {currentTab === 'concept' && <p className="lesson-section-text">{lesson.sections.concept}</p>}
 
-                        {currentTab === 'importance' && (
+                        {currentTab === 'importance' && mindMapNodes.length > 0 && (
                             <div className="mindmap-container">
-                                <MindMap title={lesson.title} points={importancePoints} centerLabel={lesson.sectionLabels?.importance || DEFAULT_TAB_LABELS.importance} />
+                                <LessonMindMap
+                                    centerLabel={lesson.sectionLabels?.importance || DEFAULT_TAB_LABELS.importance}
+                                    nodes={mindMapNodes}
+                                />
                             </div>
                         )}
 
