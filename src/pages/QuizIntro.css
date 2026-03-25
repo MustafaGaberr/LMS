@@ -73,16 +73,16 @@
 }
 
 .quiz-intro-card__content {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: #1a202c;
-    line-height: 1.6;
+    line-height: 1.5;
     text-align: right;
     padding-bottom: 0;
 }
 
 .quiz-intro-card__line {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .quiz-intro-card__line:last-child {
@@ -93,6 +93,7 @@
 .quiz-intro-card__line:empty {
     margin-bottom: 0;
     height: 0;
+    display: none;
 }
 
 /* ── CTA Button ────────────────────────────────────────────────────────── */
