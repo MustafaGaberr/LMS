@@ -49,34 +49,37 @@
     border-radius: 18px;
     padding: 24px 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-height: 400px;
+    overflow-y: auto;
 }
 
-.quiz-intro-card__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+/* Custom Scrollbar for the card */
+.quiz-intro-card::-webkit-scrollbar {
+    width: 6px;
 }
 
-.quiz-intro-card__item {
-    position: relative;
-    padding-right: 20px;
-    font-size: 0.95rem;
+.quiz-intro-card::-webkit-scrollbar-track {
+    background: #d4eaf7;
+    border-radius: 10px;
+}
+
+.quiz-intro-card::-webkit-scrollbar-thumb {
+    background: #23445D;
+    border-radius: 10px;
+}
+
+.quiz-intro-card::-webkit-scrollbar-thumb:hover {
+    background: #1a1a2e;
+}
+
+.quiz-intro-card__content {
+    font-size: 1rem;
     font-weight: 500;
     color: #1a202c;
-    line-height: 1.75;
-}
-
-.quiz-intro-card__item::before {
-    content: '•';
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: #23445D;
-    font-weight: 900;
-    font-size: 1.2rem;
+    line-height: 1.9;
+    white-space: pre-line;
+    text-align: right;
+    padding-bottom: 10px;
 }
 
 /* ── CTA Button ────────────────────────────────────────────────────────── */

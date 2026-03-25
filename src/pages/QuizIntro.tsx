@@ -18,14 +18,6 @@ const QuizIntro: React.FC = () => {
         );
     }
 
-    const instructions = [
-        `قم بدراسة محتوى إدارة التعلم الإلكتروني (LMS) من خلال أحد المصادر التعليمية الرقمية فيما يلي ما هو نظام إدارة التعلم`,
-        `يهدف نظام إدارة التعلم (LMS) إلى تسهيل إدارة وتقديم المحتوى التعليمي عبر الإنترنت`,
-        `يساعد في تنظيم وإدارة واستخدام المحتوى التعليمي بشكل فعّال`,
-        `نظام إدارة التعليم الإلكتروني هو منصة رقمية تمكّن المعلمين من إنشاء وتقديم المحتوى التعليمي`,
-        `التوجه نحو الصفحة التالية والبدء باستخدام الـ chatbot ومحاولة حتى الانتهاء من الإجابة، مع التركيز حتى إتمام هذا الجزء بسهولة قبل الانتقال`,
-    ];
-
     return (
         <div className="quiz-intro-page">
             {/* Header */}
@@ -37,13 +29,9 @@ const QuizIntro: React.FC = () => {
 
             {/* Instructions card */}
             <div className="quiz-intro-card">
-                <ul className="quiz-intro-card__list">
-                    {instructions.map((text, i) => (
-                        <li key={i} className="quiz-intro-card__item">
-                            {text}
-                        </li>
-                    ))}
-                </ul>
+                <div className="quiz-intro-card__content">
+                    {lesson.quizIntroFullContent}
+                </div>
             </div>
 
             {/* CTA Button */}
