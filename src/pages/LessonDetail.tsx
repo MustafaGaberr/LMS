@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { getLesson, getUnit } from '../data/sampleCourse';
 import { useAppStore } from '../store/useAppStore';
+import MindMap from '../components/MindMap';
 import './LessonDetail.css';
 
 type Tab = 'concept' | 'importance' | 'features';
@@ -202,104 +203,6 @@ const LessonDetail: React.FC = () => {
                 </button>
             </div>
         </div>
-    );
-};
-
-/* ── Mind Map Component ──────────────────────────────────────────────────── */
-
-interface MindMapProps {
-    title: string;
-    points: string[];
-    centerLabel?: string;
-}
-
-const MindMap: React.FC<MindMapProps> = ({ points, centerLabel = 'الأهمية' }) => {
-    const centerX = 160;
-    const centerY = 110;
-    const branchColors = ['#6C8EBF', '#82B366', '#D79B00', '#9673A6', '#23445D'];
-
-    const angles = [-60, -20, 20, 60, 90];
-    const branchLength = 90;
-
-    return (
-        <svg
-            viewBox="0 0 320 280"
-            className="mindmap-svg"
-        >
-            {/* Central node */}
-            <ellipse cx={centerX} cy={centerY} rx={52} ry={28} fill="#23445D" />
-            <text
-                x={centerX}
-                y={centerY + 5}
-                textAnchor="middle"
-                fill="white"
-                fontSize="11"
-                fontFamily="Cairo, sans-serif"
-                fontWeight="bold"
-            >
-                {centerLabel}
-            </text>
-
-            {points.map((point, i) => {
-                const angleDeg = angles[i] ?? (i * 35 - 60);
-                const angleRad = (angleDeg * Math.PI) / 180;
-                const x2 = centerX + branchLength * Math.sin(angleRad);
-                const y2 = centerY + branchLength * Math.cos(angleRad);
-                const color = branchColors[i % branchColors.length];
-
-                const words = point.split(' ');
-                const lines: string[] = [];
-                let current = '';
-                for (const w of words) {
-                    if ((current + ' ' + w).trim().length > 18) {
-                        if (current) lines.push(current.trim());
-                        current = w;
-                    } else {
-                        current = (current + ' ' + w).trim();
-                    }
-                }
-                if (current) lines.push(current.trim());
-                const maxLines = lines.slice(0, 3);
-
-                return (
-                    <g key={i}>
-                        <line
-                            x1={centerX}
-                            y1={centerY}
-                            x2={x2}
-                            y2={y2}
-                            stroke={color}
-                            strokeWidth="1.5"
-                            strokeDasharray="3 2"
-                        />
-                        <ellipse
-                            cx={x2}
-                            cy={y2}
-                            rx={48}
-                            ry={18}
-                            fill={color}
-                            fillOpacity={0.15}
-                            stroke={color}
-                            strokeWidth="1.2"
-                        />
-                        {maxLines.map((line, li) => (
-                            <text
-                                key={li}
-                                x={x2}
-                                y={y2 - (maxLines.length - 1) * 5.5 + li * 11}
-                                textAnchor="middle"
-                                fill={color}
-                                fontSize="8"
-                                fontFamily="Cairo, sans-serif"
-                                fontWeight="600"
-                            >
-                                {line}
-                            </text>
-                        ))}
-                    </g>
-                );
-            })}
-        </svg>
     );
 };
 
