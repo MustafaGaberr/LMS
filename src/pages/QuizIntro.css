@@ -49,7 +49,7 @@
     border-radius: 18px;
     padding: 24px 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    max-height: 400px;
+    max-height: 520px;
     overflow-y: auto;
 }
 
@@ -73,13 +73,26 @@
 }
 
 .quiz-intro-card__content {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 500;
     color: #1a202c;
-    line-height: 1.9;
-    white-space: pre-line;
+    line-height: 1.6;
     text-align: right;
-    padding-bottom: 10px;
+    padding-bottom: 0;
+}
+
+.quiz-intro-card__line {
+    margin-bottom: 12px;
+}
+
+.quiz-intro-card__line:last-child {
+    margin-bottom: 0;
+}
+
+/* Ensure empty lines doesn't create excessive space */
+.quiz-intro-card__line:empty {
+    margin-bottom: 0;
+    height: 0;
 }
 
 /* ── CTA Button ────────────────────────────────────────────────────────── */

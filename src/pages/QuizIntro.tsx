@@ -30,7 +30,11 @@ const QuizIntro: React.FC = () => {
             {/* Instructions card */}
             <div className="quiz-intro-card">
                 <div className="quiz-intro-card__content">
-                    {lesson.quizIntroFullContent}
+                    {lesson.quizIntroFullContent.split('\n').map((line, index) => (
+                        <div key={index} className="quiz-intro-card__line">
+                            {line}
+                        </div>
+                    ))}
                 </div>
             </div>
 
