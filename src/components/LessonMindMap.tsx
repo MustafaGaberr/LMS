@@ -45,7 +45,7 @@ const PALETTE = ['#4A90D9', '#34A853', '#9B59B6', '#E67E22', '#E74C3C', '#1ABC9C
 const LessonMindMap: React.FC<LessonMindMapProps> = ({
   centerLabel,
   nodes,
-  maxVisible = 4,
+  maxVisible = 6,
   onNodeSelect,
 }) => {
   /* — smart grouping -------------------------------------------------------- */
@@ -65,7 +65,8 @@ const LessonMindMap: React.FC<LessonMindMapProps> = ({
           title: slice[0].group || slice[0].title,
           shortLabel: `${slice.length} عناصر`,
           color: slice[0].color,
-          details: slice.flatMap((n) => n.details ?? []),
+          // No details at group level — children render their own details below
+          details: [],
           children: slice,
           group: slice[0].group,
         });
