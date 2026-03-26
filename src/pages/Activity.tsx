@@ -172,7 +172,7 @@ const Activity: React.FC = () => {
                     {/* No APPS_SCRIPT notice */}
                     {!APPS_SCRIPT_URL && (
                         <p className="activity-sim-note">
-                            ملاحظة: لم يُضبط VITE_APPS_SCRIPT_URL — سيُحاكى الرفع محليًا.
+                            {/* ملاحظة: لم يُضبط VITE_APPS_SCRIPT_URL — سيُحاكى الرفع محليًا. */}
                         </p>
                     )}
                 </>
