@@ -176,7 +176,7 @@ export const course: Course = {
                         features:
                             'يُستخدم نظام LMS في التعليم الرسمي (المدارس والجامعات)، والتدريب المهني في الشركات، والتطوير الذاتي. يساعد في توفير المرونة، وتقليل التكاليف، وتحسين جودة التعليم من خلال المتابعة المستمرة وتنوع مصادر التعلم.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtu.be/gdF7q84ce-0' },
                     mindMapData: mindMapDataMap['u1-l1'],
                     activityInstructions:
                         'ابحث عن تعريف نظام LMS في ثلاثة مصادر أكاديمية مختلفة، ثم اكتب تعريفًا بأسلوبك الخاص لا يتجاوز 100 كلمة، مُوضّحًا الفرق بين LMS ومنصات التعلم العادية.',
@@ -203,7 +203,7 @@ export const course: Course = {
                         features:
                             'أبرز مكونات LMS: لوحة تحكم متكاملة، نظام إدارة المقررات، أدوات التقييم الآلي، مستودع المحتوى التعليمي، نظام الإشعارات والتنبيهات، تقارير الأداء والتحليلات، ونظام الشهادات والإنجازات الرقمية.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtube.com/shorts/PeoxCHig5dQ' },
                     mindMapData: mindMapDataMap['u1-l2'],
                     activityInstructions:
                         'ارسم مخططًا يُوضّح مكونات نظام LMS وكيفية تفاعلها مع بعضها، مُبيّنًا دور كل طرف (مسؤول - معلم - متعلم) داخل المنصة. يمكن استخدام أي أداة رسم إلكترونية.',
@@ -231,7 +231,7 @@ export const course: Course = {
                         features:
                             'معايير اختيار LMS: سهولة الاستخدام (UX)، إمكانية التخصيص، دعم المعايير الدولية (SCORM/xAPI)، التكامل مع الأنظمة الأخرى، الأمان وحماية البيانات، الدعم الفني، التكلفة الإجمالية للملكية (TCO)، وإمكانية التوسع مع نمو المؤسسة.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtube.com/shorts/rdAEFp15B24' },
                     mindMapData: mindMapDataMap['u1-l3'],
                     activityInstructions:
                         'اكتب تقريرًا مختصرًا تُحدد فيه أنسب نوع من أنظمة LMS لمدرسة ثانوية حكومية بميزانية محدودة، مُعللًا اختيارك وفق ثلاثة معايير على الأقل من معايير الاختيار.',
@@ -258,7 +258,7 @@ export const course: Course = {
                         features:
                             'حقوق استخدام أنظمة المصدر المفتوح: حرية الاستخدام لأي غرض، حرية دراسة الكود وتعديله، حرية توزيع النسخ، وحرية توزيع النسخ المعدّلة. في المقابل، تتطلب كفاءات تقنية للتثبيت والصيانة والتحديث، وقد تحتاج مجتمعًا داعمًا.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtu.be/5Sfs3-svYF4' },
                     mindMapData: mindMapDataMap['u1-l4'],
                     activityInstructions:
                         'قارن بين نظامَي Moodle وCanvas من حيث: سهولة الاستخدام، الميزات المتاحة مجانًا، دعم المجتمع، وإمكانية التخصيص. قدّم مقارنتك في جدول لا يقل عن 5 معايير.',
@@ -285,7 +285,7 @@ export const course: Course = {
                         features:
                             'أبرز مميزات Moodle: واجهة عربية كاملة، دعم معايير SCORM وxAPI، منتديات نقاش وغرف محادثة، بنك أسئلة ضخم، نظام تقييم الأقران، تقارير تفصيلية لأداء المتعلمين، تطبيق جوال، وأكثر من 1500 إضافة مجانية في مستودعه الرسمي.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtu.be/p-hMntiZRPI' },
                     mindMapData: mindMapDataMap['u1-l5'],
                     activityInstructions:
                         'سجّل في موقع Moodle.org واستكشف واجهة العرض التجريبية (Demo). اكتب تقريرًا قصيرًا (150 كلمة) تصف فيه تجربتك: ما الذي أعجبك؟ وما الذي تعتقد أنه يحتاج إلى تحسين؟',
@@ -313,7 +313,7 @@ export const course: Course = {
                         features:
                             'Blackboard هو أحد أعرق أنظمة LMS المغلقة، يُقدّم: واجهة احترافية متطورة، أدوات تعاون فوري (Collaborate)، تحليلات تنبؤية بالأداء، تكاملًا مع آلاف الناشرين الأكاديميين، ودعمًا لمعايير الوصول للذوي الاحتياجات الخاصة (Accessibility). يُستخدم في أكثر من 5000 مؤسسة حول العالم.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtu.be/MNsmy2UkC18' },
                     mindMapData: mindMapDataMap['u1-l6'],
                     activityInstructions:
                         'اكتب مقارنة موجزة بين Moodle وBlackboard تتضمن: التكلفة، التخصيص، الدعم الفني، والفئة المستهدفة من المؤسسات. اختتم بتوصيتك: أيهما تختار لجامعة كبيرة ولماذا؟',

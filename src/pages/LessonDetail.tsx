@@ -107,7 +107,7 @@ const LessonDetail: React.FC = () => {
 
     // Get YouTube video ID
     const getYouTubeId = (url: string) => {
-        const match = url.match(/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+        const match = url.match(/(?:v=|\/embed\/|youtu\.be\/|\/shorts\/)([A-Za-z0-9_-]{11})/);
         return match ? match[1] : '';
     };
     const videoId = getYouTubeId(lesson.video.url);
