@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { getLesson, getUnit } from '../data/sampleCourse';
 import { useAppStore } from '../store/useAppStore';
 import LessonMindMap, { type MindMapNodeData } from '../components/LessonMindMap';
+import LessonVideoPlayer from '../components/LessonVideoPlayer';
 import './LessonDetail.css';
 
 type Tab = 'concept' | 'importance' | 'features';
@@ -105,12 +106,11 @@ const LessonDetail: React.FC = () => {
             }));
     }, [lesson.mindMapData, lesson.sections.importance]);
 
-    // Get YouTube video ID
-    const getYouTubeId = (url: string) => {
-        const match = url.match(/(?:v=|\/embed\/|youtu\.be\/|\/shorts\/)([A-Za-z0-9_-]{11})/);
-        return match ? match[1] : '';
-    };
-    const videoId = getYouTubeId(lesson.video.url);
+    // ── Video completion state (reactive from store) ───────────────────────
+    const videoDone = useAppStore(
+        (s) => s.progress.completedLessons[lessonId ?? '']?.videoDone ?? false
+    );
+    const hasVideo = !!(lesson?.video?.url);
 
     return (
         <div className="lesson-detail-page">
@@ -187,17 +187,11 @@ const LessonDetail: React.FC = () => {
 
                         {currentTab === 'features' && (
                             <>
-                                {videoId ? (
-                                    <div className="lesson-yt-wrap">
-                                        <iframe
-                                            src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`}
-                                            title={lesson.title}
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                            referrerPolicy="strict-origin-when-cross-origin"
-                                            allowFullScreen
-                                            className="lesson-yt-iframe"
-                                        />
-                                    </div>
+                                {hasVideo ? (
+                                    <LessonVideoPlayer
+                                        videoUrl={lesson.video.url}
+                                        lessonId={lesson.id}
+                                    />
                                 ) : (
                                     <p className="lesson-section-text">{lesson.sections.features}</p>
                                 )}
@@ -208,18 +202,28 @@ const LessonDetail: React.FC = () => {
             </div>
 
             {/* ── Next arrow footer (centered) ────────────────── */}
-            <div className="lesson-nav-arrows">
-                <button
-                    className={`lesson-nav-arrow lesson-nav-arrow--next ${
-                        (step === availableTabs.length - 1 && (!lesson.subSections?.[availableTabs[step]] || subStep === (lesson.subSections?.[availableTabs[step]]?.length ?? 0) - 1)) 
-                        ? 'lesson-nav-arrow--primary' : ''
-                    }`}
-                    onClick={handleNext}
-                    aria-label="التالي"
-                >
-                    <ArrowLeft size={26} />
-                </button>
-            </div>
+            {(() => {
+                const isAtFinalStep =
+                    step === availableTabs.length - 1 &&
+                    (!lesson.subSections?.[availableTabs[step]] ||
+                        subStep === (lesson.subSections?.[availableTabs[step]]?.length ?? 0) - 1);
+                const isNextDisabled = isAtFinalStep && hasVideo && !videoDone;
+
+                return (
+                    <div className="lesson-nav-arrows">
+                        <button
+                            className={`lesson-nav-arrow lesson-nav-arrow--next ${
+                                isAtFinalStep ? 'lesson-nav-arrow--primary' : ''
+                            } ${isNextDisabled ? 'lesson-nav-arrow--disabled' : ''}`}
+                            onClick={handleNext}
+                            disabled={isNextDisabled}
+                            aria-label="التالي"
+                        >
+                            <ArrowLeft size={26} />
+                        </button>
+                    </div>
+                );
+            })()}
         </div>
     );
 };

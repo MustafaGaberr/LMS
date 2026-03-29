@@ -34,6 +34,7 @@ interface AppState {
     markContentDone: (lessonId: string) => void;
     markQuizDone: (lessonId: string) => void;
     markActivityDone: (lessonId: string) => void;
+    markVideoDone: (lessonId: string) => void;
     saveChatHistory: (lessonId: string, messages: SavedChatMessage[]) => void;
 
     // Unlock selectors
@@ -78,6 +79,7 @@ const DEFAULT_LESSON_PROGRESS: LessonProgress = {
     contentDone: false,
     quizDone: false,
     activityDone: false,
+    videoDone: false,
 };
 
 // ─── Unlock logic helpers (pure, read from state snapshot) ───────────────────
@@ -210,6 +212,10 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     markActivityDone(lessonId) {
         patchLesson(get, set, lessonId, { activityDone: true });
+    },
+
+    markVideoDone(lessonId) {
+        patchLesson(get, set, lessonId, { videoDone: true });
     },
 
     saveChatHistory(lessonId, messages) {

@@ -437,6 +437,14 @@
     box-shadow: none;
 }
 
+/* Native disabled attribute support */
+.lesson-nav-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    box-shadow: none;
+    pointer-events: none;
+}
+
 /* ── Step dots indicator ─────────────────────────────────────────────────── */
 
 .lesson-nav-step-indicator {

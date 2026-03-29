@@ -64,6 +64,7 @@ export interface LessonProgress {
     contentDone: boolean;
     quizDone: boolean;
     activityDone: boolean;
+    videoDone?: boolean;
     completedAt?: number;
     chatHistory?: SavedChatMessage[];
 }
