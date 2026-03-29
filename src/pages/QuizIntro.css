@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════
-   QUIZ INTRO PAGE
+   QUIZ INTRO PAGE — Redesign
    ════════════════════════════════════════ */
 
 .quiz-intro-page {
@@ -7,11 +7,11 @@
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    padding: 24px 20px 40px;
+    padding: 20px 16px 40px;
     background: #f0f4f8;
     direction: rtl;
     font-family: 'Cairo', 'Segoe UI', sans-serif;
-    gap: 20px;
+    gap: 0;
 }
 
 .quiz-intro-error {
@@ -20,16 +20,44 @@
     margin-top: 40px;
 }
 
-/* ── Header ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   HEADER — Dark blue card with Lottie icon + badge
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 .quiz-intro-header {
     width: 100%;
-    max-width: 480px;
-    background: #23445D;
-    border-radius: 18px;
-    padding: 22px 24px;
+    max-width: 500px;
+    background: linear-gradient(160deg, #2c5571 0%, #1b3a50 100%);
+    border-radius: 22px;
+    padding: 28px 24px 24px;
     text-align: center;
-    box-shadow: 0 4px 18px rgba(35, 68, 93, 0.22);
+    box-shadow: 0 8px 28px rgba(27, 58, 80, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Lottie icon container */
+.quiz-intro-header__icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    /* background: rgba(255, 255, 255, 0.12); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    /* Make the Lottie icon white */
+    filter: brightness(0) invert(1);
+}
+
+.quiz-intro-header__fallback {
+    font-size: 28px;
+    line-height: 1;
 }
 
 .quiz-intro-header__title {
@@ -37,70 +65,15 @@
     font-size: 1.15rem;
     font-weight: 700;
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
 }
 
-/* ── Instructions Card ─────────────────────────────────────────────────── */
-
-.quiz-intro-card {
-    width: 100%;
-    max-width: 480px;
-    background: #d4eaf7;
-    border-radius: 18px;
-    padding: 24px 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    max-height: 520px;
-    overflow-y: auto;
-}
-
-/* Custom Scrollbar for the card */
-.quiz-intro-card::-webkit-scrollbar {
-    width: 6px;
-}
-
-.quiz-intro-card::-webkit-scrollbar-track {
-    background: #d4eaf7;
-    border-radius: 10px;
-}
-
-.quiz-intro-card::-webkit-scrollbar-thumb {
-    background: #23445D;
-    border-radius: 10px;
-}
-
-.quiz-intro-card::-webkit-scrollbar-thumb:hover {
-    background: #1a1a2e;
-}
-
-.quiz-intro-card__content {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #1a202c;
-    line-height: 1.5;
-    text-align: right;
-    padding-bottom: 0;
-}
-
-.quiz-intro-card__line {
-    margin-bottom: 8px;
-}
-
-.quiz-intro-card__line:last-child {
-    margin-bottom: 0;
-}
-
-/* Ensure empty lines doesn't create excessive space */
-.quiz-intro-card__line:empty {
-    margin-bottom: 0;
-    height: 0;
-    display: none;
-}
-
-/* ── CTA Button ────────────────────────────────────────────────────────── */
+/* ── CTA Button (bottom of page) ─────────────────────────────────────── */
 
 .quiz-intro-cta {
     width: 100%;
-    max-width: 280px;
+    max-width: 320px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -108,25 +81,160 @@
     padding: 16px 32px;
     border: none;
     border-radius: 50px;
-    background: #1a1a2e;
+    background: #23445D;
     color: #ffffff;
     font-family: 'Cairo', 'Segoe UI', sans-serif;
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 18px rgba(26, 26, 46, 0.3);
-    margin-top: 3rem;
-    margin-bottom: 24px;
+    transition: all 0.22s ease;
+    box-shadow: 0 6px 20px rgba(35, 68, 93, 0.3);
+    margin-top: 28px;
     flex-shrink: 0;
 }
 
 .quiz-intro-cta:hover {
-    background: #23445D;
+    background: #1b3a50;
     transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(35, 68, 93, 0.35);
+    box-shadow: 0 8px 28px rgba(35, 68, 93, 0.4);
 }
 
 .quiz-intro-cta:active {
     transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BODY — Light blue container with intro text + step cards
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.quiz-intro-body {
+    width: 100%;
+    max-width: 500px;
+    background: #d4eaf7;
+    border-radius: 0 0 22px 22px;
+    padding: 28px 18px 24px;
+    margin-top: -12px;
+    /* overlap under header for connected look */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    max-height: 56vh;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar */
+.quiz-intro-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.quiz-intro-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.quiz-intro-body::-webkit-scrollbar-thumb {
+    background: rgba(35, 68, 93, 0.3);
+    border-radius: 10px;
+}
+
+.quiz-intro-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(35, 68, 93, 0.5);
+}
+
+/* ── Intro paragraph ────────────────────────────────────────────────────── */
+
+.quiz-intro-intro {
+    text-align: center;
+    padding: 0 4px;
+}
+
+.quiz-intro-intro__line {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a3550;
+    line-height: 1.8;
+}
+
+/* ── Step cards ─────────────────────────────────────────────────────────── */
+
+.quiz-intro-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quiz-intro-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    animation: quizStepSlideIn 0.35s ease both;
+}
+
+.quiz-intro-step:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.quiz-intro-step:nth-child(2) {
+    animation-delay: 0.12s;
+}
+
+.quiz-intro-step:nth-child(3) {
+    animation-delay: 0.19s;
+}
+
+.quiz-intro-step:nth-child(4) {
+    animation-delay: 0.26s;
+}
+
+.quiz-intro-step:nth-child(5) {
+    animation-delay: 0.33s;
+}
+
+.quiz-intro-step:nth-child(6) {
+    animation-delay: 0.40s;
+}
+
+@keyframes quizStepSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Number circle — on the RIGHT in RTL */
+.quiz-intro-step__num {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    background: #23445D;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(35, 68, 93, 0.2);
+}
+
+/* Text */
+.quiz-intro-step__text {
+    flex: 1;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #2d3748;
+    line-height: 1.65;
+    text-align: right;
 }
