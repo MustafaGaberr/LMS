@@ -229,8 +229,14 @@
 }
 
 .lesson-section-content--features {
-    background: #fef5e7;
-    border-right: 6px solid #b45309;
+    /* background: #fef5e7; */
+    /* border-right: 6px solid #b45309; */
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    max-height: none;
+    overflow-y: visible;
 }
 
 .lesson-section-text {
@@ -240,6 +246,18 @@
     text-align: right;
     margin: 0;
     white-space: pre-line;
+}
+
+/* ── Video status (outside content container) ────────────────────────────── */
+
+.lesson-video-status {
+    width: 100%;
+    max-width: 600px;
+    margin: 12px auto 0;
+    padding: 0 16px;
+    text-align: center;
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
+    direction: rtl;
 }
 
 /* ── Sub-navigation ──────────────────────────────────────────────────────── */

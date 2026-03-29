@@ -7,12 +7,14 @@ interface LessonVideoPlayerProps {
     videoUrl: string;
     lessonId: string;
     onComplete?: () => void;
+    onProgressChange?: (progress: number, isCompleted: boolean) => void;
 }
 
 const LessonVideoPlayer: React.FC<LessonVideoPlayerProps> = ({
     videoUrl,
     lessonId,
     onComplete,
+    onProgressChange,
 }) => {
     const markVideoDone = useAppStore((s) => s.markVideoDone);
     const videoDone = useAppStore(
@@ -30,8 +32,15 @@ const LessonVideoPlayer: React.FC<LessonVideoPlayerProps> = ({
             completedRef.current = true;
             setIsCompleted(true);
             setProgress(100);
+            onProgressChange?.(100, true);
         }
-    }, [videoDone]);
+    }, [videoDone, onProgressChange]);
+
+    // Notify parent of initial state
+    useEffect(() => {
+        onProgressChange?.(progress, isCompleted);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // ── Mark completion (fires once only) ──────────────────────────────────
     const handleComplete = useCallback(() => {
@@ -41,7 +50,8 @@ const LessonVideoPlayer: React.FC<LessonVideoPlayerProps> = ({
         setProgress(100);
         markVideoDone(lessonId);
         onComplete?.();
-    }, [lessonId, markVideoDone, onComplete]);
+        onProgressChange?.(100, true);
+    }, [lessonId, markVideoDone, onComplete, onProgressChange]);
 
     // ── onProgress: fires every ~1 s with { played, playedSeconds } ──────
     const handleProgress = useCallback(
@@ -50,6 +60,7 @@ const LessonVideoPlayer: React.FC<LessonVideoPlayerProps> = ({
 
             const pct = Math.round(state.played * 100);
             setProgress(pct);
+            onProgressChange?.(pct, false);
 
             // Complete if ≥ 90% played OR within 2 seconds of end
             if (
@@ -59,7 +70,7 @@ const LessonVideoPlayer: React.FC<LessonVideoPlayerProps> = ({
                 handleComplete();
             }
         },
-        [duration, handleComplete]
+        [duration, handleComplete, onProgressChange]
     );
 
     // ── onDuration ───────────────────────────────────────────────────────
@@ -85,7 +96,6 @@ const LessonVideoPlayer: React.FC<LessonVideoPlayerProps> = ({
 
     return (
         <div className="lesson-video-player">
-            {/* 16:9 video wrapper */}
             <div className="lesson-video-player__wrapper">
                 <ReactPlayer
                     url={videoUrl}
@@ -104,28 +114,6 @@ const LessonVideoPlayer: React.FC<LessonVideoPlayerProps> = ({
                         },
                     }}
                 />
-            </div>
-
-            {/* Progress indicator */}
-            <div className="lesson-video-player__status">
-                {isCompleted ? (
-                    <div className="lesson-video-player__completed">
-                        <span className="lesson-video-player__check">✅</span>
-                        <span>تم إكمال مشاهدة الفيديو</span>
-                    </div>
-                ) : (
-                    <div className="lesson-video-player__progress">
-                        <div className="lesson-video-player__bar-bg">
-                            <div
-                                className="lesson-video-player__bar-fill"
-                                style={{ width: `${progress}%` }}
-                            />
-                        </div>
-                        <span className="lesson-video-player__pct">
-                            تم مشاهدة {progress}% من الفيديو
-                        </span>
-                    </div>
-                )}
             </div>
         </div>
     );

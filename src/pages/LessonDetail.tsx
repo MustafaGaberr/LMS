@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { getLesson, getUnit } from '../data/sampleCourse';
@@ -112,6 +112,12 @@ const LessonDetail: React.FC = () => {
     );
     const hasVideo = !!(lesson?.video?.url);
 
+    // ── Video progress for external status display ─────────────────────────
+    const [videoProgress, setVideoProgress] = useState(videoDone ? 100 : 0);
+    const handleVideoProgress = useCallback((pct: number, completed: boolean) => {
+        setVideoProgress(completed ? 100 : pct);
+    }, []);
+
     return (
         <div className="lesson-detail-page">
             {/* ── Lesson title ─────────────────────────────────── */}
@@ -191,6 +197,7 @@ const LessonDetail: React.FC = () => {
                                     <LessonVideoPlayer
                                         videoUrl={lesson.video.url}
                                         lessonId={lesson.id}
+                                        onProgressChange={handleVideoProgress}
                                     />
                                 ) : (
                                     <p className="lesson-section-text">{lesson.sections.features}</p>
@@ -200,6 +207,30 @@ const LessonDetail: React.FC = () => {
                     </>
                 )}
             </div>
+
+            {/* ── Video progress status (outside content container) ── */}
+            {currentTab === 'features' && hasVideo && (
+                <div className="lesson-video-status">
+                    {videoDone ? (
+                        <div className="lesson-video-player__completed">
+                            <span className="lesson-video-player__check">✅</span>
+                            <span>تم إكمال مشاهدة الفيديو</span>
+                        </div>
+                    ) : (
+                        <div className="lesson-video-player__progress">
+                            <div className="lesson-video-player__bar-bg">
+                                <div
+                                    className="lesson-video-player__bar-fill"
+                                    style={{ width: `${videoProgress}%` }}
+                                />
+                            </div>
+                            <span className="lesson-video-player__pct">
+                                تم مشاهدة {videoProgress}% من الفيديو
+                            </span>
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* ── Next arrow footer (centered) ────────────────── */}
             {(() => {

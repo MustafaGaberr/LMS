@@ -4,10 +4,12 @@
     width: 100%;
 }
 
-/* 16:9 responsive wrapper */
+/* 4:3 responsive wrapper — taller for easier controls */
 .lesson-video-player__wrapper {
     position: relative;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 5;
+    max-width: 85%;
+    margin: 0 auto;
     border-radius: 12px;
     overflow: hidden;
     background: #000;
@@ -80,9 +82,11 @@
         opacity: 0;
         transform: scale(0.85);
     }
+
     60% {
         transform: scale(1.05);
     }
+
     100% {
         opacity: 1;
         transform: scale(1);
