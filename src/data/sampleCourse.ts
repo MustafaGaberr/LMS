@@ -360,7 +360,7 @@ export const course: Course = {
                         features:
                             'أنشطة التعلم عبر الإنترنت: البحث والاستكشاف، التعلم التشاركي عبر المشاريع المشتركة، التواصل مع الخبراء والمتخصصين، الوصول إلى المستودعات الأكاديمية (JSTOR, Google Scholar)، المحاكاة الافتراضية والمختبرات الإلكترونية، والدورات المفتوحة (MOOCs).',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtu.be/2tMMZqLglH0' },
                     mindMapData: mindMapDataMap['u2-l1'],
                     activityInstructions:
                         'اذكر خمسة استخدامات للإنترنت في التعليم مع مثال تطبيقي لكل استخدام. ثم ناقش إيجابية واحدة وسلبية واحدة لكل استخدام ذكرته في لا يزيد عن 200 كلمة.',
@@ -408,7 +408,7 @@ export const course: Course = {
                             }
                         ]
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtu.be/QVvW7I_C-_A' },
                     // u2-l2 has no specific mindMapData
                     activityInstructions:
                         'صنّف ثلاثة مقررات إلكترونية تعرفها (أو ابحث عنها) وفق أنواع المقررات الإلكترونية المذكورة. وضّح سبب تصنيفك لكل مقرر، مستعينًا بنسبة المحتوى الإلكتروني فيه.',
@@ -442,7 +442,7 @@ export const course: Course = {
                         features:
                             'مكونات المقرر الإلكتروني الفعّال: صفحة ترحيب وتعريف بالمقرر، نظرة عامة على الأهداف والمخرجات، وحدات محتوى منظّمة ومتسلسلة، أنشطة تفاعلية وواجبات قابلة للتسليم، اختبارات تقييم متنوعة، منتدى نقاش وتواصل، وموارد ومراجع إضافية.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtube.com/shorts/dsh3kTsJYVI' },
                     mindMapData: mindMapDataMap['u2-l3'],
                     activityInstructions:
                         'افتح أحد المقررات الإلكترونية المتاحة على Coursera أو edX واستعرض مكوناته. اكتب تقريرًا (200 كلمة) توضّح فيه المكونات التي وجدتها، وما الذي ينقص المقرر من مكونات الفعّالية.',
@@ -474,7 +474,7 @@ export const course: Course = {
                         features:
                             'مبادئ تصميم المقررات الإلكترونية: مبدأ التوافق (Alignment) بين الأهداف والأنشطة والتقييم، مبدأ التسلسل المنطقي للمحتوى، مبدأ التنوع في أساليب التقديم لمراعاة أنماط التعلم المختلفة، مبدأ التغذية الراجعة الفورية، ومبدأ إمكانية الوصول للجميع (Accessibility).',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtu.be/Z5XMTlDM1EY' },
                     mindMapData: mindMapDataMap['u2-l4'],
                     activityInstructions:
                         'صمّم خطة مبدئية لمقرر إلكتروني قصير (3 وحدات) في موضوع تختاره. حدّد: الأهداف، المحتوى الرئيسي لكل وحدة، نوع الأنشطة، وأسلوب التقييم. قدّم خطتك في جدول منظم.',
@@ -504,7 +504,7 @@ export const course: Course = {
                         features:
                             'معايير تقويم جودة المقررات الإلكترونية: معيار Quality Matters (QM) ذو الثمانية معايير الرئيسية، ومعيار iNACOL للتعليم الإلكتروني، ومعايير WCAG لإمكانية الوصول. تشمل المعايير: وضوح الأهداف، التوافق التعليمي، جودة التقييم، سهولة التنقل، وجودة الموارد والمواد التعليمية.',
                     },
-                    video: { type: 'youtube', url: 'https://www.youtube.com/embed/8mwtESaBbEo?si=yElZqn_wbQFSCX0c' },
+                    video: { type: 'youtube', url: 'https://youtu.be/9BhlGOcQvgA' },
                     mindMapData: mindMapDataMap['u2-l5'],
                     activityInstructions:
                         'ابحث عن نموذج ADDIE واشرح مراحله الخمس بأسلوبك الخاص مع مثال تطبيقي لكل مرحلة عند تصميم مقرر إلكتروني في مادة الرياضيات. قدّم إجابتك في لا يزيد عن 300 كلمة.',
