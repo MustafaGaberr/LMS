@@ -219,9 +219,9 @@ export const course: Course = {
                     id: 'u1-l3',
                     title: 'معايير اختيار وأنواع LMS',
                     sectionLabels: {
-                        concept: 'خطوات اختيار أنظمة إدارة التعليم الإلكتروني',
+                        concept: '',
                         importance: 'أنواع أنظمة إدارة التعليم الإلكتروني',
-                        features: '',
+                        features: 'خطوات اختيار أنظمة إدارة التعليم الإلكتروني',
                     },
                     sections: {
                         concept:
