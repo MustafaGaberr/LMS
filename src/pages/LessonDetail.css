@@ -228,15 +228,16 @@
     border-right: 6px solid #2d7d46;
 }
 
-.lesson-section-content--features {
-    /* background: #fef5e7; */
-    /* border-right: 6px solid #b45309; */
-    background: transparent;
-    box-shadow: none;
-    border-radius: 0;
-    padding: 0;
-    max-height: none;
-    overflow-y: visible;
+.lesson-section-content--features,
+.lesson-section-content--video,
+.lesson-section-content--mindmap {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    border-right: none !important;
 }
 
 .lesson-section-text {

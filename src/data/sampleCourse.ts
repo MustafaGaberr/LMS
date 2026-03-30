@@ -39,8 +39,12 @@ export interface Lesson {
     activityInstructions: string;
     /** Full intro message context for the quiz-intro page */
     quizIntroFullContent: string;
-    /** Mind map data for the "Importance" tab */
+    /** Mind map data for the "Importance" tab (or specified mindMapTab) */
     mindMapData?: MindMapNodeData[];
+    /** Which tab should show the video? Defaults to 'features' if not specified. */
+    videoTab?: 'concept' | 'importance' | 'features';
+    /** Which tab should show the mind map? Defaults to 'importance' if not specified. */
+    mindMapTab?: 'concept' | 'importance' | 'features';
 }
 
 export interface Unit {
@@ -305,6 +309,8 @@ export const course: Course = {
                         importance: 'نظام إدارة التعليم الإلكتروني "بلاك بورد" Blackboard.',
                         features: 'خصائص نظام "بلاك بورد" (Blackboard)',
                     },
+                    videoTab: 'importance',
+                    mindMapTab: 'features',
                     sections: {
                         concept:
                             'أسباب استخدام أنظمة إدارة التعلم مغلقة المصدر:\n1- الدعم الفني الاحترافي.\n2- الاستقرار والموثوقية.\n3- واجهات سهلة الاستخدام.\n4- التحديثات والابتكارات المضمونة.\n5- الأمان.',

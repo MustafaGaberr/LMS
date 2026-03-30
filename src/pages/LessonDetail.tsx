@@ -171,74 +171,89 @@ const LessonDetail: React.FC = () => {
             )}
 
             {/* ── Section content ──────────────────────────────── */}
-            <div className={`lesson-section-content lesson-section-content--${currentTab}`}>
-                {lesson.subSections?.[currentTab] ? (
-                    <div className="lesson-sub-text-wrap">
-                        <p className="lesson-section-text">
-                            {lesson.subSections[currentTab][subStep].content}
-                        </p>
-                    </div>
-                ) : (
-                    <>
-                        {currentTab === 'concept' && <p className="lesson-section-text">{lesson.sections.concept}</p>}
+            {(() => {
+                const videoTab = lesson.videoTab || 'features';
+                const mindMapTab = lesson.mindMapTab || 'importance';
+                const isVideoTab = currentTab === videoTab && hasVideo;
+                const isMindMapTab = currentTab === mindMapTab && mindMapNodes.length > 0;
 
-                        {currentTab === 'importance' && mindMapNodes.length > 0 && (
-                            <div className="mindmap-container">
-                                <LessonMindMap
-                                    centerLabel={lesson.sectionLabels?.importance || DEFAULT_TAB_LABELS.importance}
-                                    nodes={mindMapNodes}
-                                />
+                return (
+                    <div className={`lesson-section-content 
+                        lesson-section-content--${currentTab} 
+                        ${isVideoTab ? 'lesson-section-content--video' : ''} 
+                        ${isMindMapTab ? 'lesson-section-content--mindmap' : ''}
+                    `}>
+                        {lesson.subSections?.[currentTab] ? (
+                            <div className="lesson-sub-text-wrap">
+                                <p className="lesson-section-text">
+                                    {lesson.subSections[currentTab][subStep].content}
+                                </p>
                             </div>
-                        )}
-
-                        {currentTab === 'features' && (
+                        ) : (
                             <>
-                                {hasVideo ? (
+                                {isVideoTab ? (
                                     <LessonVideoPlayer
                                         videoUrl={lesson.video.url}
                                         lessonId={lesson.id}
                                         onProgressChange={handleVideoProgress}
                                     />
+                                ) : isMindMapTab ? (
+                                    <div className="mindmap-container">
+                                        <LessonMindMap
+                                            centerLabel={lesson.sectionLabels?.[currentTab] || DEFAULT_TAB_LABELS[currentTab]}
+                                            nodes={mindMapNodes}
+                                        />
+                                    </div>
                                 ) : (
-                                    <p className="lesson-section-text">{lesson.sections.features}</p>
+                                    <p className="lesson-section-text">{lesson.sections[currentTab]}</p>
                                 )}
                             </>
                         )}
-                    </>
-                )}
-            </div>
+                    </div>
+                );
+            })()}
 
             {/* ── Video progress status (outside content container) ── */}
-            {currentTab === 'features' && hasVideo && (
-                <div className="lesson-video-status">
-                    {videoDone ? (
-                        <div className="lesson-video-player__completed">
-                            <span className="lesson-video-player__check">✅</span>
-                            <span>تم إكمال مشاهدة الفيديو</span>
+            {(() => {
+                const videoTab = lesson.videoTab || 'features';
+                if (currentTab === videoTab && hasVideo) {
+                    return (
+                        <div className="lesson-video-status">
+                            {videoDone ? (
+                                <div className="lesson-video-player__completed">
+                                    <span className="lesson-video-player__check">✅</span>
+                                    <span>تم إكمال مشاهدة الفيديو</span>
+                                </div>
+                            ) : (
+                                <div className="lesson-video-player__progress">
+                                    <div className="lesson-video-player__bar-bg">
+                                        <div
+                                            className="lesson-video-player__bar-fill"
+                                            style={{ width: `${videoProgress}%` }}
+                                        />
+                                    </div>
+                                    <span className="lesson-video-player__pct">
+                                        تم مشاهدة {videoProgress}% من الفيديو
+                                    </span>
+                                </div>
+                            )}
                         </div>
-                    ) : (
-                        <div className="lesson-video-player__progress">
-                            <div className="lesson-video-player__bar-bg">
-                                <div
-                                    className="lesson-video-player__bar-fill"
-                                    style={{ width: `${videoProgress}%` }}
-                                />
-                            </div>
-                            <span className="lesson-video-player__pct">
-                                تم مشاهدة {videoProgress}% من الفيديو
-                            </span>
-                        </div>
-                    )}
-                </div>
-            )}
+                    );
+                }
+                return null;
+            })()}
 
             {/* ── Next arrow footer (centered) ────────────────── */}
             {(() => {
+                const videoTab = lesson.videoTab || 'features';
                 const isAtFinalStep =
                     step === availableTabs.length - 1 &&
                     (!lesson.subSections?.[availableTabs[step]] ||
                         subStep === (lesson.subSections?.[availableTabs[step]]?.length ?? 0) - 1);
-                const isNextDisabled = isAtFinalStep && hasVideo && !videoDone;
+                
+                // Disable the "Next" button ONLY if the current tab is the video tab and it's not finished
+                const isCurrentTabVideo = currentTab === videoTab;
+                const isNextDisabled = isCurrentTabVideo && hasVideo && !videoDone;
 
                 return (
                     <div className="lesson-nav-arrows">
