@@ -1,7 +1,12 @@
 import { create } from 'zustand';
-import { setItem, removeItem, clearAll, STORAGE_KEYS } from '../services/storage';
+import { setItem, getItem, removeItem, clearAll, STORAGE_KEYS } from '../services/storage';
 import type { Progress, LessonProgress, SurveyAggregates, SurveyLikertCounts, SavedChatMessage } from '../services/storage';
 import { course, getUnitIndex, getLessonIndex } from '../data/sampleCourse';
+
+// ─── User-scoped storage key helper ──────────────────────────────────────────
+function progressKey(userId: string | null): string {
+    return userId ? `${STORAGE_KEYS.PROGRESS}_${userId}` : STORAGE_KEYS.PROGRESS;
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -137,7 +142,8 @@ function patchLesson(
         },
     };
     set({ progress: next });
-    void setItem(STORAGE_KEYS.PROGRESS, next);
+    // Save under the user-scoped key so each user has independent progress
+    void setItem(progressKey(get().activeUserId), next);
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -178,6 +184,16 @@ export const useAppStore = create<AppState>((set, get) => ({
         const userId = username as UserId;
         const theme = user.theme;
 
+        // Load this user's own progress from storage, then hydrate
+        void getItem<Progress>(progressKey(userId)).then((savedProgress) => {
+            const safeProgress: Progress = {
+                completedLessons: savedProgress?.completedLessons ?? {},
+                surveyFilled: savedProgress?.surveyFilled ?? false,
+                surveyResponses: savedProgress?.surveyResponses,
+            };
+            set({ progress: safeProgress });
+        });
+
         set({ activeUserId: userId, theme });
         applyTheme(theme);
         void setItem(STORAGE_KEYS.ACTIVE_USER_ID, userId);
@@ -185,7 +201,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     logout() {
-        set({ activeUserId: null, theme: 'A' });
+        set({ activeUserId: null, theme: 'A', progress: { completedLessons: {}, surveyFilled: false } });
         applyTheme('A');
         void removeItem(STORAGE_KEYS.ACTIVE_USER_ID);
     },
@@ -267,7 +283,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         });
 
         void setItem(STORAGE_KEYS.SURVEY_AGGREGATES, nextAgg);
-        void setItem(STORAGE_KEYS.PROGRESS, nextProgress);
+        void setItem(progressKey(get().activeUserId), nextProgress);
     },
 
     resetSurveyStats() {

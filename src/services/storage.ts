@@ -105,15 +105,20 @@ export async function getOrCreateDeviceId(): Promise<string> {
 // ─── Load all persisted fields at boot ───────────────────────────────────────
 
 export async function initAppState(): Promise<PersistedAppState> {
-    const [activeUserId, settings, seenOnboarding, progress, deviceId, surveyAggregates] =
+    const [activeUserId, settings, seenOnboarding, deviceId, surveyAggregates] =
         await Promise.all([
             getItem<PersistedAppState['activeUserId']>(STORAGE_KEYS.ACTIVE_USER_ID),
             getItem<PersistedAppState['settings']>(STORAGE_KEYS.SETTINGS),
             getItem<boolean>(STORAGE_KEYS.SEEN_ONBOARDING),
-            getItem<Progress>(STORAGE_KEYS.PROGRESS),
             getItem<string>(STORAGE_KEYS.DEVICE_ID),
             getItem<SurveyAggregates>(STORAGE_KEYS.SURVEY_AGGREGATES),
         ]);
+
+    // Load progress scoped to the active user
+    const progressStorageKey = activeUserId
+        ? `${STORAGE_KEYS.PROGRESS}_${activeUserId}`
+        : STORAGE_KEYS.PROGRESS;
+    const progress = await getItem<Progress>(progressStorageKey);
 
     // Create device ID if not yet set
     const resolvedDeviceId =
@@ -133,3 +138,4 @@ export async function initAppState(): Promise<PersistedAppState> {
         surveyAggregates: surveyAggregates ?? {},
     };
 }
+
