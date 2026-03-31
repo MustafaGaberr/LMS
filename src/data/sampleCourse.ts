@@ -455,6 +455,7 @@ export const course: Course = {
                         features:
                             'مبادئ تصميم المقررات الإلكترونية: مبدأ التوافق (Alignment) بين الأهداف والأنشطة والتقييم، مبدأ التسلسل المنطقي للمحتوى، مبدأ التنوع في أساليب التقديم لمراعاة أنماط التعلم المختلفة، مبدأ التغذية الراجعة الفورية، ومبدأ إمكانية الوصول للجميع (Accessibility).',
                     },
+                    videoTab: 'concept',
                     video: { type: 'youtube', url: 'https://youtu.be/Z5XMTlDM1EY' },
                     mindMapData: mindMapDataMap['u2-l4'],
                     activityInstructions:
