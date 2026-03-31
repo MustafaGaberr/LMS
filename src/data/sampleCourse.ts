@@ -486,6 +486,7 @@ export const course: Course = {
                         features:
                             'معايير تقويم جودة المقررات الإلكترونية: معيار Quality Matters (QM) ذو الثمانية معايير الرئيسية، ومعيار iNACOL للتعليم الإلكتروني، ومعايير WCAG لإمكانية الوصول. تشمل المعايير: وضوح الأهداف، التوافق التعليمي، جودة التقييم، سهولة التنقل، وجودة الموارد والمواد التعليمية.',
                     },
+                    mindMapTab: 'concept',
                     video: { type: 'youtube', url: 'https://youtu.be/9BhlGOcQvgA' },
                     mindMapData: mindMapDataMap['u2-l5'],
                     activityInstructions:
