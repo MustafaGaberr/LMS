@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Send, CheckCircle, Lock } from 'lucide-react';
 import { getLesson, getQuizQuestions } from '../data/sampleCourse';
 import { quizIntroMessages } from '../data/quizData';
+import { detailedAnswers } from '../data/detailedAnswers';
 import { evaluate } from '../lib/evaluator/arAnswerEvaluator';
 import { useAppStore } from '../store/useAppStore';
 import type { SavedChatMessage } from '../services/storage';
@@ -151,23 +152,28 @@ const Chat: React.FC = () => {
         const q = questions[qIdx];
         const result = evaluate(text, q);
 
+        // Select answer based on user type: student2 gets detailed answers
+        const da = isFriendly ? detailedAnswers[q.id] : undefined;
+        const answerText = da?.modelAnswer ?? q.modelAnswer;
+        const explanationText = da?.explanation ?? q.explanation;
+
         // Verdict message
         let reactMsg = '';
         if (result.verdict === 'correct') {
             reactMsg = isFriendly
-                ? `رائع جدًا! ✅ أحسنت 🌟\n\n**الإجابة النموذجية:** ${q.modelAnswer}\n\n💡 ${q.explanation}`
-                : `إجابة صحيحة ✅\n\n**الإجابة النموذجية:** ${q.modelAnswer}\n\n${q.explanation}`;
+                ? `رائع جدًا! ✅ أحسنت 🌟\n\n**الإجابة النموذجية:** ${answerText}\n\n💡 ${explanationText}`
+                : `إجابة صحيحة ✅\n\n**الإجابة النموذجية:** ${answerText}\n\n${explanationText}`;
         } else if (result.verdict === 'close') {
             const hint = result.uncoveredGroupHints.length
                 ? `حاول إضافة: «${result.uncoveredGroupHints[0]}»\n\n`
                 : '';
             reactMsg = isFriendly
-                ? `إجابة قريبة جدًا 👍😊 ${hint}**الإجابة الأكمل:** ${q.modelAnswer}\n\n💡 ${q.explanation}`
-                : `إجابة مقبولة مع ملاحظات 🟡\n\n${hint}**الإجابة النموذجية:** ${q.modelAnswer}\n\n${q.explanation}`;
+                ? `إجابة قريبة جدًا 👍😊 ${hint}**الإجابة الأكمل:** ${answerText}\n\n💡 ${explanationText}`
+                : `إجابة مقبولة مع ملاحظات 🟡\n\n${hint}**الإجابة النموذجية:** ${answerText}\n\n${explanationText}`;
         } else {
             reactMsg = isFriendly
-                ? `لا بأس عليك! 💪 الإجابة الصحيحة هي:\n\n${q.modelAnswer}\n\n💡 ${q.explanation}`
-                : `الإجابة غير صحيحة ❌\n\nالإجابة الصحيحة: ${q.modelAnswer}\n\n${q.explanation}`;
+                ? `لا بأس عليك! 💪 الإجابة الصحيحة هي:\n\n${answerText}\n\n💡 ${explanationText}`
+                : `الإجابة غير صحيحة ❌\n\nالإجابة الصحيحة: ${answerText}\n\n${explanationText}`;
         }
 
         addBotMsgWithDelay(reactMsg, result.verdict);
