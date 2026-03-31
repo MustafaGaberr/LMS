@@ -229,8 +229,7 @@
 }
 
 .lesson-section-content--features,
-.lesson-section-content--video,
-.lesson-section-content--mindmap {
+.lesson-section-content--video {
     background: transparent !important;
     box-shadow: none !important;
     border-radius: 0 !important;
@@ -238,6 +237,16 @@
     max-height: none !important;
     overflow-y: visible !important;
     border-right: none !important;
+}
+
+.lesson-section-content--mindmap {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-right: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    max-height: 55dvh;
+    overflow-y: auto;
 }
 
 .lesson-section-text {
