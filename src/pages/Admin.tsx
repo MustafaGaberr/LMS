@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   FileText,
   Image as ImageIcon,
@@ -8,13 +8,13 @@ import {
   Search,
   Filter,
   Calendar,
-  BookOpen,
   Loader,
+  RefreshCw,
 } from 'lucide-react';
 import {
-  getUploadedFiles,
-  deleteUploadedFile,
-  type UploadedFile,
+  fetchFilesFromDrive,
+  deleteFileFromDrive,
+  type DriveFile,
 } from '../utils/fileUpload';
 import './Admin.css';
 
@@ -45,48 +45,59 @@ function MimeIcon({ type }: { type: string }) {
 }
 
 const Admin: React.FC = () => {
-  const [files, setFiles] = useState<UploadedFile[]>(getUploadedFiles);
+  const [files, setFiles] = useState<DriveFile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLesson, setSelectedLesson] = useState<string>('all');
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  // Derive unique lesson IDs for filtering
-  const lessonIds = useMemo(() => {
-    const ids = [...new Set(files.map((f) => f.lessonId))];
-    ids.sort();
-    return ids;
-  }, [files]);
+  // Fetch files from Google Drive on mount
+  const loadFiles = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const driveFiles = await fetchFilesFromDrive();
+      setFiles(driveFiles);
+    } catch (err) {
+      console.error(err);
+      setError('فشل في تحميل الملفات. تأكد من صحة رابط الـ API.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // Filtered & sorted files
+  useEffect(() => {
+    loadFiles();
+  }, []);
+
+  // Filtered files
   const filteredFiles = useMemo(() => {
     let result = [...files];
 
-    // Lesson filter
-    if (selectedLesson !== 'all') {
-      result = result.filter((f) => f.lessonId === selectedLesson);
-    }
-
-    // Search
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
       result = result.filter(
         (f) =>
           f.name.toLowerCase().includes(q) ||
-          f.lessonId.toLowerCase().includes(q) ||
           f.type.toLowerCase().includes(q),
       );
     }
 
-    // Newest first
-    result.sort((a, b) => b.uploadedAt - a.uploadedAt);
     return result;
-  }, [files, searchQuery, selectedLesson]);
+  }, [files, searchQuery]);
 
-  const handleDelete = async (id: string) => {
-    setDeletingId(id);
-    await deleteUploadedFile(id);
-    setFiles(getUploadedFiles());
-    setDeletingId(null);
+  const handleDelete = async (fileId: string) => {
+    setDeletingId(fileId);
+    try {
+      await deleteFileFromDrive(fileId);
+      // Remove from local state immediately
+      setFiles((prev) => prev.filter((f) => f.fileId !== fileId));
+    } catch (err) {
+      console.error(err);
+      alert('فشل في حذف الملف');
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   const handleOpen = (url: string) => {
@@ -104,7 +115,7 @@ const Admin: React.FC = () => {
           <div>
             <h1 className="admin-header__title">لوحة إدارة الملفات</h1>
             <p className="admin-header__subtitle">
-              {files.length} ملف مرفوع
+              {loading ? 'جارٍ التحميل…' : `${files.length} ملف في Google Drive`}
             </p>
           </div>
         </div>
@@ -119,98 +130,106 @@ const Admin: React.FC = () => {
             id="admin-search-input"
             type="text"
             className="admin-search__input"
-            placeholder="بحث بالاسم أو الدرس…"
+            placeholder="بحث بالاسم…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        {/* Lesson filter */}
-        {lessonIds.length > 1 && (
-          <div className="admin-filter">
-            <Filter size={14} className="admin-filter__icon" />
-            <select
-              id="admin-lesson-filter"
-              className="admin-filter__select"
-              value={selectedLesson}
-              onChange={(e) => setSelectedLesson(e.target.value)}
-            >
-              <option value="all">كل الدروس</option>
-              {lessonIds.map((id) => (
-                <option key={id} value={id}>
-                  {id}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        {/* Refresh */}
+        <button
+          className="admin-refresh-btn"
+          onClick={loadFiles}
+          disabled={loading}
+        >
+          <RefreshCw size={16} className={loading ? 'spin' : ''} />
+          <span>تحديث</span>
+        </button>
       </div>
 
-      {/* Files grid */}
-      {filteredFiles.length === 0 ? (
-        <div className="admin-empty">
-          <div className="admin-empty__icon-wrap">
-            <FolderOpen size={48} />
-          </div>
-          <h2 className="admin-empty__title">
-            {files.length === 0 ? 'لا توجد ملفات بعد' : 'لا توجد نتائج'}
-          </h2>
-          <p className="admin-empty__text">
-            {files.length === 0
-              ? 'سيتم عرض الملفات المرفوعة هنا تلقائيًا.'
-              : 'جرّب تغيير معايير البحث أو الفلتر.'}
-          </p>
+      {/* Loading */}
+      {loading && (
+        <div className="admin-loading">
+          <Loader size={32} className="spin" />
+          <p>جارٍ تحميل الملفات من Google Drive…</p>
         </div>
-      ) : (
-        <ul className="admin-file-list">
-          {filteredFiles.map((file) => (
-            <li key={file.id} className="admin-file-card">
-              {/* Type badge */}
-              <div className="admin-file-card__badge">
-                <MimeIcon type={file.type} />
-                <span className="admin-file-card__type-label">{mimeLabel(file.type)}</span>
-              </div>
+      )}
 
-              {/* Info */}
-              <div className="admin-file-card__body">
-                <p className="admin-file-card__name" title={file.name}>
-                  {file.name}
-                </p>
+      {/* Error */}
+      {error && !loading && (
+        <div className="admin-error">
+          <p>{error}</p>
+          <button className="admin-error__retry" onClick={loadFiles}>
+            إعادة المحاولة
+          </button>
+        </div>
+      )}
 
-                <div className="admin-file-card__meta">
-                  <span className="admin-file-card__meta-item">
-                    <BookOpen size={12} />
-                    {file.lessonId}
-                  </span>
-                  <span className="admin-file-card__meta-item">
-                    <Calendar size={12} />
-                    {formatDate(file.uploadedAt)}
-                  </span>
-                </div>
+      {/* Files */}
+      {!loading && !error && (
+        <>
+          {filteredFiles.length === 0 ? (
+            <div className="admin-empty">
+              <div className="admin-empty__icon-wrap">
+                <FolderOpen size={48} />
               </div>
+              <h2 className="admin-empty__title">
+                {files.length === 0 ? 'لا توجد ملفات بعد' : 'لا توجد نتائج'}
+              </h2>
+              <p className="admin-empty__text">
+                {files.length === 0
+                  ? 'سيتم عرض الملفات المرفوعة هنا تلقائيًا.'
+                  : 'جرّب تغيير معايير البحث.'}
+              </p>
+            </div>
+          ) : (
+            <ul className="admin-file-list">
+              {filteredFiles.map((file) => (
+                <li key={file.fileId} className="admin-file-card">
+                  {/* Type badge */}
+                  <div className="admin-file-card__badge">
+                    <MimeIcon type={file.type} />
+                    <span className="admin-file-card__type-label">{mimeLabel(file.type)}</span>
+                  </div>
 
-              {/* Actions */}
-              <div className="admin-file-card__actions">
-                <button
-                  className="admin-file-card__action admin-file-card__action--open"
-                  onClick={() => handleOpen(file.url)}
-                  title="فتح الملف"
-                >
-                  <ExternalLink size={16} />
-                  <span>فتح</span>
-                </button>
-                <button
-                  className="admin-file-card__action admin-file-card__action--delete"
-                  onClick={() => handleDelete(file.id)}
-                  disabled={deletingId === file.id}
-                  title="حذف"
-                >
-                  {deletingId === file.id ? <Loader size={16} className="spin" /> : <Trash2 size={16} />}
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+                  {/* Info */}
+                  <div className="admin-file-card__body">
+                    <p className="admin-file-card__name" title={file.name}>
+                      {file.name}
+                    </p>
+
+                    <div className="admin-file-card__meta">
+                      <span className="admin-file-card__meta-item">
+                        <Calendar size={12} />
+                        {formatDate(file.uploadedAt)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="admin-file-card__actions">
+                    <button
+                      className="admin-file-card__action admin-file-card__action--open"
+                      onClick={() => handleOpen(file.url)}
+                      title="فتح الملف"
+                    >
+                      <ExternalLink size={16} />
+                      <span>فتح</span>
+                    </button>
+                    <button
+                      className="admin-file-card__action admin-file-card__action--delete"
+                      onClick={() => handleDelete(file.fileId)}
+                      disabled={deletingId === file.fileId}
+                      title="حذف من Drive"
+                    >
+                      {deletingId === file.fileId ? <Loader size={16} className="spin" /> : <Trash2 size={16} />}
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </div>
   );

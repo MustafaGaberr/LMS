@@ -2,7 +2,7 @@
 // Handles base64 conversion, Apps Script upload, and localStorage persistence.
 
 // ⬇️ PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ⬇️
-const APPS_SCRIPT_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbwUeeK4J66IQvt8hXEOo-KO_GP9Xpo1muNnvAUJUOdZLPY63VBFEMbVDE5zSl3SX4IH/exec';
+const APPS_SCRIPT_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbyt9flp1X1lQl02YGjFkVeBAhMZbV_uAbbK4UIQOipiQsWqtYUnNYe6AHiweRVyvM2d/exec';
 // ⬆️ PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ⬆️
 
 /** Shape of a stored uploaded-file record. */
@@ -86,7 +86,7 @@ export async function uploadFile(
   return record;
 }
 
-// ─── localStorage helpers ──────────────────────────────────────────────────────
+// ─── localStorage helpers (used by upload flow) ────────────────────────────────
 
 const STORAGE_KEY = 'uploaded_files';
 
@@ -107,34 +107,51 @@ export function saveUploadedFile(record: UploadedFile): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(files));
 }
 
+// ─── Google Drive API helpers (used by Admin page) ─────────────────────────────
+
+/** Shape of a file record returned from the Drive listing API. */
+export interface DriveFile {
+  fileId: string;
+  name: string;
+  type: string;
+  url: string;
+  uploadedAt: number;
+}
+
+/** Fetch all files from the Google Drive folder via Apps Script GET. */
+export async function fetchFilesFromDrive(): Promise<DriveFile[]> {
+  const response = await fetch(APPS_SCRIPT_UPLOAD_URL, {
+    method: 'GET',
+    redirect: 'follow',
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch files: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error(data.error || 'Failed to fetch files');
+  }
+
+  return data.files as DriveFile[];
+}
+
 /** Delete a file from Google Drive via the Apps Script endpoint. */
-async function deleteFileFromDrive(fileId: string): Promise<void> {
+export async function deleteFileFromDrive(fileId: string): Promise<void> {
   const params = new URLSearchParams();
   params.append('action', 'delete');
   params.append('fileId', fileId);
 
-  await fetch(APPS_SCRIPT_UPLOAD_URL, {
+  const response = await fetch(APPS_SCRIPT_UPLOAD_URL, {
     method: 'POST',
     body: params,
     redirect: 'follow',
   });
-}
 
-/** Delete a single record by id — removes from Drive + localStorage. */
-export async function deleteUploadedFile(id: string): Promise<void> {
-  const files = getUploadedFiles();
-  const target = files.find((f) => f.id === id);
-
-  // Delete from Google Drive first
-  if (target?.fileId) {
-    try {
-      await deleteFileFromDrive(target.fileId);
-    } catch (err) {
-      console.error('Failed to delete from Drive:', err);
-    }
+  if (!response.ok) {
+    throw new Error(`Delete failed: ${response.status}`);
   }
-
-  // Always remove from localStorage
-  const remaining = files.filter((f) => f.id !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(remaining));
 }
+
