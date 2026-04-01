@@ -6,7 +6,6 @@ import {
   Trash2,
   FolderOpen,
   Search,
-  Filter,
   Calendar,
   Loader,
   RefreshCw,
