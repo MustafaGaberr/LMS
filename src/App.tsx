@@ -26,6 +26,7 @@ import Survey from './pages/Survey';
 import SurveyResults from './pages/SurveyResults';
 import Roadmap from './pages/Roadmap';
 import Settings from './pages/Settings';
+import Admin from './pages/Admin';
 
 // ─── Protected route ────────────────────────────────────────────────────────
 
@@ -45,6 +46,7 @@ const AppRoutes: React.FC = () => {
       <Routes>
         {/* Public */}
         <Route path="/" element={<Landing />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
 
         {/* Protected */}
