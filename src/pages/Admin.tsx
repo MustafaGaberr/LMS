@@ -9,6 +9,7 @@ import {
   Filter,
   Calendar,
   BookOpen,
+  Loader,
 } from 'lucide-react';
 import {
   getUploadedFiles,
@@ -47,6 +48,7 @@ const Admin: React.FC = () => {
   const [files, setFiles] = useState<UploadedFile[]>(getUploadedFiles);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLesson, setSelectedLesson] = useState<string>('all');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Derive unique lesson IDs for filtering
   const lessonIds = useMemo(() => {
@@ -80,9 +82,11 @@ const Admin: React.FC = () => {
     return result;
   }, [files, searchQuery, selectedLesson]);
 
-  const handleDelete = (id: string) => {
-    deleteUploadedFile(id);
+  const handleDelete = async (id: string) => {
+    setDeletingId(id);
+    await deleteUploadedFile(id);
     setFiles(getUploadedFiles());
+    setDeletingId(null);
   };
 
   const handleOpen = (url: string) => {
@@ -198,9 +202,10 @@ const Admin: React.FC = () => {
                 <button
                   className="admin-file-card__action admin-file-card__action--delete"
                   onClick={() => handleDelete(file.id)}
+                  disabled={deletingId === file.id}
                   title="حذف"
                 >
-                  <Trash2 size={16} />
+                  {deletingId === file.id ? <Loader size={16} className="spin" /> : <Trash2 size={16} />}
                 </button>
               </div>
             </li>
