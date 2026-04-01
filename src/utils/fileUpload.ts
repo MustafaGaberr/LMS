@@ -46,14 +46,16 @@ export async function uploadFile(
 ): Promise<UploadedFile> {
   const base64 = await fileToBase64(file);
 
+  // Apps Script reads e.parameter — must send as URL-encoded form data
+  const params = new URLSearchParams();
+  params.append('file', base64);
+  params.append('name', file.name);
+  params.append('type', file.type);
+
   const response = await fetch(APPS_SCRIPT_UPLOAD_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      file: base64,
-      name: file.name,
-      type: file.type,
-    }),
+    body: params,
+    redirect: 'follow',        // Apps Script responds with 302 redirects
   });
 
   if (!response.ok) {
