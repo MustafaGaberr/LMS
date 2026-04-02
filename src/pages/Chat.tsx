@@ -140,22 +140,25 @@ const Chat: React.FC = () => {
         const explanationText = da?.explanation ?? q.explanation;
 
         // Verdict message
+        // Build video link suffix if available
+        const videoSuffix = q.videoUrl ? `\n\n📺 شاهد الفيديو التوضيحي:\n${q.videoUrl}` : '';
+
         let reactMsg = '';
         if (result.verdict === 'correct') {
             reactMsg = isFriendly
-                ? `رائع جدًا! ✅ أحسنت 🌟\n\n**الإجابة النموذجية:** ${answerText}\n\n💡 ${explanationText}`
-                : `إجابة صحيحة ✅\n\n**الإجابة النموذجية:** ${answerText}\n\n${explanationText}`;
+                ? `رائع جدًا! ✅ أحسنت 🌟\n\n**الإجابة النموذجية:** ${answerText}\n\n💡 ${explanationText}${videoSuffix}`
+                : `إجابة صحيحة ✅\n\n**الإجابة النموذجية:** ${answerText}\n\n${explanationText}${videoSuffix}`;
         } else if (result.verdict === 'close') {
             const hint = result.uncoveredGroupHints.length
                 ? `حاول إضافة: «${result.uncoveredGroupHints[0]}»\n\n`
                 : '';
             reactMsg = isFriendly
-                ? `إجابة قريبة جدًا 👍😊 ${hint}**الإجابة الأكمل:** ${answerText}\n\n💡 ${explanationText}`
-                : `إجابة مقبولة مع ملاحظات 🟡\n\n${hint}**الإجابة النموذجية:** ${answerText}\n\n${explanationText}`;
+                ? `إجابة قريبة جدًا 👍😊 ${hint}**الإجابة الأكمل:** ${answerText}\n\n💡 ${explanationText}${videoSuffix}`
+                : `إجابة مقبولة مع ملاحظات 🟡\n\n${hint}**الإجابة النموذجية:** ${answerText}\n\n${explanationText}${videoSuffix}`;
         } else {
             reactMsg = isFriendly
-                ? `لا بأس عليك! 💪 الإجابة الصحيحة هي:\n\n${answerText}\n\n💡 ${explanationText}`
-                : `الإجابة غير صحيحة ❌\n\nالإجابة الصحيحة: ${answerText}\n\n${explanationText}`;
+                ? `لا بأس عليك! 💪 الإجابة الصحيحة هي:\n\n${answerText}\n\n💡 ${explanationText}${videoSuffix}`
+                : `الإجابة غير صحيحة ❌\n\nالإجابة الصحيحة: ${answerText}\n\n${explanationText}${videoSuffix}`;
         }
 
         addBotMsgWithDelay(reactMsg, result.verdict);
@@ -261,16 +264,24 @@ const Chat: React.FC = () => {
                                 }`}
                         >
                             {/* Render newlines in bot messages */}
-                            {msg.text.split('\n').map((line, i) => (
-                                <span key={i}>
-                                    {line.startsWith('**') && line.endsWith('**') ? (
-                                        <strong>{line.slice(2, -2)}</strong>
-                                    ) : (
-                                        line
-                                    )}
-                                    {i < msg.text.split('\n').length - 1 && <br />}
-                                </span>
-                            ))}
+                            {msg.text.split('\n').map((line, i) => {
+                                // Check if line is a URL
+                                const isUrl = /^https?:\/\/\S+$/.test(line.trim());
+                                return (
+                                    <span key={i}>
+                                        {isUrl ? (
+                                            <a href={line.trim()} target="_blank" rel="noopener noreferrer" className="chat-link">
+                                                {line.trim()}
+                                            </a>
+                                        ) : line.startsWith('**') && line.endsWith('**') ? (
+                                            <strong>{line.slice(2, -2)}</strong>
+                                        ) : (
+                                            line
+                                        )}
+                                        {i < msg.text.split('\n').length - 1 && <br />}
+                                    </span>
+                                );
+                            })}
                             {msg.verdict && (
                                 <div className="chat-verdict-badge">
                                     {msg.verdict === 'correct' && '✅ صحيح'}

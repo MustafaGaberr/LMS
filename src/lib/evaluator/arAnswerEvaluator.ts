@@ -15,6 +15,8 @@ export interface QuizQuestion {
     modelAnswer: string;
     explanation: string;
     accept?: AcceptCriteria;
+    /** Optional supporting video URL shown with the bot's feedback */
+    videoUrl?: string;
 }
 
 export interface EvaluationResult {

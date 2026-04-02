@@ -209,6 +209,20 @@
     background: rgba(0, 0, 0, 0.06);
 }
 
+/* ── Chat links (video URLs) ─────────────────────────────── */
+.chat-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    word-break: break-all;
+    font-weight: 600;
+    transition: opacity var(--transition-fast);
+}
+
+.chat-link:hover {
+    opacity: 0.75;
+}
+
 /* ── Footer ──────────────────────────────────────────────── */
 .chat-footer {
     flex-shrink: 0;
