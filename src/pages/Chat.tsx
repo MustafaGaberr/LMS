@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Send, CheckCircle, Lock } from 'lucide-react';
 import { getLesson, getQuizQuestions } from '../data/sampleCourse';
-import { quizIntroMessages } from '../data/quizData';
 import { detailedAnswers } from '../data/detailedAnswers';
 import { evaluate } from '../lib/evaluator/arAnswerEvaluator';
 import { useAppStore } from '../store/useAppStore';
@@ -76,33 +75,16 @@ const Chat: React.FC = () => {
         if (isReadOnly || !lesson || questions.length === 0 || messages.length > 0 || scheduledRef.current) return;
         scheduledRef.current = true;
 
-        const greeting = isFriendly
-            ? `أهلاً! 🎉 جاهز نبدأ أسئلة درس "${lesson.title}"؟ خذ وقتك بالإجابة 😊`
-            : `مرحبًا. سنبدأ التقييم الكتابي لدرس: "${lesson.title}". يُرجى الإجابة بصياغة كاملة.`;
+        const greeting = 'مرحباً. أنا هنا علشان أساعدك، وهنبدأ مع بعض بأسئلة بسيطة تساعدنا نكمل بشكل أفضل ونوصل لأفضل نتيجة ممكنة.';
 
         addBotMsgWithDelay(greeting);
 
-        const introMsg = quizIntroMessages[lessonId];
-        if (introMsg) {
-            // Send intro after greeting, then first question after intro
-            const tIntro = setTimeout(() => {
-                addBotMsgWithDelay(introMsg);
-                timeoutsRef.current = timeoutsRef.current.filter(x => x !== tIntro);
-            }, 1200);
-            timeoutsRef.current.push(tIntro);
-
-            const t1 = setTimeout(() => {
-                addBotMsgWithDelay(`س١: ${questions[0].question}`);
-                timeoutsRef.current = timeoutsRef.current.filter(x => x !== t1);
-            }, 2400);
-            timeoutsRef.current.push(t1);
-        } else {
-            const t1 = setTimeout(() => {
-                addBotMsgWithDelay(`س١: ${questions[0].question}`);
-                timeoutsRef.current = timeoutsRef.current.filter(x => x !== t1);
-            }, 1200);
-            timeoutsRef.current.push(t1);
-        }
+        // Send first question after greeting
+        const t1 = setTimeout(() => {
+            addBotMsgWithDelay(`س١: ${questions[0].question}`);
+            timeoutsRef.current = timeoutsRef.current.filter(x => x !== t1);
+        }, 1200);
+        timeoutsRef.current.push(t1);
 
         return () => {
             timeoutsRef.current.forEach(clearTimeout);
