@@ -141,7 +141,7 @@ const Chat: React.FC = () => {
 
         // Verdict message
         // Build video link suffix — only for student2 (detailed/friendly mode)
-        const videoSuffix = isFriendly && q.videoUrl ? `\n\n📺 شاهد الفيديو التوضيحي:\n${q.videoUrl}` : '';
+        const videoSuffix = isFriendly && q.videoUrl ? `\n\n🎬 وذلك رابط يدعم الإجابة:\n${q.videoUrl}` : '';
 
         let reactMsg = '';
         if (result.verdict === 'correct') {
