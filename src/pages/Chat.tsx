@@ -140,8 +140,8 @@ const Chat: React.FC = () => {
         const explanationText = da?.explanation ?? q.explanation;
 
         // Verdict message
-        // Build video link suffix if available
-        const videoSuffix = q.videoUrl ? `\n\n📺 شاهد الفيديو التوضيحي:\n${q.videoUrl}` : '';
+        // Build video link suffix — only for student2 (detailed/friendly mode)
+        const videoSuffix = isFriendly && q.videoUrl ? `\n\n📺 شاهد الفيديو التوضيحي:\n${q.videoUrl}` : '';
 
         let reactMsg = '';
         if (result.verdict === 'correct') {
