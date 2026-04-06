@@ -326,6 +326,170 @@
     animation: surveySlideInNext 0.3s ease-out;
 }
 
+/* ── Scale Indicator Badges ───────────────────────────────── */
+.survey-scale-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.survey-scale-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--color-surface-2);
+    border: 2px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    color: var(--color-text-3);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.survey-scale-badge--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    box-shadow: 0 4px 16px rgba(var(--color-primary-rgb, 99, 102, 241), 0.35);
+}
+
+.survey-scale-badge--done {
+    background: #10b981;
+    border-color: #10b981;
+    color: white;
+}
+
+.survey-scale-badge__emoji {
+    font-size: 16px;
+}
+
+.survey-scale-badge__check {
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.survey-scale-connector {
+    width: 32px;
+    height: 2px;
+    background: var(--color-border);
+}
+
+/* ── Transition Screen ───────────────────────────────────── */
+.survey-page--transition {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.survey-transition {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6, 2.5rem) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.08));
+    max-width: 420px;
+    width: 100%;
+    animation: surveySlideInNext 0.4s ease-out;
+}
+
+.survey-transition__check {
+    font-size: 56px;
+    animation: transitionBounce 0.6s ease-out;
+}
+
+@keyframes transitionBounce {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.survey-transition__title {
+    font-size: var(--font-size-lg);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.survey-transition__subtitle {
+    font-size: var(--font-size-base);
+    color: var(--color-text-2);
+    margin: 0;
+}
+
+.survey-transition__stats {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: #10b981;
+    font-weight: 700;
+}
+
+.survey-transition__stats-dot {
+    opacity: 0.4;
+}
+
+.survey-transition__divider {
+    width: 80%;
+    height: 1px;
+    background: var(--color-border);
+    margin: var(--space-2) 0;
+}
+
+.survey-transition__next-label {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--color-text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.survey-transition__next-scale {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-4);
+    width: 100%;
+    text-align: right;
+}
+
+.survey-transition__next-emoji {
+    font-size: 36px;
+}
+
+.survey-transition__next-title {
+    font-size: var(--font-size-base);
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+}
+
+.survey-transition__next-info {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-3);
+    font-weight: 600;
+    margin: var(--space-1) 0 0;
+}
+
+.survey-transition__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+    margin-top: var(--space-2);
+}
+
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 400px) {
     .survey-likert {
@@ -343,5 +507,13 @@
     .survey-section-header {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .survey-scale-badge__label {
+        font-size: 9px;
+    }
+
+    .survey-scale-badge {
+        padding: var(--space-1) var(--space-2);
     }
 }
