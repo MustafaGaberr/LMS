@@ -3,7 +3,7 @@
 
 // Uses the same URL as fileUpload.ts
 const APPS_SCRIPT_URL =
-    'https://script.google.com/macros/s/AKfycbxmA7vnwhYeVQWQY4R2J5_aDo65cCZ0APoaR_wK-N9X0Gaqz_dkjXjboT_-VZPhPtB_/exec';
+    'https://script.google.com/macros/s/AKfycbzPt6GM7haiouXgvFDPumYpO7hj5p7VwTdzOiH6xqDJvyYDbmeoA6I06M2uebKC61g/exec';
 
 /**
  * Submit both psychological scale answers to Google Sheets.
