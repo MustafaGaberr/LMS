@@ -441,12 +441,6 @@ const Survey: React.FC = () => {
 
             {/* Navigation */}
             <div className="survey-nav">
-                {currentStep > 0 && (
-                    <Button variant="secondary" size="lg" onClick={goPrev} disabled={isSubmitting}>
-                        ← السابق
-                    </Button>
-                )}
-                <div className="survey-nav__spacer" />
                 {isLastSection ? (
                     <Button
                         variant="primary"
@@ -464,6 +458,12 @@ const Survey: React.FC = () => {
                         onClick={goNext}
                     >
                         التالي →
+                    </Button>
+                )}
+                <div className="survey-nav__spacer" />
+                {currentStep > 0 && (
+                    <Button variant="secondary" size="lg" onClick={goPrev} disabled={isSubmitting}>
+                        ← السابق
                     </Button>
                 )}
             </div>
