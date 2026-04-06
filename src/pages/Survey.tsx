@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { Button } from '../components/Button';
+import { submitSurvey } from '../api/surveyApi';
 import './Survey.css';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -173,6 +174,13 @@ const QuestionCard: React.FC<{
             <span className="survey-q__num">{index}</span>
             {question.text}
         </p>
+        {/* Fixed labels row */}
+        <div className="survey-likert-labels">
+            {LIKERT_OPTIONS.map((opt) => (
+                <span key={opt.value} className="survey-likert-labels__item">{opt.label}</span>
+            ))}
+        </div>
+        {/* Numbered circle buttons */}
         <div className="survey-likert">
             {LIKERT_OPTIONS.map((opt) => (
                 <button
@@ -182,7 +190,7 @@ const QuestionCard: React.FC<{
                     disabled={readonly}
                     type="button"
                 >
-                    <span className="survey-likert-btn__label">{opt.label}</span>
+                    <span className="survey-likert-btn__val">{opt.value}</span>
                 </button>
             ))}
         </div>
@@ -215,6 +223,8 @@ const Survey: React.FC = () => {
     );
     const [currentStep, setCurrentStep] = useState(0);
     const [submitted, setSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
     const [animDir, setAnimDir] = useState<'next' | 'prev'>('next');
     const [animKey, setAnimKey] = useState(0);
 
@@ -272,11 +282,31 @@ const Survey: React.FC = () => {
     const isLastSection = currentStep === totalGlobalSections - 1;
     const allAnswered = totalAnswered >= totalQuestions;
 
-    const handleSubmit = useCallback(() => {
-        if (!allAnswered) return;
-        submitSurveyResponse(responses);
-        setSubmitted(true);
-    }, [allAnswered, responses, submitSurveyResponse]);
+    const handleSubmit = useCallback(async () => {
+        if (!allAnswered || isSubmitting) return;
+        setIsSubmitting(true);
+        setSubmitError(null);
+
+        // Build ordered arrays from responses keyed by question IDs
+        const scale1Answers = COGNITIVE_SCALE.sections
+            .flatMap((s) => s.questions)
+            .map((q) => responses[q.id] ?? 0);
+        const scale2Answers = SELF_EFFICACY_SCALE.sections
+            .flatMap((s) => s.questions)
+            .map((q) => responses[q.id] ?? 0);
+
+        try {
+            await submitSurvey(scale1Answers, scale2Answers);
+            // Also save locally
+            submitSurveyResponse(responses);
+            setSubmitted(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch {
+            setSubmitError('حدث خطأ أثناء الإرسال، حاول مرة أخرى');
+        } finally {
+            setIsSubmitting(false);
+        }
+    }, [allAnswered, isSubmitting, responses, submitSurveyResponse]);
 
     // ── Guard: must complete all lessons first ────────────────────────
     if (!isAllCourseDone()) {
@@ -340,7 +370,7 @@ const Survey: React.FC = () => {
                                                     question={q}
                                                     index={qCounter}
                                                     selectedValue={responses[q.id]}
-                                                    onSelect={() => {}}
+                                                    onSelect={() => { }}
                                                     readonly
                                                 />
                                             );
@@ -412,7 +442,7 @@ const Survey: React.FC = () => {
             {/* Navigation */}
             <div className="survey-nav">
                 {currentStep > 0 && (
-                    <Button variant="secondary" size="lg" onClick={goPrev}>
+                    <Button variant="secondary" size="lg" onClick={goPrev} disabled={isSubmitting}>
                         ← السابق
                     </Button>
                 )}
@@ -421,10 +451,10 @@ const Survey: React.FC = () => {
                     <Button
                         variant="primary"
                         size="lg"
-                        disabled={!allAnswered}
+                        disabled={!allAnswered || isSubmitting}
                         onClick={handleSubmit}
                     >
-                        إرسال الاستبيان 📤
+                        {isSubmitting ? 'جارٍ الإرسال...' : 'إرسال الاستبيان 📤'}
                     </Button>
                 ) : (
                     <Button
@@ -437,6 +467,13 @@ const Survey: React.FC = () => {
                     </Button>
                 )}
             </div>
+
+            {/* Error message */}
+            {submitError && (
+                <div className="survey-error">
+                    ⚠️ {submitError}
+                </div>
+            )}
         </div>
     );
 };
