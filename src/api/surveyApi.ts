@@ -1,34 +1,44 @@
 // ─── Survey API ────────────────────────────────────────────────────────────────
+// Submits survey responses to Google Sheets via Google Apps Script.
+//
+// KEY INSIGHT: Google Apps Script reads POST data via e.parameter which ONLY
+// works with URL-encoded form data (URLSearchParams). FormData sends multipart
+// which Apps Script cannot parse via e.parameter — it arrives as undefined.
+//
+// This matches the working pattern used in fileUpload.ts.
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2UjFbh0x8lIwAdLQF7OLLKFbRFlUu72pgJb4IX4X2B3SLlpxe8CfqUYvngo9gmu0U/exec';
+const APPS_SCRIPT_URL =
+    'https://script.google.com/macros/s/AKfycbw2UjFbh0x8lIwAdLQF7OLLKFbRFlUu72pgJb4IX4X2B3SLlpxe8CfqUYvngo9gmu0U/exec';
 
+/**
+ * Submit both psychological scale answers to Google Sheets.
+ */
 export async function submitSurvey(
     scale1: number[],
     scale2: number[],
 ): Promise<void> {
-    // استخدمنا FormData بدل URLSearchParams لأنها متوافقة أكتر مع Google Apps Script ومفيهاش مشاكل CORS
-    const formData = new FormData();
-    formData.append('action', 'survey');
-    formData.append('scale1', scale1.join(','));
-    formData.append('scale2', scale2.join(','));
+    // ✅ URLSearchParams — same encoding as working file upload
+    // Apps Script reads e.parameter which requires application/x-www-form-urlencoded
+    const params = new URLSearchParams();
+    params.append('action', 'survey');
+    params.append('scale1', scale1.join(','));
+    params.append('scale2', scale2.join(','));
+    params.append('submittedAt', new Date().toISOString());
 
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            body: formData,
-            // شيلنا mode: 'no-cors' عشان نقدر نقرأ الرد من السيرفر ونعرف لو فيه خطأ حقيقي
-        });
+    // ✅ redirect: 'follow' — same as working file upload
+    // Apps Script returns 302 → googleusercontent.com → 200 JSON
+    const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: params,
+        redirect: 'follow',
+    });
 
-        // قراءة الرد اللي راجع من جوجل سكريبت
-        const result = await response.json();
+    if (!response.ok) {
+        throw new Error(`فشل الإرسال: ${response.status}`);
+    }
 
-        // لو السكريبت رجع success: false (زي ما إحنا كاتبين في catch في كود جوجل)
-        if (!result.success) {
-            console.error("Google Script Error:", result.error);
-            throw new Error(result.error || 'حدث خطأ من طرف السيرفر');
-        }
-    } catch (error) {
-        console.error("Submission failed:", error);
-        throw error; // الرمي هنا هيخلي الـ catch اللي في 컴بوننت الـ Survey تشتغل وتطلع رسالة الخطأ للمستخدم
+    const data = await response.json();
+    if (data && !data.success) {
+        throw new Error(data.error || 'فشل في حفظ الاستبيان');
     }
 }
