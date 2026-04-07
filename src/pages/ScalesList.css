@@ -109,14 +109,12 @@
 
 .scale-card--done {
     border-color: #10b981;
-    opacity: 0.8;
 }
 
 .scale-card--done:hover {
-    border-color: #10b981;
-    transform: none;
-    box-shadow: var(--shadow-sm);
-    cursor: default;
+    border-color: #059669;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
 }
 
 /* ── Card Emoji ─────────────────────────────────────────── */

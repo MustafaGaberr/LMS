@@ -241,8 +241,9 @@ const QuestionCard: React.FC<{
     index: number;
     selectedValue?: number;
     onSelect: (questionId: string, value: number) => void;
-}> = ({ question, index, selectedValue, onSelect }) => (
-    <div className="survey-q">
+    readonly?: boolean;
+}> = ({ question, index, selectedValue, onSelect, readonly }) => (
+    <div className={`survey-q ${readonly ? 'survey-q--readonly' : ''}`}>
         <p className="survey-q__text">
             <span className="survey-q__num">{index}</span>
             {question.text}
@@ -259,7 +260,8 @@ const QuestionCard: React.FC<{
                 <button
                     key={opt.value}
                     className={`survey-likert-btn ${selectedValue === opt.value ? 'survey-likert-btn--active' : ''}`}
-                    onClick={() => onSelect(question.id, opt.value)}
+                    onClick={() => !readonly && onSelect(question.id, opt.value)}
+                    disabled={readonly}
                     type="button"
                 >
                     <span className="survey-likert-btn__val">{opt.value}</span>
@@ -394,29 +396,9 @@ const Survey: React.FC = () => {
         );
     }
 
-    // ── Guard: already filled this scale ─────────────────────────────
-    const alreadyFilled =
-        (activeScale.scaleType === 'cognitive' && progress.cognitiveFilled) ||
-        (activeScale.scaleType === 'efficacy' && progress.efficacyFilled);
-
-    if (alreadyFilled) {
-        return (
-            <div className="survey-page survey-page--done">
-                <div className="survey-done-emoji">✅</div>
-                <h2 className="survey-done-title">تم الإرسال مسبقاً</h2>
-                <p className="survey-done-desc">
-                    لقد قمت بملء {activeScale.title} مسبقاً.
-                </p>
-                <div style={{ marginTop: '2rem', width: '100%' }}>
-                    <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/scales')}>
-                        العودة للمقاييس 📋
-                    </Button>
-                </div>
-            </div>
-        );
-    }
-
     // ── Phase: Done (just submitted) ─────────────────────────────────
+    // Must come BEFORE alreadyFilled guard so the success screen shows
+    // after submitScaleResponse triggers a re-render.
     if (phase === 'done') {
         return (
             <div className="survey-page survey-page--done">
@@ -426,6 +408,53 @@ const Survey: React.FC = () => {
                     تم حفظ ردودك على {activeScale.title} بنجاح.
                 </p>
                 <div style={{ marginTop: '2.5rem', width: '100%' }}>
+                    <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/scales')}>
+                        العودة للمقاييس 📋
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    // ── Guard: already filled this scale → read-only view ─────────────
+    const alreadyFilled =
+        (activeScale.scaleType === 'cognitive' && progress.cognitiveFilled) ||
+        (activeScale.scaleType === 'efficacy' && progress.efficacyFilled);
+
+    if (alreadyFilled) {
+        const savedResponses = progress.surveyResponses ?? {};
+        let globalQ = 0;
+        return (
+            <div className="survey-page survey-page--readonly">
+                <div className="survey-header">
+                    <h2 className="survey-header__title">
+                        {activeScale.emoji} {activeScale.title}
+                    </h2>
+                    <p className="survey-header__sub">إجاباتك السابقة (للعرض فقط)</p>
+                </div>
+
+                {activeScale.sections.map((section) => (
+                    <div key={section.id}>
+                        <SectionHeader title={section.title} questionCount={section.questions.length} />
+                        <div className="survey-questions">
+                            {section.questions.map((q) => {
+                                globalQ++;
+                                return (
+                                    <QuestionCard
+                                        key={q.id}
+                                        question={q}
+                                        index={globalQ}
+                                        selectedValue={savedResponses[q.id]}
+                                        onSelect={() => {}}
+                                        readonly
+                                    />
+                                );
+                            })}
+                        </div>
+                    </div>
+                ))}
+
+                <div style={{ marginTop: '2rem', width: '100%' }}>
                     <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/scales')}>
                         العودة للمقاييس 📋
                     </Button>

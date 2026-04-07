@@ -58,8 +58,7 @@ const ScalesList: React.FC = () => {
                         <button
                             key={scale.id}
                             className={`scale-card scale-card--${scale.cssModifier} ${done ? 'scale-card--done' : ''}`}
-                            onClick={() => !done && navigate(`/survey/${scale.id}`)}
-                            disabled={done}
+                            onClick={() => navigate(`/survey/${scale.id}`)}
                         >
                             <div className="scale-card__emoji">{scale.emoji}</div>
                             <div className="scale-card__body">
@@ -69,15 +68,13 @@ const ScalesList: React.FC = () => {
                                 </p>
                                 {done && (
                                     <span className="scale-card__done-badge">
-                                        ✓ تم الإرسال
+                                        ✓ عرض الإجابات
                                     </span>
                                 )}
                             </div>
-                            {!done && (
-                                <span className="scale-card__arrow">
-                                    <ChevronLeft size={22} />
-                                </span>
-                            )}
+                            <span className="scale-card__arrow">
+                                <ChevronLeft size={22} />
+                            </span>
                         </button>
                     );
                 })}
