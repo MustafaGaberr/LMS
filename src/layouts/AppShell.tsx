@@ -36,7 +36,8 @@ const ROUTE_TITLES: Array<[string, string]> = [
     ['/roadmap', 'خريطة التعلم'],
     ['/settings', 'الإعدادات'],
     ['/survey/results', 'نتائج الاستبيان'],
-    ['/survey', 'الاستبيان'],
+    ['/survey', 'المقياس'],
+    ['/scales', 'المقاييس'],
 ];
 
 function getPageTitle(pathname: string): string {

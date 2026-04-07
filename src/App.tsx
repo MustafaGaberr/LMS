@@ -23,6 +23,7 @@ import Chat from './pages/Chat';
 import QuizIntro from './pages/QuizIntro';
 import Activity from './pages/Activity';
 import Survey from './pages/Survey';
+import ScalesList from './pages/ScalesList';
 import SurveyResults from './pages/SurveyResults';
 import Roadmap from './pages/Roadmap';
 import Settings from './pages/Settings';
@@ -95,7 +96,11 @@ const AppRoutes: React.FC = () => {
           element={<ProtectedRoute><Activity /></ProtectedRoute>}
         />
         <Route
-          path="/survey"
+          path="/scales"
+          element={<ProtectedRoute><ScalesList /></ProtectedRoute>}
+        />
+        <Route
+          path="/survey/:scaleId"
           element={<ProtectedRoute><Survey /></ProtectedRoute>}
         />
         <Route

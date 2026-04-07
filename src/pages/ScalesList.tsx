@@ -11,14 +11,16 @@ const SCALES = [
         emoji: '🧠',
         questionsCount: 28,
         sectionsCount: 2,
+        sectionsLabel: 'رتبة',
         cssModifier: 'cognitive',
     },
     {
         id: 'efficacy',
         title: 'مقياس الكفاءة الذاتية',
-        emoji: '💪',
+        emoji: '🎯',
         questionsCount: 30,
         sectionsCount: 6,
+        sectionsLabel: 'أبعاد',
         cssModifier: 'efficacy',
     },
 ];
@@ -42,7 +44,7 @@ const ScalesList: React.FC = () => {
             {/* Header */}
             <div className="scales-header">
                 <div className="scales-header__emoji">📋</div>
-                <h2 className="scales-header__title">المقاييس النفسية</h2>
+                <h2 className="scales-header__title">المقاييس</h2>
                 <p className="scales-header__sub">
                     اختر المقياس الذي تريد الإجابة عليه
                 </p>
@@ -63,7 +65,7 @@ const ScalesList: React.FC = () => {
                             <div className="scale-card__body">
                                 <h3 className="scale-card__title">{scale.title}</h3>
                                 <p className="scale-card__info">
-                                    {scale.sectionsCount} أبعاد • {scale.questionsCount} سؤال
+                                    {scale.sectionsCount} {scale.sectionsLabel} • {scale.questionsCount} سؤال
                                 </p>
                                 {done && (
                                     <span className="scale-card__done-badge">

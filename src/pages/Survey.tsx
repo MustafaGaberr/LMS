@@ -47,8 +47,8 @@ const COGNITIVE_CONTROL_SCALE: Scale = {
     scaleType: 'cognitive',
     sections: [
         {
-            id: 'cc-rank1',
-            title: 'قوة السيطرة المعرفية من الرتبة الأولى',
+            id: 'cc-rank1-a',
+            title: 'الرتبة الأولى (1/2)',
             questions: [
                 { id: 'cc1-1', text: 'أواصل أداء المهمة ولا أستسلم عندما أواجه صعوبة أثناء تنفيذها' },
                 { id: 'cc1-2', text: 'أستطيع تنفيذ خطوات العمل دون التأثر بالأمور المحيطة من حولي.' },
@@ -57,6 +57,12 @@ const COGNITIVE_CONTROL_SCALE: Scale = {
                 { id: 'cc1-5', text: 'أستطيع التفكير بوضوح عند الشعور بالتعب.' },
                 { id: 'cc1-6', text: 'أرتب أفكاري من جديد في حالة انشغالي بأشياء غير مهمة.' },
                 { id: 'cc1-7', text: 'أستخدم أسلوب التذكير الذاتي لأحافظ على تركيزي.' },
+            ],
+        },
+        {
+            id: 'cc-rank1-b',
+            title: 'الرتبة الأولى (2/2)',
+            questions: [
                 { id: 'cc1-8', text: 'أتقبل نتائجي مهما كانت' },
                 { id: 'cc1-9', text: 'أستطيع ضبط نفسي عندما أشعر بالانفعال.' },
                 { id: 'cc1-10', text: 'أطبق التعليمات بدقة بعد استيعابها جيداً.' },
@@ -67,8 +73,8 @@ const COGNITIVE_CONTROL_SCALE: Scale = {
             ],
         },
         {
-            id: 'cc-rank2',
-            title: 'قوة السيطرة المعرفية من الرتبة الثانية',
+            id: 'cc-rank2-a',
+            title: 'الرتبة الثانية (1/2)',
             questions: [
                 { id: 'cc2-1', text: 'أطرح أسئلة للتحقق من صحة إجابتي' },
                 { id: 'cc2-2', text: 'أشعر برغبة في تجريب أفكار جديدة عند مواجهة مهام غير مألوفة.' },
@@ -77,6 +83,12 @@ const COGNITIVE_CONTROL_SCALE: Scale = {
                 { id: 'cc2-5', text: 'أنفذ المهام بأسلوبي الخاص' },
                 { id: 'cc2-6', text: 'أجد علاقات بين الأشياء التي أتعلمها.' },
                 { id: 'cc2-7', text: 'أُعيد تنظيم أولوياتي فورًا إذا استجدّ ما هو أهم.' },
+            ],
+        },
+        {
+            id: 'cc-rank2-b',
+            title: 'الرتبة الثانية (2/2)',
+            questions: [
                 { id: 'cc2-8', text: 'أستطيع الاحتفاظ بعدة أفكار في ذهني ومقارنتها معًا.' },
                 { id: 'cc2-9', text: 'أتعلم من تجاربي السابقة وأطبّق الدروس في مواقف جديدة.' },
                 { id: 'cc2-10', text: 'أستخدم طرقًا مختلفة لحل المشكلة الواحدة حتى أجد الأفضل.' },
@@ -95,7 +107,7 @@ const SELF_EFFICACY_SCALE: Scale = {
     id: 'efficacy',
     title: 'مقياس الكفاءة الذاتية',
     subtitle: 'Self-Efficacy Scale',
-    emoji: '💪',
+    emoji: '🎯',
     scaleType: 'efficacy',
     sections: [
         {
@@ -174,18 +186,16 @@ const SCALE_MAP: Record<string, Scale> = {
     efficacy: SELF_EFFICACY_SCALE,
 };
 
-// ─── Instructions text builder ────────────────────────────────────────────────
+// ─── Instructions points builder ──────────────────────────────────────────────
 
-function getInstructionsText(scaleTitle: string): string {
-    return `عزيزي الطالب/عزيزتي الطالبة،
-يهدف هذا المقياس إلى التعرف على مستوى ${scaleTitle} لدى الطلاب.
-يتكون المقياس من مجموعة من الابعاد والعبارات، ويُرجى قراءة كل عبارة بعناية، ثم تحديد درجة موافقتك عليها من خلال اختيار البديل الذي يعبر عن رأيك بدقة.
-
-لا توجد إجابات صحيحة أو خاطئة، وإنما المطلوب هو التعبير الصادق عن رأيك.
-
-يُرجى الإجابة على جميع العبارات، وعدم ترك أي عبارة دون إجابة.
-
-علمًا بأن جميع إجاباتك ستُستخدم لأغراض البحث العلمي فقط، وستُعامل بسرية تامة.`;
+function getInstructionPoints(scaleTitle: string): string[] {
+    return [
+        `يهدف هذا المقياس إلى التعرف على مستوى ${scaleTitle} لدى الطلاب.`,
+        'يتكون المقياس من مجموعة من الابعاد والعبارات، ويُرجى قراءة كل عبارة بعناية، ثم تحديد درجة موافقتك عليها من خلال اختيار البديل الذي يعبر عن رأيك بدقة.',
+        'لا توجد إجابات صحيحة أو خاطئة، وإنما المطلوب هو التعبير الصادق عن رأيك.',
+        'يُرجى الإجابة على جميع العبارات، وعدم ترك أي عبارة دون إجابة.',
+        'جميع إجاباتك ستُستخدم لأغراض البحث العلمي فقط، وستُعامل بسرية تامة.',
+    ];
 }
 
 // ─── Reusable Components ──────────────────────────────────────────────────────
@@ -426,28 +436,39 @@ const Survey: React.FC = () => {
 
     // ── Phase: Instructions ──────────────────────────────────────────
     if (phase === 'instructions') {
+        const points = getInstructionPoints(activeScale.title);
         return (
-            <div className="survey-page survey-page--instructions">
-                <div className="survey-instructions">
-                    <div className="survey-instructions__emoji">{activeScale.emoji}</div>
+            <div className="survey-page">
+                <div className="survey-instructions__header">
+                    <span className="survey-instructions__emoji">{activeScale.emoji}</span>
                     <h2 className="survey-instructions__title">{activeScale.title}</h2>
-                    <div className="survey-instructions__text">
-                        {getInstructionsText(activeScale.title).split('\n').map((line, i) => (
-                            <p key={i}>{line || '\u00A0'}</p>
-                        ))}
-                    </div>
-                    <Button
-                        variant="primary"
-                        size="lg"
-                        fullWidth
-                        onClick={() => {
-                            setPhase('questions');
-                            setCurrentSectionIdx(0);
-                        }}
-                    >
-                        التالي ←
-                    </Button>
                 </div>
+
+                <p className="survey-instructions__greeting">عزيزي الطالب / عزيزتي الطالبة،</p>
+
+                <div className="survey-instructions__section">
+                    <h3 className="survey-instructions__section-title">📌 تعليمات قبل البدء</h3>
+                    <ul className="survey-instructions__list">
+                        {points.map((point, i) => (
+                            <li key={i} className="survey-instructions__item">
+                                <span className="survey-instructions__bullet">{i + 1}</span>
+                                <span className="survey-instructions__item-text">{point}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    onClick={() => {
+                        setPhase('questions');
+                        setCurrentSectionIdx(0);
+                    }}
+                >
+                    ابدأ المقياس ←
+                </Button>
             </div>
         );
     }
