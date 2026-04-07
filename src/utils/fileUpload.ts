@@ -2,7 +2,7 @@
 // Handles base64 conversion, Apps Script upload, and localStorage persistence.
 
 // ⬇️ PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ⬇️
-const APPS_SCRIPT_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbx0C705hHNFulhhFJ5AXWsDYW6x1ohYnDOOuQnnrGcoBgzhCtH7HDDWiY8fvpCFg0ak/exec';
+const APPS_SCRIPT_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbzROps4ABQYijrT7vEzdveCouQsnPviH_g6iEOG3yzQ1Vql7TFcdDpMt1xggY-DjcBZ/exec';
 // ⬆️ PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ⬆️
 
 /** Shape of a stored uploaded-file record. */
