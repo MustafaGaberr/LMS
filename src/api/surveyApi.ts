@@ -7,7 +7,7 @@
 //
 // This matches the working pattern used in fileUpload.ts.
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzROps4ABQYijrT7vEzdveCouQsnPviH_g6iEOG3yzQ1Vql7TFcdDpMt1xggY-DjcBZ/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwCTmnwhJ0Y6zD1_ojim63JDIeuQadj22a_oSEgAXVkOsZNrc5XszAkz-TihjJS-2Zy/exec';
 
 /**
  * Submit both psychological scale answers to Google Sheets.
