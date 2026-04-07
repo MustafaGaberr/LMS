@@ -49,7 +49,7 @@ interface AppState {
     isAllCourseDone: () => boolean;
 
     // Survey actions
-    submitSurveyResponse: (responses: Record<string, number>) => void;
+    submitScaleResponse: (scaleType: 'cognitive' | 'efficacy', responses: Record<string, number>) => void;
     resetSurveyStats: () => void;
 
     // App reset
@@ -153,7 +153,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     theme: 'A',
     settings: { soundEnabled: true },
     seenOnboarding: false,
-    progress: { completedLessons: {}, surveyFilled: false },
+    progress: { completedLessons: {}, surveyFilled: false, cognitiveFilled: false, efficacyFilled: false },
     deviceId: '',
     surveyAggregates: {},
 
@@ -163,6 +163,8 @@ export const useAppStore = create<AppState>((set, get) => ({
             completedLessons: progress?.completedLessons ?? {},
             surveyFilled: progress?.surveyFilled ?? false,
             surveyResponses: progress?.surveyResponses,
+            cognitiveFilled: progress?.cognitiveFilled ?? false,
+            efficacyFilled: progress?.efficacyFilled ?? false,
         };
 
         set({
@@ -190,6 +192,8 @@ export const useAppStore = create<AppState>((set, get) => ({
                 completedLessons: savedProgress?.completedLessons ?? {},
                 surveyFilled: savedProgress?.surveyFilled ?? false,
                 surveyResponses: savedProgress?.surveyResponses,
+                cognitiveFilled: savedProgress?.cognitiveFilled ?? false,
+                efficacyFilled: savedProgress?.efficacyFilled ?? false,
             };
             set({ progress: safeProgress });
         });
@@ -201,7 +205,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     logout() {
-        set({ activeUserId: null, theme: 'A', progress: { completedLessons: {}, surveyFilled: false } });
+        set({ activeUserId: null, theme: 'A', progress: { completedLessons: {}, surveyFilled: false, cognitiveFilled: false, efficacyFilled: false } });
         applyTheme('A');
         void removeItem(STORAGE_KEYS.ACTIVE_USER_ID);
     },
@@ -257,8 +261,12 @@ export const useAppStore = create<AppState>((set, get) => ({
         );
     },
 
-    submitSurveyResponse(responses: Record<string, number>) {
-        if (get().progress.surveyFilled) return; // Block duplicate submissions
+    submitScaleResponse(scaleType: 'cognitive' | 'efficacy', responses: Record<string, number>) {
+        const currentProgress = get().progress;
+
+        // Block duplicate per-scale
+        if (scaleType === 'cognitive' && currentProgress.cognitiveFilled) return;
+        if (scaleType === 'efficacy' && currentProgress.efficacyFilled) return;
 
         // 1. Update Global Aggregates
         const currentAgg = get().surveyAggregates;
@@ -269,12 +277,16 @@ export const useAppStore = create<AppState>((set, get) => ({
             nextAgg[qId] = { ...existing, [value]: (existing[value] ?? 0) + 1 };
         }
 
-        // 2. Update User Progress (Mark as Filled + Save Responses)
-        const currentProgress = get().progress;
+        // 2. Update per-scale flag
+        const nextCognitive = scaleType === 'cognitive' ? true : (currentProgress.cognitiveFilled ?? false);
+        const nextEfficacy = scaleType === 'efficacy' ? true : (currentProgress.efficacyFilled ?? false);
+
         const nextProgress: Progress = {
             ...currentProgress,
-            surveyFilled: true,
-            surveyResponses: responses,
+            cognitiveFilled: nextCognitive,
+            efficacyFilled: nextEfficacy,
+            surveyFilled: nextCognitive && nextEfficacy,
+            surveyResponses: { ...(currentProgress.surveyResponses ?? {}), ...responses },
         };
 
         set({ 
@@ -298,7 +310,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             theme: 'A',
             settings: { soundEnabled: true },
             seenOnboarding: false,
-            progress: { completedLessons: {}, surveyFilled: false, surveyResponses: undefined },
+            progress: { completedLessons: {}, surveyFilled: false, surveyResponses: undefined, cognitiveFilled: false, efficacyFilled: false },
             surveyAggregates: {},
         });
         applyTheme('A');

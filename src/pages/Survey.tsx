@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
 import { Button } from '../components/Button';
 import { submitSurvey } from '../api/surveyApi';
@@ -23,6 +23,7 @@ interface Scale {
     title: string;
     subtitle: string;
     emoji: string;
+    scaleType: 'cognitive' | 'efficacy';
     sections: ScaleSection[];
 }
 
@@ -39,10 +40,11 @@ const LIKERT_OPTIONS = [
 // ─── Scale 1: قوة السيطرة المعرفية (28 questions = 2 sections × 14) ──────────
 
 const COGNITIVE_CONTROL_SCALE: Scale = {
-    id: 'cognitive-control',
+    id: 'cognitive',
     title: 'مقياس قوة السيطرة المعرفية',
     subtitle: 'Cognitive Control Strength Scale',
     emoji: '🧠',
+    scaleType: 'cognitive',
     sections: [
         {
             id: 'cc-rank1',
@@ -90,10 +92,11 @@ const COGNITIVE_CONTROL_SCALE: Scale = {
 // ─── Scale 2: الكفاءة الذاتية (30 questions = 6 dimensions × 5) ─────────────
 
 const SELF_EFFICACY_SCALE: Scale = {
-    id: 'self-efficacy',
+    id: 'efficacy',
     title: 'مقياس الكفاءة الذاتية',
     subtitle: 'Self-Efficacy Scale',
     emoji: '💪',
+    scaleType: 'efficacy',
     sections: [
         {
             id: 'se-d1',
@@ -164,7 +167,26 @@ const SELF_EFFICACY_SCALE: Scale = {
     ],
 };
 
-const ALL_SCALES: Scale[] = [COGNITIVE_CONTROL_SCALE, SELF_EFFICACY_SCALE];
+// ─── Scale lookup map ─────────────────────────────────────────────────────────
+
+const SCALE_MAP: Record<string, Scale> = {
+    cognitive: COGNITIVE_CONTROL_SCALE,
+    efficacy: SELF_EFFICACY_SCALE,
+};
+
+// ─── Instructions text builder ────────────────────────────────────────────────
+
+function getInstructionsText(scaleTitle: string): string {
+    return `عزيزي الطالب/عزيزتي الطالبة،
+يهدف هذا المقياس إلى التعرف على مستوى ${scaleTitle} لدى الطلاب.
+يتكون المقياس من مجموعة من الابعاد والعبارات، ويُرجى قراءة كل عبارة بعناية، ثم تحديد درجة موافقتك عليها من خلال اختيار البديل الذي يعبر عن رأيك بدقة.
+
+لا توجد إجابات صحيحة أو خاطئة، وإنما المطلوب هو التعبير الصادق عن رأيك.
+
+يُرجى الإجابة على جميع العبارات، وعدم ترك أي عبارة دون إجابة.
+
+علمًا بأن جميع إجاباتك ستُستخدم لأغراض البحث العلمي فقط، وستُعامل بسرية تامة.`;
+}
 
 // ─── Reusable Components ──────────────────────────────────────────────────────
 
@@ -209,9 +231,8 @@ const QuestionCard: React.FC<{
     index: number;
     selectedValue?: number;
     onSelect: (questionId: string, value: number) => void;
-    readonly?: boolean;
-}> = ({ question, index, selectedValue, onSelect, readonly }) => (
-    <div className={`survey-q ${readonly ? 'survey-q--readonly' : ''}`}>
+}> = ({ question, index, selectedValue, onSelect }) => (
+    <div className="survey-q">
         <p className="survey-q__text">
             <span className="survey-q__num">{index}</span>
             {question.text}
@@ -228,8 +249,7 @@ const QuestionCard: React.FC<{
                 <button
                     key={opt.value}
                     className={`survey-likert-btn ${selectedValue === opt.value ? 'survey-likert-btn--active' : ''}`}
-                    onClick={() => !readonly && onSelect(question.id, opt.value)}
-                    disabled={readonly}
+                    onClick={() => onSelect(question.id, opt.value)}
                     type="button"
                 >
                     <span className="survey-likert-btn__val">{opt.value}</span>
@@ -241,59 +261,52 @@ const QuestionCard: React.FC<{
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-type SurveyPhase = 'scale1' | 'transition' | 'scale2';
+type SurveyPhase = 'instructions' | 'questions' | 'done';
 
 const Survey: React.FC = () => {
     const navigate = useNavigate();
+    const { scaleId } = useParams<{ scaleId: string }>();
     const isAllCourseDone = useAppStore((s) => s.isAllCourseDone);
-    const submitSurveyResponse = useAppStore((s) => s.submitSurveyResponse);
+    const submitScaleResponse = useAppStore((s) => s.submitScaleResponse);
     const progress = useAppStore((s) => s.progress);
 
-    const [responses, setResponses] = useState<Record<string, number>>(
-        progress.surveyResponses || {}
-    );
-    const [phase, setPhase] = useState<SurveyPhase>('scale1');
+    // Resolve active scale from URL param
+    const activeScale = scaleId ? SCALE_MAP[scaleId] : undefined;
+
+    const [responses, setResponses] = useState<Record<string, number>>({});
+    const [phase, setPhase] = useState<SurveyPhase>('instructions');
     const [currentSectionIdx, setCurrentSectionIdx] = useState(0);
-    const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [animDir, setAnimDir] = useState<'next' | 'prev'>('next');
     const [animKey, setAnimKey] = useState(0);
 
-    // Current scale based on phase
-    const currentScale = phase === 'scale2' ? SELF_EFFICACY_SCALE : COGNITIVE_CONTROL_SCALE;
-    const currentSection = currentScale.sections[currentSectionIdx];
+    // Total question count for active scale
+    const totalQuestions = useMemo(
+        () => activeScale?.sections.reduce((sum, s) => sum + s.questions.length, 0) ?? 0,
+        [activeScale]
+    );
 
-    // Question counts for current scale
-    const scaleQuestionCount = currentScale.sections.reduce((sum, s) => sum + s.questions.length, 0);
-    const scaleAnsweredCount = currentScale.sections
-        .flatMap((s) => s.questions)
-        .filter((q) => responses[q.id] !== undefined).length;
+    // Answered count
+    const answeredCount = useMemo(
+        () =>
+            activeScale?.sections
+                .flatMap((s) => s.questions)
+                .filter((q) => responses[q.id] !== undefined).length ?? 0,
+        [activeScale, responses]
+    );
 
-    // Section-level answered
+    const allAnswered = answeredCount === totalQuestions && totalQuestions > 0;
+
+    const currentSection = activeScale?.sections[currentSectionIdx];
+    const isLastSection = activeScale ? currentSectionIdx === activeScale.sections.length - 1 : false;
+
     const sectionAnswered = currentSection
         ? currentSection.questions.filter((q) => responses[q.id] !== undefined).length
         : 0;
     const sectionComplete = currentSection ? sectionAnswered === currentSection.questions.length : false;
 
-    // Total counts
-    const totalScale1Questions = COGNITIVE_CONTROL_SCALE.sections.reduce((sum, s) => sum + s.questions.length, 0);
-    const totalScale2Questions = SELF_EFFICACY_SCALE.sections.reduce((sum, s) => sum + s.questions.length, 0);
-
-    const scale1Answered = COGNITIVE_CONTROL_SCALE.sections
-        .flatMap((s) => s.questions)
-        .filter((q) => responses[q.id] !== undefined).length;
-    const scale2Answered = SELF_EFFICACY_SCALE.sections
-        .flatMap((s) => s.questions)
-        .filter((q) => responses[q.id] !== undefined).length;
-
-    const scale1Complete = scale1Answered >= totalScale1Questions;
-    const scale2Complete = scale2Answered >= totalScale2Questions;
-    const allAnswered = scale1Complete && scale2Complete;
-
-    const isLastSectionInScale = currentSectionIdx === currentScale.sections.length - 1;
-
-    // Scroll to top on section/phase change
+    // Scroll to top on phase/section change
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentSectionIdx, phase]);
@@ -303,12 +316,12 @@ const Survey: React.FC = () => {
     }, []);
 
     const goNextSection = useCallback(() => {
-        if (currentSectionIdx < currentScale.sections.length - 1) {
+        if (activeScale && currentSectionIdx < activeScale.sections.length - 1) {
             setAnimDir('next');
             setAnimKey((k) => k + 1);
             setCurrentSectionIdx((s) => s + 1);
         }
-    }, [currentSectionIdx, currentScale.sections.length]);
+    }, [currentSectionIdx, activeScale]);
 
     const goPrevSection = useCallback(() => {
         if (currentSectionIdx > 0) {
@@ -318,66 +331,51 @@ const Survey: React.FC = () => {
         }
     }, [currentSectionIdx]);
 
-    // Transition to Scale 2
-    const goToTransition = useCallback(() => {
-        setPhase('transition');
-    }, []);
-
-    // Start Scale 2
-    const startScale2 = useCallback(() => {
-        setPhase('scale2');
-        setCurrentSectionIdx(0);
-        setAnimDir('next');
-        setAnimKey((k) => k + 1);
-    }, []);
-
-    // Go back to Scale 1
-    const goBackToScale1 = useCallback(() => {
-        setPhase('scale1');
-        setCurrentSectionIdx(COGNITIVE_CONTROL_SCALE.sections.length - 1);
-        setAnimDir('prev');
-        setAnimKey((k) => k + 1);
-    }, []);
-
-    // Go back to transition from Scale 2
-    const goBackToTransition = useCallback(() => {
-        setPhase('transition');
-    }, []);
-
     const handleSubmit = useCallback(async () => {
-        if (!allAnswered || isSubmitting) return;
+        if (!allAnswered || isSubmitting || !activeScale) return;
         setIsSubmitting(true);
         setSubmitError(null);
 
-        // Build ordered arrays from responses keyed by question IDs
-        const scale1Answers = COGNITIVE_CONTROL_SCALE.sections
-            .flatMap((s) => s.questions)
-            .map((q) => responses[q.id] ?? 0);
-        const scale2Answers = SELF_EFFICACY_SCALE.sections
+        // Build ordered answers array
+        const answersArray = activeScale.sections
             .flatMap((s) => s.questions)
             .map((q) => responses[q.id] ?? 0);
 
         try {
-            await submitSurvey(scale1Answers, scale2Answers);
-            // Also save locally
-            submitSurveyResponse(responses);
-            setSubmitted(true);
+            await submitSurvey(activeScale.scaleType, answersArray);
+            // Save locally
+            submitScaleResponse(activeScale.scaleType, responses);
+            setPhase('done');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch {
             setSubmitError('حدث خطأ أثناء الإرسال، حاول مرة أخرى');
         } finally {
             setIsSubmitting(false);
         }
-    }, [allAnswered, isSubmitting, responses, submitSurveyResponse]);
+    }, [allAnswered, isSubmitting, activeScale, responses, submitScaleResponse]);
+
+    // ── Guard: invalid scale ID ──────────────────────────────────────
+    if (!activeScale) {
+        return (
+            <div className="survey-page survey-page--locked">
+                <div className="survey-locked-icon">❌</div>
+                <h2 className="survey-locked-title">مقياس غير موجود</h2>
+                <p className="survey-locked-desc">هذا المقياس غير متاح.</p>
+                <Button variant="primary" onClick={() => navigate('/scales')}>
+                    العودة للمقاييس
+                </Button>
+            </div>
+        );
+    }
 
     // ── Guard: must complete all lessons first ────────────────────────
     if (!isAllCourseDone()) {
         return (
             <div className="survey-page survey-page--locked">
                 <div className="survey-locked-icon">🔒</div>
-                <h2 className="survey-locked-title">الاستبيان مقفل</h2>
+                <h2 className="survey-locked-title">المقاييس مقفلة</h2>
                 <p className="survey-locked-desc">
-                    أكمل جميع دروس الدورة لفتح الاستبيان.
+                    أكمل جميع دروس الدورة لفتح المقاييس.
                 </p>
                 <Button variant="primary" onClick={() => navigate('/units')}>
                     العودة للوحدات
@@ -386,142 +384,87 @@ const Survey: React.FC = () => {
         );
     }
 
-    // ── Fresh submission thank you ───────────────────────────────────
-    if (submitted) {
+    // ── Guard: already filled this scale ─────────────────────────────
+    const alreadyFilled =
+        (activeScale.scaleType === 'cognitive' && progress.cognitiveFilled) ||
+        (activeScale.scaleType === 'efficacy' && progress.efficacyFilled);
+
+    if (alreadyFilled) {
+        return (
+            <div className="survey-page survey-page--done">
+                <div className="survey-done-emoji">✅</div>
+                <h2 className="survey-done-title">تم الإرسال مسبقاً</h2>
+                <p className="survey-done-desc">
+                    لقد قمت بملء {activeScale.title} مسبقاً.
+                </p>
+                <div style={{ marginTop: '2rem', width: '100%' }}>
+                    <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/scales')}>
+                        العودة للمقاييس 📋
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
+    // ── Phase: Done (just submitted) ─────────────────────────────────
+    if (phase === 'done') {
         return (
             <div className="survey-page survey-page--done">
                 <div className="survey-done-emoji">🎉</div>
                 <h2 className="survey-done-title">شكرًا على إجابتك!</h2>
                 <p className="survey-done-desc">
-                    تم حفظ ردودك بشكل مجهول. نقدّر رأيك ونسعد بمشاركتك.
+                    تم حفظ ردودك على {activeScale.title} بنجاح.
                 </p>
                 <div style={{ marginTop: '2.5rem', width: '100%' }}>
-                    <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/units')}>
-                        الذهاب للقائمة الرئيسية 🏠
+                    <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/scales')}>
+                        العودة للمقاييس 📋
                     </Button>
                 </div>
             </div>
         );
     }
 
-    // ── Returning user read-only view ────────────────────────────────
-    if (progress.surveyFilled) {
+    // ── Phase: Instructions ──────────────────────────────────────────
+    if (phase === 'instructions') {
         return (
-            <div className="survey-page survey-page--readonly">
-                <div className="survey-header">
-                    <h2 className="survey-header__title">إجاباتك السابقة</h2>
-                    <p className="survey-header__sub">لقد قمت بملء هذا الاستبيان مسبقاً</p>
-                </div>
-
-                {ALL_SCALES.map((scale) => (
-                    <div key={scale.id} className="survey-readonly-scale">
-                        <div className="survey-readonly-scale__title">
-                            {scale.emoji} {scale.title}
-                        </div>
-                        {scale.sections.map((section) => {
-                            let qCounter = 0;
-                            return (
-                                <div key={section.id}>
-                                    <SectionHeader title={section.title} questionCount={section.questions.length} />
-                                    <div className="survey-questions">
-                                        {section.questions.map((q) => {
-                                            qCounter++;
-                                            return (
-                                                <QuestionCard
-                                                    key={q.id}
-                                                    question={q}
-                                                    index={qCounter}
-                                                    selectedValue={responses[q.id]}
-                                                    onSelect={() => { }}
-                                                    readonly
-                                                />
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            );
-                        })}
+            <div className="survey-page survey-page--instructions">
+                <div className="survey-instructions">
+                    <div className="survey-instructions__emoji">{activeScale.emoji}</div>
+                    <h2 className="survey-instructions__title">{activeScale.title}</h2>
+                    <div className="survey-instructions__text">
+                        {getInstructionsText(activeScale.title).split('\n').map((line, i) => (
+                            <p key={i}>{line || '\u00A0'}</p>
+                        ))}
                     </div>
-                ))}
-
-                <div style={{ marginTop: '2rem', width: '100%' }}>
-                    <Button variant="secondary" size="lg" fullWidth onClick={() => navigate('/units')}>
-                        العودة للرئيسية 🏠
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        fullWidth
+                        onClick={() => {
+                            setPhase('questions');
+                            setCurrentSectionIdx(0);
+                        }}
+                    >
+                        التالي ←
                     </Button>
                 </div>
             </div>
         );
     }
 
-    // ── Transition screen between Scale 1 and Scale 2 ────────────────
-    if (phase === 'transition') {
-        return (
-            <div className="survey-page survey-page--transition">
-                <div className="survey-transition">
-                    <div className="survey-transition__check">✅</div>
-                    <h2 className="survey-transition__title">أحسنت! أكملت المقياس الأول</h2>
-                    <p className="survey-transition__subtitle">
-                        {COGNITIVE_CONTROL_SCALE.emoji} {COGNITIVE_CONTROL_SCALE.title}
-                    </p>
-                    <div className="survey-transition__stats">
-                        <span>{totalScale1Questions} سؤال</span>
-                        <span className="survey-transition__stats-dot">•</span>
-                        <span>تمت الإجابة ✓</span>
-                    </div>
-
-                    <div className="survey-transition__divider" />
-
-                    <p className="survey-transition__next-label">المقياس التالي:</p>
-                    <div className="survey-transition__next-scale">
-                        <span className="survey-transition__next-emoji">{SELF_EFFICACY_SCALE.emoji}</span>
-                        <div>
-                            <h3 className="survey-transition__next-title">{SELF_EFFICACY_SCALE.title}</h3>
-                            <p className="survey-transition__next-info">
-                                {SELF_EFFICACY_SCALE.sections.length} أبعاد • {totalScale2Questions} سؤال
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="survey-transition__actions">
-                        <Button variant="primary" size="lg" fullWidth onClick={startScale2}>
-                            الانتقال للمقياس التالي →
-                        </Button>
-                        <Button variant="secondary" size="lg" fullWidth onClick={goBackToScale1}>
-                            ← الرجوع للمقياس السابق
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    // ── Active survey with section-based flow ────────────────────────
+    // ── Phase: Questions ─────────────────────────────────────────────
     let qNum = 0;
 
     return (
         <div className="survey-page">
-            {/* Scale indicator badges */}
-            <div className="survey-scale-indicator">
-                <div className={`survey-scale-badge ${phase === 'scale1' ? 'survey-scale-badge--active' : 'survey-scale-badge--done'}`}>
-                    <span className="survey-scale-badge__emoji">{COGNITIVE_CONTROL_SCALE.emoji}</span>
-                    <span className="survey-scale-badge__label">المقياس الأول</span>
-                    {phase === 'scale2' && <span className="survey-scale-badge__check">✓</span>}
-                </div>
-                <div className="survey-scale-connector" />
-                <div className={`survey-scale-badge ${phase === 'scale2' ? 'survey-scale-badge--active' : ''}`}>
-                    <span className="survey-scale-badge__emoji">{SELF_EFFICACY_SCALE.emoji}</span>
-                    <span className="survey-scale-badge__label">المقياس الثاني</span>
-                </div>
-            </div>
-
             {/* Progress */}
             <ProgressHeader
-                scaleTitle={currentScale.title}
-                scaleEmoji={currentScale.emoji}
+                scaleTitle={activeScale.title}
+                scaleEmoji={activeScale.emoji}
                 currentSectionIndex={currentSectionIdx}
-                totalSections={currentScale.sections.length}
-                answeredCount={scaleAnsweredCount}
-                totalQuestions={scaleQuestionCount}
+                totalSections={activeScale.sections.length}
+                answeredCount={answeredCount}
+                totalQuestions={totalQuestions}
             />
 
             {/* Section content with animation */}
@@ -556,24 +499,15 @@ const Survey: React.FC = () => {
 
             {/* Navigation */}
             <div className="survey-nav">
-                {/* Primary action (right side in RTL) */}
-                {phase === 'scale1' && isLastSectionInScale ? (
-                    <Button
-                        variant="primary"
-                        size="lg"
-                        disabled={!scale1Complete}
-                        onClick={goToTransition}
-                    >
-                        الانتقال للمقياس التالي →
-                    </Button>
-                ) : phase === 'scale2' && isLastSectionInScale ? (
+                {/* Primary action */}
+                {isLastSection ? (
                     <Button
                         variant="primary"
                         size="lg"
                         disabled={!allAnswered || isSubmitting}
                         onClick={handleSubmit}
                     >
-                        {isSubmitting ? 'جارٍ الإرسال...' : 'إرسال الاستبيان 📤'}
+                        {isSubmitting ? 'جارٍ الإرسال...' : 'إرسال المقياس 📤'}
                     </Button>
                 ) : (
                     <Button
@@ -589,19 +523,19 @@ const Survey: React.FC = () => {
                 <div className="survey-nav__spacer" />
 
                 {/* Back button */}
-                {phase === 'scale1' && currentSectionIdx > 0 && (
+                {currentSectionIdx > 0 && (
                     <Button variant="secondary" size="lg" onClick={goPrevSection} disabled={isSubmitting}>
                         ← السابق
                     </Button>
                 )}
-                {phase === 'scale2' && currentSectionIdx > 0 && (
-                    <Button variant="secondary" size="lg" onClick={goPrevSection} disabled={isSubmitting}>
-                        ← السابق
-                    </Button>
-                )}
-                {phase === 'scale2' && currentSectionIdx === 0 && (
-                    <Button variant="secondary" size="lg" onClick={goBackToTransition} disabled={isSubmitting}>
-                        ← المقياس السابق
+                {currentSectionIdx === 0 && (
+                    <Button
+                        variant="secondary"
+                        size="lg"
+                        onClick={() => setPhase('instructions')}
+                        disabled={isSubmitting}
+                    >
+                        ← التعليمات
                     </Button>
                 )}
             </div>
