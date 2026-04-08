@@ -82,9 +82,9 @@ const Welcome: React.FC = () => {
                             <div className="welcome-card welcome-card--course">
                                 <p className="welcome-card__course-title">{course.subject ?? course.title}</p>
                             </div>
-                            <div className="welcome-card welcome-card--code">
+                            {/* <div className="welcome-card welcome-card--code">
                                 <p className="welcome-card__code">كود المقرر...</p>
-                            </div>
+                            </div> */}
                             <p className="welcome-card__tagline">هيا بنا نبدأ تعلمنا في محتوانا</p>
                         </motion.div>
                     )}
