@@ -92,8 +92,8 @@ const Units: React.FC = () => {
                     })}
                 </div>
 
-                {/* Survey CTA when course done */}
-                {courseDone && (
+                {/* TODO: إعادة شرط courseDone قبل الإطلاق — حالياً ظاهر للتجربة */}
+                {/* Survey CTA — always visible during testing */}
                     <div className={`units-survey-cta ${progress.surveyFilled ? 'units-survey-cta--done' : ''}`}>
                         <p className="units-survey-cta__title">
                             {progress.surveyFilled ? '📊 شكراً لمشاركتك رأيك' : '🎉 أتممت الدورة بالكامل!'}
@@ -102,7 +102,6 @@ const Units: React.FC = () => {
                             {progress.surveyFilled ? 'عرض المقاييس' : 'المقاييس'}
                         </button>
                     </div>
-                )}
             </div>
 
             {/* ── Fixed bottom progress bar ── */}

@@ -381,6 +381,8 @@ const Survey: React.FC = () => {
     }
 
     // ── Guard: must complete all lessons first ────────────────────────
+    // TODO: إعادة تفعيل شرط isAllCourseDone قبل الإطلاق — حالياً معطّل للتجربة
+    /*
     if (!isAllCourseDone()) {
         return (
             <div className="survey-page survey-page--locked">
@@ -395,6 +397,7 @@ const Survey: React.FC = () => {
             </div>
         );
     }
+    */
 
     // ── Phase: Done (just submitted) ─────────────────────────────────
     // Must come BEFORE alreadyFilled guard so the success screen shows
