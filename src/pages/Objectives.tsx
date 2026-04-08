@@ -104,22 +104,32 @@ const Objectives: React.FC = () => {
                                     ))}
                                 </div>
 
-                                {/* LEFT: sub-objectives */}
+                                {/* LEFT: sub-objectives in unified container */}
                                 <div className="obj-sub-col">
                                     <AnimatePresence mode="wait">
                                         <motion.div
                                             key={selected}
-                                            className="obj-sub-col-inner"
+                                            className="obj-sub-container"
                                             initial={{ opacity: 0, y: 16 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: -12 }}
                                             transition={{ duration: 0.22, ease: 'easeInOut' }}
                                         >
-                                            {course.objectives[selected].subObjectives.map((sub, i) => (
-                                                <div key={i} className="obj-sub-card">
-                                                    <p>{sub}</p>
-                                                </div>
-                                            ))}
+                                            {/* Container header */}
+                                            <div className="obj-sub-header">
+                                                <span className="obj-sub-header__icon">{selected + 1}</span>
+                                                <span>الأهداف الفرعية — الهدف {ORDINAL[selected]}</span>
+                                            </div>
+
+                                            {/* Scrollable list */}
+                                            <div className="obj-sub-col-inner">
+                                                {course.objectives[selected].subObjectives.map((sub, i) => (
+                                                    <div key={i} className="obj-sub-card">
+                                                        <span className="obj-sub-card__num">{i + 1}</span>
+                                                        <p>{sub}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </motion.div>
                                     </AnimatePresence>
                                 </div>
