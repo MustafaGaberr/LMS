@@ -126,6 +126,31 @@
     box-shadow: none;
 }
 
+/* ── Locked card ── */
+.obj-list-card--locked {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: var(--color-surface);
+    border-color: var(--color-border);
+}
+
+.obj-list-card--locked:hover {
+    border-color: var(--color-border);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    transform: none;
+}
+
+/* ── Visited card (completed) ── */
+.obj-list-card--visited {
+    border-color: color-mix(in srgb, #22c55e 40%, var(--color-border));
+    background: color-mix(in srgb, #22c55e 4%, var(--color-surface));
+}
+
+.obj-list-card--visited .obj-list-card__num {
+    background: #22c55e;
+}
+
 .obj-list-card__num {
     width: 36px;
     height: 36px;
@@ -138,6 +163,10 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+}
+
+.obj-list-card__num--locked {
+    background: var(--color-text-3);
 }
 
 .obj-list-card__label {
@@ -158,6 +187,17 @@
 .obj-list-card:hover .obj-list-card__arrow {
     color: var(--color-primary);
     transform: translateX(-4px);
+}
+
+/* Lock badge on locked cards */
+.obj-list-card__lock-badge {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-3);
+    font-weight: 600;
+    padding: var(--space-1) var(--space-2);
+    background: color-mix(in srgb, var(--color-text-3) 10%, transparent);
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
 }
 
 /* Back arrows */
@@ -274,6 +314,26 @@
     background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
     color: var(--color-primary);
     border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* Locked tab in sidebar */
+.obj-label-btn--locked {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background: var(--color-surface);
+    color: var(--color-text-3);
+    border-color: var(--color-border);
+}
+
+.obj-label-btn--locked:hover {
+    opacity: 0.35;
+    background: var(--color-surface);
+    color: var(--color-text-3);
+}
+
+.obj-label-btn__lock {
+    margin-left: var(--space-1);
+    opacity: 0.7;
 }
 
 /* ── LEFT: Sub-objectives container (Detail) ── */
@@ -416,4 +476,11 @@
     background: color-mix(in srgb, var(--color-primary) 85%, #000);
     border-color: transparent;
     color: #fff;
+}
+
+/* Disabled forward button */
+.obj-back-btn--forward:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
 }

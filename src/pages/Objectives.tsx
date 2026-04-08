@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Lock, CheckCircle } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { course } from '../data/sampleCourse';
 import './Objectives.css';
@@ -13,8 +13,28 @@ const Objectives: React.FC = () => {
     // 0-4   → phase B (detail, selected index)
     const [selected, setSelected] = useState<number | null>(null);
 
+    // Sequential unlock: only objectives ≤ maxUnlocked are accessible
+    const [maxUnlocked, setMaxUnlocked] = useState(0);
+
+    // When user selects/views an objective, unlock the next one
+    useEffect(() => {
+        if (selected !== null && selected >= maxUnlocked) {
+            setMaxUnlocked(selected + 1);
+        }
+    }, [selected, maxUnlocked]);
+
+    const totalObjectives = course.objectives.length;
     const isPhaseB = selected !== null;
-    const isLast = isPhaseB && selected === course.objectives.length - 1;
+    const isLast = isPhaseB && selected === totalObjectives - 1;
+    // Can only go to units after viewing the last objective
+    const allViewed = maxUnlocked >= totalObjectives;
+
+    /* ─── Select handler with lock check ─── */
+    const handleSelect = (i: number) => {
+        if (i <= maxUnlocked) {
+            setSelected(i);
+        }
+    };
 
     /* ─── Footer handlers ─── */
     const handleBack = () => {
@@ -29,9 +49,9 @@ const Objectives: React.FC = () => {
 
     const handleForward = () => {
         if (!isPhaseB) {
-            setSelected(0);      // enter first objective
+            setSelected(0);       // enter first objective
         } else if (isLast) {
-            navigate('/units');  // finish
+            navigate('/units');   // finish — only reachable after viewing last
         } else {
             setSelected((s) => (s as number) + 1);
         }
@@ -61,17 +81,35 @@ const Objectives: React.FC = () => {
 
                             {/* Card list */}
                             <div className="obj-list">
-                                {course.objectives.map((obj, i) => (
-                                    <button
-                                        key={obj.id}
-                                        className="obj-list-card"
-                                        onClick={() => setSelected(i)}
-                                    >
-                                        <span className="obj-list-card__num">{i + 1}</span>
-                                        <span className="obj-list-card__label">الهدف {ORDINAL[i]}</span>
-                                        <span className="obj-list-card__arrow">›</span>
-                                    </button>
-                                ))}
+                                {course.objectives.map((obj, i) => {
+                                    const unlocked = i <= maxUnlocked;
+                                    const visited = i < maxUnlocked;
+
+                                    return unlocked ? (
+                                        <button
+                                            key={obj.id}
+                                            className={`obj-list-card ${visited ? 'obj-list-card--visited' : ''}`}
+                                            onClick={() => handleSelect(i)}
+                                        >
+                                            <span className="obj-list-card__num">
+                                                {visited ? <CheckCircle size={18} /> : i + 1}
+                                            </span>
+                                            <span className="obj-list-card__label">الهدف {ORDINAL[i]}</span>
+                                            <span className="obj-list-card__arrow">›</span>
+                                        </button>
+                                    ) : (
+                                        <div
+                                            key={obj.id}
+                                            className="obj-list-card obj-list-card--locked"
+                                        >
+                                            <span className="obj-list-card__num obj-list-card__num--locked">
+                                                <Lock size={16} />
+                                            </span>
+                                            <span className="obj-list-card__label">الهدف {ORDINAL[i]}</span>
+                                            <span className="obj-list-card__lock-badge">مقفل</span>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </motion.div>
                     ) : (
@@ -93,15 +131,27 @@ const Objectives: React.FC = () => {
                             <div className="obj-detail-body">
                                 {/* RIGHT: objective label buttons */}
                                 <div className="obj-label-col">
-                                    {course.objectives.map((obj, i) => (
-                                        <button
-                                            key={obj.id}
-                                            className={`obj-label-btn ${i === selected ? 'obj-label-btn--active' : 'obj-label-btn--inactive'}`}
-                                            onClick={() => setSelected(i)}
-                                        >
-                                            الهدف {ORDINAL[i]}
-                                        </button>
-                                    ))}
+                                    {course.objectives.map((obj, i) => {
+                                        const unlocked = i <= maxUnlocked;
+
+                                        return (
+                                            <button
+                                                key={obj.id}
+                                                className={`obj-label-btn ${
+                                                    i === selected
+                                                        ? 'obj-label-btn--active'
+                                                        : unlocked
+                                                        ? 'obj-label-btn--inactive'
+                                                        : 'obj-label-btn--locked'
+                                                }`}
+                                                onClick={() => unlocked && handleSelect(i)}
+                                                disabled={!unlocked}
+                                            >
+                                                {!unlocked && <Lock size={12} className="obj-label-btn__lock" />}
+                                                الهدف {ORDINAL[i]}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
 
                                 {/* LEFT: sub-objectives in unified container */}
@@ -144,9 +194,12 @@ const Objectives: React.FC = () => {
                 <button className="obj-back-btn" onClick={handleBack} aria-label="رجوع">
                     <ArrowRight size={26} />
                 </button>
+
+                {/* Forward: disabled until all objectives viewed (when on last) */}
                 <button
                     className={`obj-back-btn obj-back-btn--forward ${isPhaseB && isLast ? 'obj-back-btn--primary' : ''}`}
                     onClick={handleForward}
+                    disabled={isPhaseB && isLast && !allViewed}
                     aria-label="التالي"
                 >
                     <ArrowLeft size={26} />
