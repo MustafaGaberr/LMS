@@ -278,7 +278,8 @@ type SurveyPhase = 'instructions' | 'questions' | 'done';
 const Survey: React.FC = () => {
     const navigate = useNavigate();
     const { scaleId } = useParams<{ scaleId: string }>();
-    const isAllCourseDone = useAppStore((s) => s.isAllCourseDone);
+    // TODO: إعادة تفعيل قبل الإطلاق
+    // const isAllCourseDone = useAppStore((s) => s.isAllCourseDone);
     const submitScaleResponse = useAppStore((s) => s.submitScaleResponse);
     const progress = useAppStore((s) => s.progress);
 

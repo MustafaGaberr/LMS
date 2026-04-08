@@ -10,9 +10,10 @@ const ORDINAL = ['الأولى', 'الثانية', 'الثالثة', 'الراب
 const Units: React.FC = () => {
     const navigate = useNavigate();
     const isUnitUnlocked = useAppStore((s) => s.isUnitUnlocked);
-    const isAllCourseDone = useAppStore((s) => s.isAllCourseDone);
+    // TODO: إعادة تفعيل قبل الإطلاق
+    // const isAllCourseDone = useAppStore((s) => s.isAllCourseDone);
     const progress = useAppStore((s) => s.progress);
-    const courseDone = isAllCourseDone();
+    // const courseDone = isAllCourseDone();
 
     // Overall progress across all lessons
     const totalLessons = course.units.reduce((acc, u) => acc + u.lessons.length, 0);
