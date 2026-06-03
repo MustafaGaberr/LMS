@@ -97,11 +97,11 @@ const variants = {
 const Onboarding: React.FC = () => {
     const navigate = useNavigate();
     const markOnboardingSeen = useAppStore((s) => s.markOnboardingSeen);
+    const activeUserId = useAppStore((s) => s.activeUserId);
     const [step, setStep] = useState(0);
     const [dir, setDir] = useState(1);
 
     const isLast = step === SLIDES.length - 1;
-    const isFirst = step === 0;
 
     const finish = () => {
         markOnboardingSeen();
@@ -117,10 +117,6 @@ const Onboarding: React.FC = () => {
         }
     };
 
-    const handlePrev = () => {
-        setDir(-1);
-        setStep((s) => s - 1);
-    };
 
     return (
         <div className="ob-page">
@@ -177,18 +173,29 @@ const Onboarding: React.FC = () => {
                 ))}
             </div>
 
-            {/* ── Footer: prev + next ── */}
+            {/* ── Footer ── */}
             <div className="ob-footer">
-                <button
-                    className="ob-prev-btn"
-                    onClick={handlePrev}
-                    disabled={isFirst}
-                >
-                    السابق
-                </button>
-                <button className="ob-next-btn" onClick={handleNext}>
-                    {isLast ? 'التالي' : 'التالي'}
-                </button>
+                {step === 0 ? (
+                    <button className="ob-next-btn ob-next-btn--full" onClick={handleNext}>
+                        التالي
+                    </button>
+                ) : isLast ? (
+                    <button className="ob-next-btn ob-next-btn--full" onClick={handleNext}>
+                        ابدأ الآن
+                    </button>
+                ) : (
+                    <>
+                        <button
+                            className={`ob-skip-btn ${activeUserId === 'student2' ? 'ob-skip-btn--accent' : 'ob-skip-btn--primary'}`}
+                            onClick={finish}
+                        >
+                            تخطي
+                        </button>
+                        <button className="ob-next-btn ob-next-btn--middle" onClick={handleNext}>
+                            التالي
+                        </button>
+                    </>
+                )}
             </div>
         </div>
     );
