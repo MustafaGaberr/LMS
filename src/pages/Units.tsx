@@ -97,7 +97,14 @@ const Units: React.FC = () => {
                 {/* Survey CTA — always visible during testing */}
                     <div className={`units-survey-cta ${progress.surveyFilled ? 'units-survey-cta--done' : ''}`}>
                         <p className="units-survey-cta__title">
-                            {progress.surveyFilled ? '📊 شكراً لمشاركتك رأيك' : '🎉 أتممت الدورة بالكامل!'}
+                            {progress.surveyFilled ? (
+                                '📊 شكراً لمشاركتك رأيك'
+                            ) : (
+                                <>
+                                    <span>🎉 أحسنت! أنهيت جميع الوحدات التعليمية</span>
+                                    <span>يرجى استكمال المقاييس للمتابعة</span>
+                                </>
+                            )}
                         </p>
                         <button className="units-survey-cta__btn" onClick={() => navigate('/scales')}>
                             {progress.surveyFilled ? 'عرض المقاييس' : 'المقاييس'}
