@@ -40,7 +40,79 @@ const ROUTE_TITLES: Array<[string, string]> = [
     ['/scales', 'المقاييس'],
 ];
 
+const ARABIC_UNITS = [
+    'الأولى',
+    'الثانية',
+    'الثالثة',
+    'الرابعة',
+    'الخامسة',
+    'السادسة',
+    'السابعة',
+    'الثامنة',
+    'التاسعة',
+    'العاشرة',
+];
+
+const ARABIC_LESSONS = [
+    'الأول',
+    'الثاني',
+    'الثالث',
+    'الرابع',
+    'الخامس',
+    'السادس',
+    'السابع',
+    'الثامن',
+    'التاسع',
+    'العاشر',
+];
+
+function getDynamicTitle(pathname: string): string | null {
+    if (!pathname.startsWith('/units')) {
+        return null;
+    }
+
+    if (pathname === '/units' || pathname === '/units/') {
+        return 'الوحدات التعليمية';
+    }
+
+    const match = pathname.match(/^\/units\/([^/]+)(?:\/lessons\/([^/]+))?/);
+    if (!match) return null;
+
+    const unitId = match[1];
+    const lessonId = match[2];
+
+    const unitNum = parseInt(unitId.replace(/[^0-9]/g, ''), 10);
+    const unitWord = (unitNum > 0 && unitNum <= ARABIC_UNITS.length)
+        ? `الوحدة ${ARABIC_UNITS[unitNum - 1]}`
+        : `الوحدة ${unitNum}`;
+
+    if (!lessonId) {
+        return unitWord;
+    }
+
+    let lessonNum = 0;
+    if (lessonId.includes('-l')) {
+        const parts = lessonId.split('-l');
+        lessonNum = parseInt(parts[1], 10);
+    } else {
+        lessonNum = parseInt(lessonId.replace(/[^0-9]/g, ''), 10);
+    }
+
+    if (isNaN(lessonNum) || lessonNum <= 0) {
+        return unitWord;
+    }
+
+    const lessonWord = (lessonNum > 0 && lessonNum <= ARABIC_LESSONS.length)
+        ? `الدرس ${ARABIC_LESSONS[lessonNum - 1]}`
+        : `الدرس ${lessonNum}`;
+
+    return `${unitWord} - ${lessonWord}`;
+}
+
 function getPageTitle(pathname: string): string {
+    const dynamic = getDynamicTitle(pathname);
+    if (dynamic !== null) return dynamic;
+
     for (const [pattern, title] of ROUTE_TITLES) {
         if (pathname.startsWith(pattern)) return title;
     }

@@ -61,7 +61,7 @@ const Welcome: React.FC = () => {
                             transition={{ duration: 0.25 }}
                         >
                             <p className="welcome-card__line welcome-card__line--bold">
-                                مرحباً طلاب الفرقة الثالثة
+                                مرحباً بك عزيزي الطالب
                             </p>
                             <p className="welcome-card__line">
                                 أنا روبوت المحادثة .....
