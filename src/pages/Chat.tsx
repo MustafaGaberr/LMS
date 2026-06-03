@@ -69,6 +69,17 @@ const Chat: React.FC = () => {
         'جاهز للمساعدة';
     const timeoutsRef = useRef<any[]>([]);
     const bottomRef = useRef<HTMLDivElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    // Auto-resize textarea
+    useEffect(() => {
+        const textarea = textareaRef.current;
+        if (textarea) {
+            textarea.style.height = 'auto';
+            const scrollHeight = textarea.scrollHeight;
+            textarea.style.height = `${Math.min(120, Math.max(44, scrollHeight))}px`;
+        }
+    }, [input]);
 
     // ── Init bot opening messages (only if starting fresh) ─────────────────
     useEffect(() => {
@@ -335,6 +346,7 @@ const Chat: React.FC = () => {
             ) : (
                 <div className={`chat-footer chat-footer--input ${isBotTyping ? 'chat-footer--disabled' : ''}`}>
                     <textarea
+                        ref={textareaRef}
                         className="chat-input"
                         placeholder={isBotTyping ? "انتظر رد البوت..." : "اكتب إجابتك هنا…"}
                         value={input}
@@ -346,7 +358,7 @@ const Chat: React.FC = () => {
                                 handleSend();
                             }
                         }}
-                        rows={3}
+                        rows={1}
                     />
                     <button
                         className="chat-send-btn"
