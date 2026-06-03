@@ -151,6 +151,21 @@
     font-weight: 700;
 }
 
+.lesson-dropdown-item--locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: #fafafa;
+    color: #a0aec0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+}
+
+.lesson-dropdown-lock {
+    font-size: 0.9rem;
+}
+
 /* Overlay for closing when clicking outside */
 .lesson-dropdown-overlay {
     position: fixed;

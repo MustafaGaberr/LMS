@@ -26,17 +26,41 @@ const LessonDetail: React.FC = () => {
     const navigate = useNavigate();
 
     const markContentDone = useAppStore((s) => s.markContentDone);
-
-    const [step, setStep] = useState(0); 
-    const [subStep, setSubStep] = useState(0); // For sub-sections within a tab
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const isLessonContentDone = useAppStore(
+        (s) => s.progress.completedLessons[lessonId ?? '']?.contentDone ?? false
+    );
 
     const unit = getUnit(unitId ?? '');
     const lesson = getLesson(unitId ?? '', lessonId ?? '');
 
+    const availableTabs = useMemo(() => {
+        if (!lesson) return [];
+        return TABS.filter(tab => {
+            if (lesson.sectionLabels && lesson.sectionLabels[tab] === '') return false;
+            return true;
+        });
+    }, [lesson]);
+
+    const [step, setStep] = useState(0); 
+    const [subStep, setSubStep] = useState(0); // For sub-sections within a tab
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [maxStepVisited, setMaxStepVisited] = useState(isLessonContentDone ? Math.max(0, availableTabs.length - 1) : 0);
+
     // Reset sub-step when changing main tabs
     React.useEffect(() => {
         setSubStep(0);
+    }, [step]);
+
+    // Reset step states when changing lesson
+    React.useEffect(() => {
+        setStep(0);
+        setSubStep(0);
+        setMaxStepVisited(isLessonContentDone ? Math.max(0, availableTabs.length - 1) : 0);
+    }, [lessonId, isLessonContentDone, availableTabs.length]);
+
+    // Keep track of maximum step reached
+    React.useEffect(() => {
+        setMaxStepVisited(prev => Math.max(prev, step));
     }, [step]);
 
     if (!unit || !lesson) {
@@ -47,14 +71,10 @@ const LessonDetail: React.FC = () => {
         );
     }
 
-    const availableTabs = TABS.filter(tab => {
-        if (lesson.sectionLabels && lesson.sectionLabels[tab] === '') return false;
-        return true;
-    });
-
     const currentTab = availableTabs[step] || availableTabs[0];
 
     const handleBubbleClick = (idx: number) => {
+        if (idx > maxStepVisited + 1) return;
         setStep(idx);
         setIsDropdownOpen(false);
     };
@@ -141,15 +161,19 @@ const LessonDetail: React.FC = () => {
                     <>
                         <div className="lesson-dropdown-overlay" onClick={() => setIsDropdownOpen(false)} />
                         <div className="lesson-dropdown-menu">
-                            {availableTabs.map((tab, idx) => (
-                                <div 
-                                    key={tab} 
-                                    className={`lesson-dropdown-item ${idx === step ? 'lesson-dropdown-item--active' : ''}`}
-                                    onClick={() => handleBubbleClick(idx)}
-                                >
-                                    {lesson.sectionLabels ? lesson.sectionLabels[tab] : DEFAULT_TAB_LABELS[tab]}
-                                </div>
-                            ))}
+                            {availableTabs.map((tab, idx) => {
+                                const isLocked = idx > maxStepVisited + 1;
+                                return (
+                                    <div 
+                                        key={tab} 
+                                        className={`lesson-dropdown-item ${idx === step ? 'lesson-dropdown-item--active' : ''} ${isLocked ? 'lesson-dropdown-item--locked' : ''}`}
+                                        onClick={() => !isLocked && handleBubbleClick(idx)}
+                                    >
+                                        <span>{lesson.sectionLabels ? lesson.sectionLabels[tab] : DEFAULT_TAB_LABELS[tab]}</span>
+                                        {isLocked && <span className="lesson-dropdown-lock">🔒</span>}
+                                    </div>
+                                );
+                            })}
                         </div>
                     </>
                 )}
