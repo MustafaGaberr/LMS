@@ -9,7 +9,7 @@
     /* Use padding-bottom only for the fixed footer if necessary, 
        but here we want the content to be able to center in the space */
     padding: 20px 20px 100px;
-    background: #f0f4f8;
+    background: var(--color-bg);
     direction: rtl;
     font-family: 'Cairo', 'Segoe UI', sans-serif;
     box-sizing: border-box;
@@ -498,4 +498,65 @@
     border-radius: 8px;
     background: linear-gradient(135deg, #23445D, #3a6b8a);
     box-shadow: 0 2px 8px rgba(35, 68, 93, 0.3);
+}
+
+/* ── Dark Mode overrides for LessonDetail page ── */
+[data-theme-mode="dark"] .lesson-custom-select {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme-mode="dark"] .lesson-dropdown-menu {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+}
+
+[data-theme-mode="dark"] .lesson-dropdown-item {
+    color: var(--color-text-2);
+    border-bottom-color: var(--color-border);
+}
+
+[data-theme-mode="dark"] .lesson-dropdown-item:hover {
+    background: var(--color-surface-2);
+    color: var(--color-text);
+}
+
+[data-theme-mode="dark"] .lesson-dropdown-item--active {
+    background: var(--color-primary-subtle);
+    color: var(--color-primary-light);
+}
+
+[data-theme-mode="dark"] .lesson-sub-button {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text-2);
+}
+
+[data-theme-mode="dark"] .lesson-sub-button:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text);
+    background: var(--color-surface-2);
+}
+
+[data-theme-mode="dark"] .lesson-sub-button--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+[data-theme-mode="dark"] .lesson-section-content--concept {
+    background: rgba(37, 99, 235, 0.1);
+    border-right-color: var(--color-primary);
+}
+
+[data-theme-mode="dark"] .lesson-section-content--importance {
+    background: rgba(16, 185, 129, 0.15);
+    border-right-color: var(--color-accent);
+}
+
+[data-theme-mode="dark"] .lesson-section-text {
+    color: var(--color-text);
 }

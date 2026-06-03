@@ -15,6 +15,7 @@ export type ThemeId = 'A' | 'B';
 
 export interface UserSettings {
     soundEnabled: boolean;
+    darkModeEnabled: boolean;
 }
 
 interface AppState {
@@ -33,6 +34,7 @@ interface AppState {
 
     // Settings actions
     toggleSound: () => void;
+    toggleDarkMode: () => void;
     markOnboardingSeen: () => void;
 
     // Progress actions
@@ -151,7 +153,7 @@ function patchLesson(
 export const useAppStore = create<AppState>((set, get) => ({
     activeUserId: null,
     theme: 'A',
-    settings: { soundEnabled: true },
+    settings: { soundEnabled: true, darkModeEnabled: false },
     seenOnboarding: false,
     progress: { completedLessons: {}, surveyFilled: false, cognitiveFilled: false, efficacyFilled: false },
     deviceId: '',
@@ -167,16 +169,22 @@ export const useAppStore = create<AppState>((set, get) => ({
             efficacyFilled: progress?.efficacyFilled ?? false,
         };
 
+        const finalSettings = {
+            soundEnabled: settings?.soundEnabled ?? true,
+            darkModeEnabled: settings?.darkModeEnabled ?? false,
+        };
+
         set({
             activeUserId,
             theme: deriveTheme(activeUserId),
-            settings: settings ?? { soundEnabled: true },
+            settings: finalSettings,
             seenOnboarding: !!seenOnboarding,
             progress: safeProgress,
             deviceId,
             surveyAggregates: surveyAggregates ?? {},
         });
         applyTheme(deriveTheme(activeUserId));
+        applyThemeMode(finalSettings.darkModeEnabled);
     },
 
     login(username, password) {
@@ -214,6 +222,14 @@ export const useAppStore = create<AppState>((set, get) => ({
         const next = !get().settings.soundEnabled;
         const settings = { ...get().settings, soundEnabled: next };
         set({ settings });
+        void setItem(STORAGE_KEYS.SETTINGS, settings);
+    },
+
+    toggleDarkMode() {
+        const next = !get().settings.darkModeEnabled;
+        const settings = { ...get().settings, darkModeEnabled: next };
+        set({ settings });
+        applyThemeMode(next);
         void setItem(STORAGE_KEYS.SETTINGS, settings);
     },
 
@@ -308,12 +324,13 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             activeUserId: null,
             theme: 'A',
-            settings: { soundEnabled: true },
+            settings: { soundEnabled: true, darkModeEnabled: false },
             seenOnboarding: false,
             progress: { completedLessons: {}, surveyFilled: false, surveyResponses: undefined, cognitiveFilled: false, efficacyFilled: false },
             surveyAggregates: {},
         });
         applyTheme('A');
+        applyThemeMode(false);
     },
 }));
 
@@ -321,4 +338,8 @@ export const useAppStore = create<AppState>((set, get) => ({
 
 function applyTheme(theme: ThemeId) {
     document.documentElement.setAttribute('data-theme', theme);
+}
+
+function applyThemeMode(darkMode: boolean) {
+    document.documentElement.setAttribute('data-theme-mode', darkMode ? 'dark' : 'light');
 }

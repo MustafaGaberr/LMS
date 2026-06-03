@@ -269,6 +269,22 @@
     background: #94a3b8;
 }
 
+/* Dark mode overrides for Survey CTA */
+[data-theme-mode="dark"] .units-survey-cta {
+    background: linear-gradient(to bottom, rgba(16, 185, 129, 0.1), var(--color-surface));
+    border-color: var(--color-success);
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.05);
+}
+
+[data-theme-mode="dark"] .units-survey-cta__title {
+    color: var(--color-success);
+}
+
+[data-theme-mode="dark"] .units-survey-cta--done {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }

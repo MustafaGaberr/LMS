@@ -95,6 +95,38 @@
     --color-accent-subtle: #fff7ed;
 }
 
+/* ---------- Theme mode overrides (Dark Mode) ---------- */
+[data-theme-mode="dark"] {
+    /* Neutral palette */
+    --color-bg: #0b0f19;
+    --color-surface: #151f32;
+    --color-surface-2: #090d16;
+    --color-border: #1e293b;
+    --color-border-strong: #334155;
+    --color-text: #f8fafc;
+    --color-text-2: #cbd5e1;
+    --color-text-3: #64748b;
+    --color-text-inverse: #ffffff;
+
+    /* Theme A adjustments in dark mode */
+    --color-primary-light: #60a5fa;
+    --color-primary-dark: #3b82f6;
+    --color-primary-subtle: rgba(37, 99, 235, 0.15);
+    --color-accent-light: #34d399;
+    --color-accent-dark: #10b981;
+    --color-accent-subtle: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme-mode="dark"][data-theme="B"] {
+    /* Theme B adjustments in dark mode */
+    --color-primary-light: #a78bfa;
+    --color-primary-dark: #8b5cf6;
+    --color-primary-subtle: rgba(124, 58, 237, 0.15);
+    --color-accent-light: #fdba74;
+    --color-accent-dark: #f97316;
+    --color-accent-subtle: rgba(249, 115, 22, 0.15);
+}
+
 /* ---------- Reset & Base ---------- */
 *,
 *::before,

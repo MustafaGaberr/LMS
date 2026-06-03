@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Volume2, VolumeX, RotateCcw, User, Palette, LogOut } from 'lucide-react';
+import { Volume2, VolumeX, RotateCcw, User, Palette, LogOut, Sun, Moon } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
@@ -12,6 +12,8 @@ const Settings: React.FC = () => {
     const theme = useAppStore((s) => s.theme);
     const soundEnabled = useAppStore((s) => s.settings.soundEnabled);
     const toggleSound = useAppStore((s) => s.toggleSound);
+    const darkModeEnabled = useAppStore((s) => s.settings.darkModeEnabled);
+    const toggleDarkMode = useAppStore((s) => s.toggleDarkMode);
     const logout = useAppStore((s) => s.logout);
     const resetAll = useAppStore((s) => s.resetAll);
 
@@ -77,6 +79,22 @@ const Settings: React.FC = () => {
                     </p>
                 </div>
                 <div className="toggle-switch" aria-checked={soundEnabled} role="switch">
+                    <div className="toggle-switch__thumb" />
+                </div>
+            </Card>
+
+            {/* Dark mode toggle */}
+            <Card elevated className="settings-card settings-row" onClick={toggleDarkMode}>
+                <div className="settings-row__icon">
+                    {darkModeEnabled ? <Moon size={20} /> : <Sun size={20} />}
+                </div>
+                <div className="settings-row__content">
+                    <p className="settings-row__title">المظهر الداكن</p>
+                    <p className="settings-row__desc">
+                        {darkModeEnabled ? 'مفعّل' : 'معطّل'}
+                    </p>
+                </div>
+                <div className="toggle-switch" aria-checked={darkModeEnabled} role="switch">
                     <div className="toggle-switch__thumb" />
                 </div>
             </Card>

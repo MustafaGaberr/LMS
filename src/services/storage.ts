@@ -88,7 +88,7 @@ export type SurveyAggregates = Record<string, SurveyLikertCounts>;
 
 export interface PersistedAppState {
     activeUserId: 'student1' | 'student2' | null;
-    settings: { soundEnabled: boolean };
+    settings: { soundEnabled: boolean; darkModeEnabled: boolean };
     seenOnboarding: boolean;
     progress: Progress;
     deviceId: string;
@@ -134,7 +134,10 @@ export async function initAppState(): Promise<PersistedAppState> {
 
     return {
         activeUserId: activeUserId ?? null,
-        settings: settings ?? { soundEnabled: true },
+        settings: {
+            soundEnabled: settings?.soundEnabled ?? true,
+            darkModeEnabled: settings?.darkModeEnabled ?? false,
+        },
         seenOnboarding: seenOnboarding ?? false,
         progress: progress ?? { completedLessons: {}, surveyFilled: false },
         deviceId: resolvedDeviceId,
