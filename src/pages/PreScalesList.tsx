@@ -45,7 +45,7 @@ const PreScalesList: React.FC = () => {
             {/* Header */}
             <div className="scales-header">
                 <div className="scales-header__emoji">📋</div>
-                <h2 className="scales-header__title">المقاييس القبلية</h2>
+                <h2 className="scales-header__title">المقاييس</h2>
                 <p className="scales-header__sub">
                     يرجى تعبئة المقياسين قبل البدء في الوحدات التعليمية
                 </p>
