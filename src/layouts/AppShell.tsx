@@ -11,6 +11,8 @@ const HIDDEN_NAV_ROUTES = [
     '/welcome',
     '/course-start',
     '/objectives',
+    '/pre-scales',
+    '/pre-survey',
 ];
 
 // Hide bottom nav on lesson detail and deeper pages (e.g. /units/u1/lessons/u1-l1, /chat, /activity, /quiz-intro)
@@ -120,7 +122,7 @@ function getPageTitle(pathname: string): string {
 }
 
 function getShowBack(pathname: string): boolean {
-    const noBackRoutes = ['/login', '/units', '/roadmap', '/settings', '/onboarding', '/welcome', '/objectives'];
+    const noBackRoutes = ['/login', '/units', '/roadmap', '/settings', '/onboarding', '/welcome', '/objectives', '/pre-scales'];
     return !noBackRoutes.some((r) => pathname === r);
 }
 
@@ -139,16 +141,17 @@ const pageTransition = { duration: 0.22, ease: 'easeInOut' };
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     const location = useLocation();
     const showNav = !HIDDEN_NAV_ROUTES.some((r) => location.pathname.startsWith(r)) && !LESSON_DETAIL_PATTERN.test(location.pathname);
+    const showHeader = !['/pre-scales', '/pre-survey'].some((r) => location.pathname.startsWith(r));
     const noScroll = NO_SCROLL_ROUTES.some((r) => location.pathname.startsWith(r));
     const title = getPageTitle(location.pathname);
     const showBack = getShowBack(location.pathname);
 
     return (
         <div className="app-shell">
-            <AppHeader title={title} showBack={showBack} />
+            {showHeader && <AppHeader title={title} showBack={showBack} />}
 
             <main
-                className={`app-shell__content ${showNav ? '' : 'app-shell__content--no-nav'} ${noScroll ? 'app-shell__content--no-scroll' : ''}`}
+                className={`app-shell__content ${showNav ? '' : 'app-shell__content--no-nav'} ${showHeader ? '' : 'app-shell__content--no-header'} ${noScroll ? 'app-shell__content--no-scroll' : ''}`}
             >
                 <AnimatePresence mode="wait">
                     <motion.div

@@ -36,3 +36,15 @@
     height: 100%;
     overflow: hidden;
 }
+
+.app-shell__content--no-header {
+    padding-top: 0;
+}
+
+.app-shell__content--no-header .app-shell__page {
+    min-height: calc(100dvh - var(--bottom-nav-height));
+}
+
+.app-shell__content--no-header.app-shell__content--no-nav .app-shell__page {
+    min-height: 100dvh;
+}

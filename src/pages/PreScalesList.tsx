@@ -98,15 +98,7 @@ const PreScalesList: React.FC = () => {
                 })}
             </div>
 
-            {/* CTA after both done */}
-            {bothDone && (
-                <button
-                    className="pre-scales-continue-btn"
-                    onClick={() => navigate('/units')}
-                >
-                    ابدأ الوحدات التعليمية ←
-                </button>
-            )}
+            {/* No continue button to keep it completely isolated */}
         </div>
     );
 };

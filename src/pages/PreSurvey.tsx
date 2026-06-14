@@ -367,10 +367,6 @@ const PreSurvey: React.FC = () => {
 
     // ── Phase: Done ──────────────────────────────────────────────────
     if (phase === 'done') {
-        const bothDone =
-            (activeScale.scaleType === 'cognitive' && progress.preEfficacyFilled) ||
-            (activeScale.scaleType === 'efficacy' && progress.preCognitiveFilled);
-
         return (
             <div className="survey-page survey-page--done">
                 <div className="survey-done-emoji">🎉</div>
@@ -379,15 +375,9 @@ const PreSurvey: React.FC = () => {
                     تم حفظ ردودك على {activeScale.title} بنجاح.
                 </p>
                 <div style={{ marginTop: '2.5rem', width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    {bothDone ? (
-                        <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/units')}>
-                            ابدأ الوحدات التعليمية ←
-                        </Button>
-                    ) : (
-                        <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/pre-scales')}>
-                            العودة للمقاييس 📋
-                        </Button>
-                    )}
+                    <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/pre-scales')}>
+                        العودة للمقاييس 📋
+                    </Button>
                 </div>
             </div>
         );
