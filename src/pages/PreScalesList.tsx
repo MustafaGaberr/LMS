@@ -32,7 +32,6 @@ const PreScalesList: React.FC = () => {
 
     const isPreCognitiveDone = !!progress.preCognitiveFilled;
     const isPreEfficacyDone  = !!progress.preEfficacyFilled;
-    const bothDone = isPreCognitiveDone && isPreEfficacyDone;
 
     const isDone = (id: string) => {
         if (id === 'cognitive') return isPreCognitiveDone;
