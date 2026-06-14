@@ -10,11 +10,7 @@ const ORDINAL = ['الأولى', 'الثانية', 'الثالثة', 'الراب
 const Units: React.FC = () => {
     const navigate = useNavigate();
     const isUnitUnlocked = useAppStore((s) => s.isUnitUnlocked);
-    const isPreSurveyDone = useAppStore((s) => s.isPreSurveyDone);
     const progress = useAppStore((s) => s.progress);
-
-    // Pre-survey gate: must fill both pre-scales before starting units
-    const preDone = isPreSurveyDone();
 
     // Overall progress across all lessons
     const totalLessons = course.units.reduce((acc, u) => acc + u.lessons.length, 0);
@@ -45,7 +41,7 @@ const Units: React.FC = () => {
                 {/* Unit list */}
                 <div className="units-list">
                 {course.units.map((unit, i) => {
-                        const unlocked = preDone && isUnitUnlocked(unit.id);
+                        const unlocked = isUnitUnlocked(unit.id);
                         const completedCount = unit.lessons.filter(
                             (l) => progress.completedLessons[l.id]?.activityDone
                         ).length;
@@ -94,21 +90,8 @@ const Units: React.FC = () => {
                     })}
                 </div>
 
-                {/* PRE-SCALES CTA — shown when pre-survey not done yet */}
-                {!preDone && (
-                    <div className="units-survey-cta units-pre-scales-cta">
-                        <p className="units-survey-cta__title">
-                            <span>📝 يرجى إكمال المقاييس </span>
-                            <span>قبل البدء في الوحدات التعليمية</span>
-                        </p>
-                        <button className="units-survey-cta__btn" onClick={() => navigate('/pre-scales')}>
-                            ابدأ المقاييس 
-                        </button>
-                    </div>
-                )}
-
                 {/* POST-SCALES CTA — shown after all units complete */}
-                {preDone && overallPct === 100 && (
+                {overallPct === 100 && (
                     <div className={`units-survey-cta ${progress.surveyFilled ? 'units-survey-cta--done' : ''}`}>
                         <p className="units-survey-cta__title">
                             {progress.surveyFilled ? (
