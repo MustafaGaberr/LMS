@@ -28,6 +28,8 @@ import SurveyResults from './pages/SurveyResults';
 import Roadmap from './pages/Roadmap';
 import Settings from './pages/Settings';
 import Admin from './pages/Admin';
+import PreScalesList from './pages/PreScalesList';
+import PreSurvey from './pages/PreSurvey';
 
 // ─── Protected route ────────────────────────────────────────────────────────
 
@@ -94,6 +96,14 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/units/:unitId/lessons/:lessonId/activity"
           element={<ProtectedRoute><Activity /></ProtectedRoute>}
+        />
+        <Route
+          path="/pre-scales"
+          element={<ProtectedRoute><PreScalesList /></ProtectedRoute>}
+        />
+        <Route
+          path="/pre-survey/:scaleId"
+          element={<ProtectedRoute><PreSurvey /></ProtectedRoute>}
         />
         <Route
           path="/scales"

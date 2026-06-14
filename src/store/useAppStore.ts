@@ -50,9 +50,13 @@ interface AppState {
     getLessonProgress: (lessonId: string) => LessonProgress;
     isAllCourseDone: () => boolean;
 
-    // Survey actions
+    // Survey actions (POST — after units)
     submitScaleResponse: (scaleType: 'cognitive' | 'efficacy', responses: Record<string, number>) => void;
     resetSurveyStats: () => void;
+
+    // Pre-Survey actions (PRE — before units)
+    submitPreScaleResponse: (scaleType: 'cognitive' | 'efficacy', responses: Record<string, number>) => void;
+    isPreSurveyDone: () => boolean;
 
     // App reset
     resetAll: () => Promise<void>;
@@ -155,7 +159,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     theme: 'A',
     settings: { soundEnabled: true, darkModeEnabled: false },
     seenOnboarding: false,
-    progress: { completedLessons: {}, surveyFilled: false, cognitiveFilled: false, efficacyFilled: false },
+    progress: { completedLessons: {}, surveyFilled: false, cognitiveFilled: false, efficacyFilled: false, preCognitiveFilled: false, preEfficacyFilled: false, preSurveyFilled: false },
     deviceId: '',
     surveyAggregates: {},
 
@@ -167,6 +171,9 @@ export const useAppStore = create<AppState>((set, get) => ({
             surveyResponses: progress?.surveyResponses,
             cognitiveFilled: progress?.cognitiveFilled ?? false,
             efficacyFilled: progress?.efficacyFilled ?? false,
+            preCognitiveFilled: progress?.preCognitiveFilled ?? false,
+            preEfficacyFilled: progress?.preEfficacyFilled ?? false,
+            preSurveyFilled: progress?.preSurveyFilled ?? false,
         };
 
         const finalSettings = {
@@ -202,6 +209,9 @@ export const useAppStore = create<AppState>((set, get) => ({
                 surveyResponses: savedProgress?.surveyResponses,
                 cognitiveFilled: savedProgress?.cognitiveFilled ?? false,
                 efficacyFilled: savedProgress?.efficacyFilled ?? false,
+                preCognitiveFilled: savedProgress?.preCognitiveFilled ?? false,
+                preEfficacyFilled: savedProgress?.preEfficacyFilled ?? false,
+                preSurveyFilled: savedProgress?.preSurveyFilled ?? false,
             };
             set({ progress: safeProgress });
         });
@@ -213,7 +223,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     logout() {
-        set({ activeUserId: null, theme: 'A', progress: { completedLessons: {}, surveyFilled: false, cognitiveFilled: false, efficacyFilled: false } });
+        set({ activeUserId: null, theme: 'A', progress: { completedLessons: {}, surveyFilled: false, cognitiveFilled: false, efficacyFilled: false, preCognitiveFilled: false, preEfficacyFilled: false, preSurveyFilled: false } });
         applyTheme('A');
         void removeItem(STORAGE_KEYS.ACTIVE_USER_ID);
     },
@@ -319,6 +329,39 @@ export const useAppStore = create<AppState>((set, get) => ({
         void setItem(STORAGE_KEYS.SURVEY_AGGREGATES, {});
     },
 
+    submitPreScaleResponse(scaleType: 'cognitive' | 'efficacy', responses: Record<string, number>) {
+        const currentProgress = get().progress;
+
+        // Block duplicate per-scale
+        if (scaleType === 'cognitive' && currentProgress.preCognitiveFilled) return;
+        if (scaleType === 'efficacy' && currentProgress.preEfficacyFilled) return;
+
+        const nextPreCognitive = scaleType === 'cognitive' ? true : (currentProgress.preCognitiveFilled ?? false);
+        const nextPreEfficacy  = scaleType === 'efficacy'  ? true : (currentProgress.preEfficacyFilled  ?? false);
+
+        const nextProgress: Progress = {
+            ...currentProgress,
+            preCognitiveFilled: nextPreCognitive,
+            preEfficacyFilled:  nextPreEfficacy,
+            preSurveyFilled:    nextPreCognitive && nextPreEfficacy,
+            // Store pre-responses under a separate key
+            surveyResponses: {
+                ...(currentProgress.surveyResponses ?? {}),
+                ...Object.fromEntries(
+                    Object.entries(responses).map(([k, v]) => [`pre_${k}`, v])
+                ),
+            },
+        };
+
+        set({ progress: nextProgress });
+        void setItem(progressKey(get().activeUserId), nextProgress);
+    },
+
+    isPreSurveyDone() {
+        const p = get().progress;
+        return !!(p.preCognitiveFilled && p.preEfficacyFilled);
+    },
+
     async resetAll() {
         await clearAll();
         set({
@@ -326,7 +369,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             theme: 'A',
             settings: { soundEnabled: true, darkModeEnabled: false },
             seenOnboarding: false,
-            progress: { completedLessons: {}, surveyFilled: false, surveyResponses: undefined, cognitiveFilled: false, efficacyFilled: false },
+            progress: { completedLessons: {}, surveyFilled: false, surveyResponses: undefined, cognitiveFilled: false, efficacyFilled: false, preCognitiveFilled: false, preEfficacyFilled: false, preSurveyFilled: false },
             surveyAggregates: {},
         });
         applyTheme('A');

@@ -73,9 +73,13 @@ export interface Progress {
     completedLessons: Record<string, LessonProgress>;
     surveyFilled: boolean;
     surveyResponses?: Record<string, number>;
-    /** Per-scale filled flags */
+    /** Per-scale filled flags (POST — after all units) */
     cognitiveFilled?: boolean;
     efficacyFilled?: boolean;
+    /** Per-scale filled flags (PRE — before starting units) */
+    preCognitiveFilled?: boolean;
+    preEfficacyFilled?: boolean;
+    preSurveyFilled?: boolean;
 }
 
 // ─── Survey types ─────────────────────────────────────────────────────────────

@@ -300,6 +300,37 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ── PRE-SCALES CTA — blue/purple variant ── */
+.units-pre-scales-cta {
+    background: linear-gradient(to bottom, #eff6ff, #ffffff);
+    border-color: #6366f1;
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15);
+}
+
+.units-pre-scales-cta .units-survey-cta__title {
+    color: #312e81;
+}
+
+.units-pre-scales-cta .units-survey-cta__btn {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.units-pre-scales-cta .units-survey-cta__btn:hover {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Dark mode for pre-scales CTA */
+[data-theme-mode="dark"] .units-pre-scales-cta {
+    background: linear-gradient(to bottom, rgba(99, 102, 241, 0.1), var(--color-surface));
+    border-color: #6366f1;
+}
+
+[data-theme-mode="dark"] .units-pre-scales-cta .units-survey-cta__title {
+    color: #a5b4fc;
+}
+
 /* ════════════════════════════════════════
    BOTTOM PROGRESS BAR
 ════════════════════════════════════════ */
