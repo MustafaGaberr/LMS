@@ -315,20 +315,19 @@ const PreSurvey: React.FC = () => {
     }, []);
 
     const goNextSection = useCallback(() => {
-        if (activeScale && currentSectionIdx < activeScale.sections.length - 1) {
-            setAnimDir('next');
-            setAnimKey((k) => k + 1);
-            setCurrentSectionIdx((s) => s + 1);
-        }
-    }, [currentSectionIdx, activeScale]);
+        setAnimDir('next');
+        setAnimKey((k) => k + 1);
+        setCurrentSectionIdx((s) => {
+            if (activeScale && s < activeScale.sections.length - 1) return s + 1;
+            return s;
+        });
+    }, [activeScale]);
 
     const goPrevSection = useCallback(() => {
-        if (currentSectionIdx > 0) {
-            setAnimDir('prev');
-            setAnimKey((k) => k + 1);
-            setCurrentSectionIdx((s) => s - 1);
-        }
-    }, [currentSectionIdx]);
+        setAnimDir('prev');
+        setAnimKey((k) => k + 1);
+        setCurrentSectionIdx((s) => (s > 0 ? s - 1 : s));
+    }, []);
 
     const handleSubmit = useCallback(async () => {
         if (!allAnswered || isSubmitting || !activeScale) return;
