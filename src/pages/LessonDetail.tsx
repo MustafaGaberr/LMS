@@ -41,18 +41,25 @@ const LessonDetail: React.FC = () => {
         });
     }, [lesson]);
 
-    const [step, setStep] = useState(0); 
+    const [step, setStep] = useState(0);
     const [subStep, setSubStep] = useState(0); // For sub-sections within a tab
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [maxStepVisited, setMaxStepVisited] = useState(isLessonContentDone ? Math.max(0, availableTabs.length - 1) : 0);
+    const [maxStepVisited, setMaxStepVisited] = useState(
+        isLessonContentDone ? Math.max(0, availableTabs.length - 1) : 0
+    );
+
+    // Track previous lessonId to detect actual lesson change (not store updates)
+    const prevLessonIdRef = React.useRef(lessonId);
 
     // Reset sub-step when changing main tabs
     React.useEffect(() => {
         setSubStep(0);
     }, [step]);
 
-    // Reset step states when changing lesson
+    // Reset step states ONLY when the lesson actually changes (not on store updates)
     React.useEffect(() => {
+        if (prevLessonIdRef.current === lessonId) return;
+        prevLessonIdRef.current = lessonId;
         setStep(0);
         setSubStep(0);
         setMaxStepVisited(isLessonContentDone ? Math.max(0, availableTabs.length - 1) : 0);
