@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import ReactPlayer from 'react-player/youtube';
+import ReactPlayer from 'react-player';
 import { useAppStore } from '../store/useAppStore';
 import './LessonVideoPlayer.css';
 
@@ -94,6 +94,9 @@ const LessonVideoPlayer: React.FC<LessonVideoPlayerProps> = ({
         handleComplete();
     }, [handleComplete]);
 
+    // Detect if the URL is a Dailymotion link
+    const isDailymotion = videoUrl.includes('dai.ly') || videoUrl.includes('dailymotion.com');
+
     return (
         <div className="lesson-video-player">
             <div className="lesson-video-player__wrapper">
@@ -107,12 +110,26 @@ const LessonVideoPlayer: React.FC<LessonVideoPlayerProps> = ({
                     onSeek={handleSeek}
                     onEnded={handleEnded}
                     progressInterval={1000}
-                    config={{
-                        playerVars: {
-                            rel: 0,
-                            modestbranding: 1,
-                        },
-                    }}
+                    config={
+                        isDailymotion
+                            ? {
+                                  dailymotion: {
+                                      params: {
+                                          controls: true,
+                                          'sharing-enable': false,
+                                          'ui-logo': false,
+                                      },
+                                  },
+                              }
+                            : {
+                                  youtube: {
+                                      playerVars: {
+                                          rel: 0,
+                                          modestbranding: 1,
+                                      },
+                                  },
+                              }
+                    }
                 />
             </div>
         </div>
